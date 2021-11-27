@@ -1,0 +1,12 @@
+#!/bin/sh
+
+SCRIPT_DIR=$(pwd)
+
+./gradlew build -x test
+
+if [ $? -eq 0 ]; then
+  echo "Checking the project integrity has been completed."
+else
+  echo "Fail to check the project integrity."
+  exit 1
+fi
