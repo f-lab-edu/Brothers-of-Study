@@ -1,0 +1,8 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    url: jdbc:mysql://localhost:3306/bos?useSSL=false&allowPublicKeyRetrieval=true
+    username: test
+    password: test
