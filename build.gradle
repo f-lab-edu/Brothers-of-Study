@@ -17,22 +17,6 @@ configurations {
     }
 }
 
-checkstyle {
-    maxWarnings = 0
-    configFile = file("${rootDir}/checkstyle/google-checkstyle.xml")
-    showViolations = true
-    toolVersion = "8.45"
-}
-
-task preCheckStyle() {
-    copy {
-        from "./githooks/pre-commit"
-        into "./.git/hooks"
-    }
-}
-
-checkstyleMain.dependsOn preCheckStyle
-
 repositories {
     mavenCentral()
 }
@@ -104,6 +88,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+    implementation 'org.mybatis:mybatis-typehandlers-jsr310:1.0.2'
+    implementation 'org.modelmapper:modelmapper:2.4.4'
+    implementation 'org.mindrot:jbcrypt:0.4'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'mysql:mysql-connector-java'
