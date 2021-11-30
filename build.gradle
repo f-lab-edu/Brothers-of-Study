@@ -4,6 +4,7 @@ plugins {
     id 'java'
     id 'groovy'
     id 'checkstyle'
+    id 'jacoco'
 }
 
 group = 'kr.bos'
@@ -16,6 +17,11 @@ configurations {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
+// CheckStyle Configurations
 checkstyle {
     maxWarnings = 0
     configFile = file("${rootDir}/checkstyle/google-checkstyle.xml")
@@ -32,9 +38,50 @@ task preCheckStyle() {
 
 checkstyleMain.dependsOn preCheckStyle
 
-repositories {
-    mavenCentral()
+// Jacoco Configuration
+def jacocoExcludes = [
+    '**/BosApplication.class',
+    '**/controller'
+]
+
+jacocoTestReport {
+    reports {
+        csv.enabled true
+
+        afterEvaluate {
+            getClassDirectories().setFrom(classDirectories.files.collect {
+                fileTree(dir: it, exclude: jacocoExcludes)
+            })
+        }
+    }
 }
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS'
+            limit {
+                counter = 'BRANCH'
+                minimum = 1.0
+            }
+        }
+        rule {
+            element = 'CLASS'
+            limit {
+                counter = 'LINE'
+                minimum = 1.0
+            }
+        }
+    }
+    afterEvaluate {
+        getClassDirectories().setFrom(classDirectories.files.collect {
+            fileTree(dir: it, exclude: jacocoExcludes)
+        })
+    }
+}
+
+test.finalizedBy jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'

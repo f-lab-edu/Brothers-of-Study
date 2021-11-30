@@ -6,4 +6,9 @@
 - Spring Boot
 - MySQL
 - MyBatis
-- Spock
+
+### InteliJ Google Style 적용 방법
+1. Preferences > Editor > Code Style > Java 메뉴
+2. Scheme 우측 메뉴에서 Import Scheme > InteliJ IDEA code style XML
+3. checkstyle/intellij-java-google-style.xml 파일 선택
+4. 적용 후 Tab size 와 Indent 를 4로 변경
