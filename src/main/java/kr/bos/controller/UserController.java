@@ -33,7 +33,7 @@ public class UserController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody UserDto userDto) {
+    public void signUp(@Valid @RequestBody UserDto userDto) {
         userService.signUp(userDto);
     }
 }
