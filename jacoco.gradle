@@ -1,0 +1,50 @@
+apply plugin: 'jacoco'
+
+def jacocoExcludes = [
+        '**/BosApplication.class',
+        '**/controller',
+
+        // 로그인 검증 클래스. (@LoginCheck, @CurrentUserId)
+        '**/CurrentUserIdResolver.class',
+        '**/RequiredLoginException.class',
+        '**/LoginCheckAspect.class'
+]
+
+jacocoTestReport {
+    reports {
+        csv.enabled true
+
+        afterEvaluate {
+            getClassDirectories().setFrom(classDirectories.files.collect {
+                fileTree(dir: it, exclude: jacocoExcludes)
+            })
+        }
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS'
+            limit {
+                counter = 'BRANCH'
+                minimum = 1.0
+            }
+        }
+        rule {
+            element = 'CLASS'
+            limit {
+                counter = 'LINE'
+                minimum = 1.0
+            }
+        }
+    }
+    afterEvaluate {
+        getClassDirectories().setFrom(classDirectories.files.collect {
+            fileTree(dir: it, exclude: jacocoExcludes)
+        })
+    }
+}
+
+test.finalizedBy jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification
