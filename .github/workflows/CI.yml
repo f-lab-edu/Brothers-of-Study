@@ -20,10 +20,3 @@ jobs:
       
     - name: Build with Gradle
       run: ./gradlew clean build
-
-    - name: Generate JaCoCo badge
-      id: jacoco
-      uses: cicirello/jacoco-badge-generator@v2
-      with:
-        generate-branches-badge: true
-        jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
