@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
 import kr.bos.dto.UserDto;
 import kr.bos.exception.DuplicatedEmailException;
+import kr.bos.exception.SelectUserNotFoundException;
 import kr.bos.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +31,7 @@ class UserServiceTest {
     @BeforeEach
     public void makeUser() {
         userDto = UserDto.builder()
+            .id(1L)
             .email("email@email.com")
             .password("password")
             .name("name")
@@ -50,5 +53,27 @@ class UserServiceTest {
         when(userMapper.isExistsEmail(userDto.getEmail())).thenReturn(true);
         assertThrows(DuplicatedEmailException.class, () -> userService.signUp(userDto));
         verify(userMapper).isExistsEmail(userDto.getEmail());
+    }
+
+    @Test
+    @DisplayName("회원 조회에 성공합니다.")
+    public void selectUserByEmailTestWhenSuccess() {
+        when(userMapper.selectUserByEmail(userDto.getEmail()))
+            .thenReturn(Optional.ofNullable(userDto));
+        userService.selectUserByEmail(userDto.getEmail());
+    }
+
+    @Test
+    @DisplayName("회원 조회에 실패합니다. :존재하지않는 이메일")
+    public void selectUserByEmailTestWhenFail() {
+        assertThrows(SelectUserNotFoundException.class,
+            () -> userService.selectUserByEmail(userDto.getEmail()));
+    }
+
+    @Test
+    @DisplayName("회원탈퇴에 성공합니다.")
+    public void deleteUserWhenSuccess() {
+        userService.deleteUser(userDto.getId());
+        verify(userMapper).deleteUser(userDto.getId());
     }
 }

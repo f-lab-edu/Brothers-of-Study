@@ -15,4 +15,13 @@
     (SELECT email FROM users WHERE email = #{email})
   </select>
 
+  <select id="selectUserByEmail" resultType="kr.bos.dto.UserDto">
+    SELECT id, email, password, name, address
+    FROM users WHERE email = #{email}
+  </select>
+
+  <delete id="deleteUser">
+    DELETE FROM users WHERE id = #{id}
+  </delete>
+
 </mapper>
