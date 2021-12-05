@@ -3,9 +3,10 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'groovy'
-    id 'checkstyle'
-    id 'jacoco'
 }
+
+apply from: 'checkstyle.gradle'
+apply from: 'jacoco.gradle'
 
 group = 'kr.bos'
 version = '0.0.1-SNAPSHOT'
@@ -21,71 +22,10 @@ repositories {
     mavenCentral()
 }
 
-// CheckStyle Configurations
-checkstyle {
-    maxWarnings = 0
-    configFile = file("${rootDir}/checkstyle/google-checkstyle.xml")
-    showViolations = true
-    toolVersion = "8.45"
-}
-
-task preCheckStyle() {
-    copy {
-        from "./githooks/pre-commit"
-        into "./.git/hooks"
-    }
-}
-
-checkstyleMain.dependsOn preCheckStyle
-
-// Jacoco Configuration
-def jacocoExcludes = [
-    '**/BosApplication.class',
-    '**/controller'
-]
-
-jacocoTestReport {
-    reports {
-        csv.enabled true
-
-        afterEvaluate {
-            getClassDirectories().setFrom(classDirectories.files.collect {
-                fileTree(dir: it, exclude: jacocoExcludes)
-            })
-        }
-    }
-}
-
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            element = 'CLASS'
-            limit {
-                counter = 'BRANCH'
-                minimum = 1.0
-            }
-        }
-        rule {
-            element = 'CLASS'
-            limit {
-                counter = 'LINE'
-                minimum = 1.0
-            }
-        }
-    }
-    afterEvaluate {
-        getClassDirectories().setFrom(classDirectories.files.collect {
-            fileTree(dir: it, exclude: jacocoExcludes)
-        })
-    }
-}
-
-test.finalizedBy jacocoTestReport
-check.dependsOn jacocoTestCoverageVerification
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
     implementation 'org.mindrot:jbcrypt:0.4'
 
