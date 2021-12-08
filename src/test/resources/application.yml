@@ -2,5 +2,3 @@ spring:
   output:
     ansi:
       enabled: always
-  datasource:
-    url: jdbc:mysql://localhost:3307/bos?useSSL=false&allowPublicKeyRetrieval=true
