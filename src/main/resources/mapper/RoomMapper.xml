@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.bos.mapper.RoomMapper">
+
+  <insert id="insertRooms" parameterType="kr.bos.dto.StudyCafeDto">
+    INSERT INTO rooms (study_cafe_id, number, capacity)
+    VALUES
+    <foreach collection="rooms" item="room" separator=",">
+      (
+      #{id},
+      #{room.number},
+      #{room.capacity}
+      )
+    </foreach>
+  </insert>
+
+</mapper>
