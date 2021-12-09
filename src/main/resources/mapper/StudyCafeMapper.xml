@@ -5,8 +5,7 @@
 
 <mapper namespace="kr.bos.mapper.StudyCafeMapper">
 
-  <insert id="insertStudyCafe" parameterType="kr.bos.dto.StudyCafeDto"
-    useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertStudyCafe" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO study_cafes (user_id, title, address, thumbnail)
     VALUES (#{userId}, #{title}, #{address}, #{thumbnail})
   </insert>

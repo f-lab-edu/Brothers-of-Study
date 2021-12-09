@@ -1,5 +1,10 @@
 package kr.bos.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import kr.bos.model.Room;
+import kr.bos.model.StudyCafe;
+import kr.bos.dto.RoomDto;
 import kr.bos.dto.StudyCafeDto;
 import kr.bos.mapper.RoomMapper;
 import kr.bos.mapper.StudyCafeMapper;
@@ -28,8 +33,27 @@ public class StudyCafeService {
      */
     @Transactional
     public void registerStudyCafe(Long userId, StudyCafeDto studyCafeDto) {
-        studyCafeDto.setUserId(userId);
-        studyCafeMapper.insertStudyCafe(studyCafeDto);
-        roomMapper.insertRooms(studyCafeDto);
+
+        StudyCafe studyCafe = StudyCafe.builder()
+            .userId(userId)
+            .title(studyCafeDto.getTitle())
+            .address(studyCafeDto.getAddress())
+            .thumbnail(studyCafeDto.getThumbnail())
+            .build();
+
+        studyCafeMapper.insertStudyCafe(studyCafe);
+
+        List<Room> rooms = new ArrayList<>();
+        for (RoomDto roomDto : studyCafeDto.getRooms()) {
+            Room room = Room.builder()
+                .studyCafeId(studyCafe.getId())
+                .number(roomDto.getNumber())
+                .capacity(roomDto.getCapacity())
+                .build();
+
+            rooms.add(room);
+        }
+
+        roomMapper.insertRooms(rooms);
     }
 }

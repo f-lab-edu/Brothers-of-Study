@@ -1,8 +1,6 @@
 package kr.bos.dto;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * StudyCafe Dto.
@@ -20,14 +17,10 @@ import lombok.Setter;
  * @since 1.0.0
  */
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class StudyCafeDto {
-
-    private Long id;
-    private Long userId;
 
     @NotBlank
     private String title;

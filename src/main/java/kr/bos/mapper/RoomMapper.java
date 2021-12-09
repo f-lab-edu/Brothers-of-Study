@@ -1,6 +1,7 @@
 package kr.bos.mapper;
 
-import kr.bos.dto.StudyCafeDto;
+import java.util.List;
+import kr.bos.model.Room;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,5 +12,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface RoomMapper {
 
-    void insertRooms(StudyCafeDto studyCafeDto);
+    void insertRooms(List<Room> rooms);
 }
