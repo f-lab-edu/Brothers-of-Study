@@ -1,14 +1,15 @@
 package kr.bos.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
+import kr.bos.model.StudyCafe;
 import kr.bos.dto.RoomDto;
 import kr.bos.dto.StudyCafeDto;
 import kr.bos.mapper.RoomMapper;
 import kr.bos.mapper.StudyCafeMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,7 +49,6 @@ class StudyCafeServiceTest {
         rooms.add(room2);
 
         studyCafeDto = StudyCafeDto.builder()
-            .id(1L)
             .title("title")
             .address("address")
             .thumbnail("thumbnail")
@@ -56,7 +56,7 @@ class StudyCafeServiceTest {
             .build();
 
         studyCafeService.registerStudyCafe(1L, studyCafeDto);
-        verify(studyCafeMapper).insertStudyCafe(studyCafeDto);
-        verify(roomMapper).insertRooms(studyCafeDto);
+        verify(studyCafeMapper).insertStudyCafe(any(StudyCafe.class));
+        verify(roomMapper).insertRooms(any());
     }
 }

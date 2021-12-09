@@ -1,6 +1,6 @@
 package kr.bos.mapper;
 
-import kr.bos.dto.StudyCafeDto;
+import kr.bos.model.StudyCafe;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,5 +11,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface StudyCafeMapper {
 
-    void insertStudyCafe(StudyCafeDto studyCafeDto);
+    void insertStudyCafe(StudyCafe studyCafe);
 }

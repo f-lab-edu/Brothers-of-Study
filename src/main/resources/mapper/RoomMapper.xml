@@ -5,12 +5,12 @@
 
 <mapper namespace="kr.bos.mapper.RoomMapper">
 
-  <insert id="insertRooms" parameterType="kr.bos.dto.StudyCafeDto">
+  <insert id="insertRooms">
     INSERT INTO rooms (study_cafe_id, number, capacity)
     VALUES
-    <foreach collection="rooms" item="room" separator=",">
+    <foreach collection="list" item="room" separator=",">
       (
-      #{id},
+      #{room.studyCafeId},
       #{room.number},
       #{room.capacity}
       )

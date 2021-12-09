@@ -35,6 +35,7 @@ public class StudyCafeController {
     @ResponseStatus(HttpStatus.CREATED)
     public void registerStudyCafe(@CurrentUserId Long userId,
         @Valid @RequestBody StudyCafeDto studyCafeDto) {
+
         studyCafeService.registerStudyCafe(userId, studyCafeDto);
     }
 }

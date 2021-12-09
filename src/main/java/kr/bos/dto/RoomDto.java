@@ -1,6 +1,5 @@
 package kr.bos.dto;
 
-import java.util.Objects;
 import javax.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +18,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(of = "number")
 public class RoomDto {
 
     private Long id;
@@ -29,14 +29,4 @@ public class RoomDto {
 
     @Min(1)
     private Integer capacity;
-
-    @Override
-    public boolean equals(Object o) {
-        return number.equals(((RoomDto) o).number);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(number);
-    }
 }
