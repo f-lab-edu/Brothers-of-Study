@@ -11,11 +11,11 @@ import lombok.Builder;
 @Builder
 public class Room {
 
-    Long id;
-    Long studyCafeId;
-    Integer number;
-    Integer capacity;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+    private Long id;
+    private Long studyCafeId;
+    private Integer number;
+    private Integer capacity;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 }
