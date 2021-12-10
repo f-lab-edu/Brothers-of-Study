@@ -14,13 +14,13 @@ import lombok.Getter;
 @Getter
 public class StudyCafe {
 
-    Long id;
-    Long userId;
-    String title;
-    String address;
-    String thumbnail;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+    private Long id;
+    private Long userId;
+    private String title;
+    private String address;
+    private String thumbnail;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    List<Room> rooms;
+    private List<Room> rooms;
 }
