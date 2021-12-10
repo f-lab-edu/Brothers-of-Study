@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.bos.mapper.StudyCafeMapper">
+
+  <resultMap id="studyCafe" type="kr.bos.domain.StudyCafe">
+    <result property="id" column="id"/>
+    <result property="userId" column="user_id"/>
+    <result property="title" column="title"/>
+    <result property="address" column="address"/>
+    <result property="thumbnail" column="thumbnail"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="updatedAt" column="updated_at"/>
+  </resultMap>
+  
+  <select id="getStudyCafeById" resultMap="studyCafe">
+    SELECT id, user_id, title, address, thumbnail, created_at, updated_at
+    FROM STUDY_CAFES
+    WHERE id=#{id}
+  </select>
+
+  <select id="getStudyCafesByKeyword" resultMap="studyCafe">
+    SELECT id, user_id, title, address, thumbnail, created_at, updated_at
+    FROM STUDY_CAFES
+    WHERE title LIKE CONCAT('%', #{name}, '%')
+  </select>
+  <select id="getStudyCafeIdByName" resultType="java.lang.Long">
+    SELECT id FROM STUDY_CAFES WHERE title=#{name}
+  </select>
+
+  <insert id="insertStudyCafe" parameterType="kr.bos.domain.StudyCafe">
+    INSERT INTO STUDY_CAFES(id, user_id, title, address, thumbnail, created_at, updated_at)
+    VALUES(#{id}, #{userId}, #{title}, #{address}, #{thumbnail}, NOW(), NOW())
+  </insert>
+
+  <update id="updateStudyCafe" parameterType="kr.bos.domain.StudyCafe">
+    UPDATE STUDY_CAFES SET id=#{id}, user_id=#{userId}, title=#{title}, address=#{address},
+                           thumbnail=#{thumbnail}, updated_at=NOW()
+    WHERE id=#{id}
+  </update>
+
+  <delete id="deleteStudyCafe" parameterType="int">
+    DELETE STUDY_CAFES WHERE id=#{id}
+  </delete>
+</mapper>

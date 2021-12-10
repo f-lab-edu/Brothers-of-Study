@@ -1,4 +1,16 @@
 spring:
-  output:
-    ansi:
-      enabled: always
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/brothers-of-study
+    username: bos
+    password: bos
+
+  flyway:
+    baseline-version: 0
+    baseline-on-migrate: true
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    use-generated-keys: true
+    mapper-locations: classpath:/mapper/**/*.xml
