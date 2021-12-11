@@ -1,4 +1,4 @@
-package kr.bos.dto;
+package kr.bos.model.dto.request;
 
 import java.util.List;
 import javax.validation.Valid;
@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class StudyCafeDto {
+public class StudyCafeReq {
 
     @NotBlank
     private String title;
@@ -33,14 +33,14 @@ public class StudyCafeDto {
     @Valid
     @NotNull
     @Size(min = 1)
-    private List<RoomDto> rooms;
+    private List<RoomReq> rooms;
 
     /**
      * Rooms 입력시 중복된 방 번호가 있는지 체크. 중복된 방이 있다면 DuplicatedRoomNumberException 발생.
      *
      * @since 1.0.0
      */
-    public void setRooms(List<RoomDto> rooms) {
+    public void setRooms(List<RoomReq> rooms) {
         if (rooms.size() != rooms.stream().distinct().count()) {
             throw new DuplicatedRoomNumberException();
         }

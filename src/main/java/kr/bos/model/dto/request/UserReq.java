@@ -1,4 +1,4 @@
-package kr.bos.dto;
+package kr.bos.model.dto.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -9,16 +9,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * LoginInfo Dto. 로그인 입력 정보.
+ * User Dto.
  *
  * @since 1.0.0
  */
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class LoginInfoDto {
+public class UserReq {
+
+    private Long id;
 
     @NotBlank
     @Email
@@ -26,4 +28,10 @@ public class LoginInfoDto {
 
     @NotBlank
     private String password;
-}
+
+    @NotBlank
+    private String name;
+
+    @NotBlank
+    private String address;
+} 

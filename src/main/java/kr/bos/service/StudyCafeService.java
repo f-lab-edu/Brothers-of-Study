@@ -2,10 +2,10 @@ package kr.bos.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import kr.bos.model.Room;
-import kr.bos.model.StudyCafe;
-import kr.bos.dto.RoomDto;
-import kr.bos.dto.StudyCafeDto;
+import kr.bos.model.domain.Room;
+import kr.bos.model.domain.StudyCafe;
+import kr.bos.model.dto.request.RoomReq;
+import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.mapper.RoomMapper;
 import kr.bos.mapper.StudyCafeMapper;
 import lombok.RequiredArgsConstructor;
@@ -32,23 +32,23 @@ public class StudyCafeService {
      * @since 1.0.0
      */
     @Transactional
-    public void registerStudyCafe(Long userId, StudyCafeDto studyCafeDto) {
+    public void registerStudyCafe(Long userId, StudyCafeReq studyCafeReq) {
 
         StudyCafe studyCafe = StudyCafe.builder()
             .userId(userId)
-            .title(studyCafeDto.getTitle())
-            .address(studyCafeDto.getAddress())
-            .thumbnail(studyCafeDto.getThumbnail())
+            .title(studyCafeReq.getTitle())
+            .address(studyCafeReq.getAddress())
+            .thumbnail(studyCafeReq.getThumbnail())
             .build();
 
         studyCafeMapper.insertStudyCafe(studyCafe);
 
         List<Room> rooms = new ArrayList<>();
-        for (RoomDto roomDto : studyCafeDto.getRooms()) {
+        for (RoomReq roomReq : studyCafeReq.getRooms()) {
             Room room = Room.builder()
                 .studyCafeId(studyCafe.getId())
-                .number(roomDto.getNumber())
-                .capacity(roomDto.getCapacity())
+                .number(roomReq.getNumber())
+                .capacity(roomReq.getCapacity())
                 .build();
 
             rooms.add(room);

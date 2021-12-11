@@ -5,7 +5,7 @@
 
 <mapper namespace="kr.bos.mapper.UserMapper">
 
-  <insert id="insertUser" parameterType="kr.bos.dto.UserDto">
+  <insert id="insertUser" parameterType="kr.bos.model.dto.request.UserReq">
     INSERT INTO users (email, password, name, address)
     VALUES (#{email}, #{password}, #{name}, #{address})
   </insert>
@@ -15,7 +15,7 @@
     (SELECT email FROM users WHERE email = #{email})
   </select>
 
-  <select id="selectUserByEmail" resultType="kr.bos.dto.UserDto">
+  <select id="selectUserByEmail" resultType="kr.bos.model.dto.request.UserReq">
     SELECT id, email, password, name, address
     FROM users WHERE email = #{email}
   </select>

@@ -3,7 +3,7 @@ package kr.bos.controller;
 import javax.validation.Valid;
 import kr.bos.annotation.CurrentUserId;
 import kr.bos.annotation.LoginCheck;
-import kr.bos.dto.StudyCafeDto;
+import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.service.StudyCafeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,8 +34,8 @@ public class StudyCafeController {
     @LoginCheck
     @ResponseStatus(HttpStatus.CREATED)
     public void registerStudyCafe(@CurrentUserId Long userId,
-        @Valid @RequestBody StudyCafeDto studyCafeDto) {
+        @Valid @RequestBody StudyCafeReq studyCafeReq) {
 
-        studyCafeService.registerStudyCafe(userId, studyCafeDto);
+        studyCafeService.registerStudyCafe(userId, studyCafeReq);
     }
 }

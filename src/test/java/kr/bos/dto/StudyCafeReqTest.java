@@ -5,21 +5,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.List;
 import kr.bos.exception.DuplicatedRoomNumberException;
+import kr.bos.model.dto.request.RoomReq;
+import kr.bos.model.dto.request.StudyCafeReq;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class StudyCafeDtoTest {
+class StudyCafeReqTest {
 
-    List<RoomDto> rooms;
-    StudyCafeDto studyCafeDto;
+    List<RoomReq> rooms;
+    StudyCafeReq studyCafeReq;
 
     @BeforeEach
     public void beforeEach() {
-        studyCafeDto = new StudyCafeDto();
+        studyCafeReq = new StudyCafeReq();
 
         rooms = new ArrayList<>();
-        RoomDto room = RoomDto.builder()
+        RoomReq room = RoomReq.builder()
             .number(1)
             .capacity(1)
             .build();
@@ -30,24 +32,24 @@ class StudyCafeDtoTest {
     @Test
     @DisplayName("StudyCafeDto 생성에 성공합니다.")
     public void createStudyCafeDtoTestWhenSuccess() {
-        RoomDto newRoom = RoomDto.builder()
+        RoomReq newRoom = RoomReq.builder()
             .number(rooms.get(0).getNumber() + 1)
             .capacity(1)
             .build();
 
         rooms.add(newRoom);
-        studyCafeDto.setRooms(rooms);
+        studyCafeReq.setRooms(rooms);
     }
 
     @Test
     @DisplayName("StudyCafeDto 생성에 실패합니다. :중복된 방 번호")
     public void createStudyCafeDtoTestWhenFail() {
-        RoomDto duplicatedRoom = RoomDto.builder()
+        RoomReq duplicatedRoom = RoomReq.builder()
             .number(rooms.get(0).getNumber())
             .capacity(1)
             .build();
 
         rooms.add(duplicatedRoom);
-        assertThrows(DuplicatedRoomNumberException.class, () -> studyCafeDto.setRooms(rooms));
+        assertThrows(DuplicatedRoomNumberException.class, () -> studyCafeReq.setRooms(rooms));
     }
 }

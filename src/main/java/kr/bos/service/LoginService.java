@@ -1,8 +1,8 @@
 package kr.bos.service;
 
 import javax.servlet.http.HttpSession;
-import kr.bos.dto.LoginInfoDto;
-import kr.bos.dto.UserDto;
+import kr.bos.model.dto.request.LoginInfoReq;
+import kr.bos.model.dto.request.UserReq;
 import kr.bos.exception.InvalidPasswordException;
 import kr.bos.utils.PasswordEncrypt;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +26,11 @@ public class LoginService {
      *
      * @since 1.0.0
      */
-    public void login(LoginInfoDto loginInfoDto) {
-        UserDto userDto = userService.selectUserByEmail(loginInfoDto.getEmail());
+    public void login(LoginInfoReq loginInfoReq) {
+        UserReq userReq = userService.selectUserByEmail(loginInfoReq.getEmail());
 
-        if (PasswordEncrypt.isMatch(loginInfoDto.getPassword(), userDto.getPassword())) {
-            session.setAttribute(USER_ID, userDto.getId());
+        if (PasswordEncrypt.isMatch(loginInfoReq.getPassword(), userReq.getPassword())) {
+            session.setAttribute(USER_ID, userReq.getId());
         } else {
             throw new InvalidPasswordException();
         }
