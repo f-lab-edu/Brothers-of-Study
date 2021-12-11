@@ -8,7 +8,11 @@ def jacocoExcludes = [
         // 로그인 검증 클래스. (@LoginCheck, @CurrentUserId)
         '**/CurrentUserIdResolver.class',
         '**/RequiredLoginException.class',
-        '**/LoginCheckAspect.class'
+        '**/LoginCheckAspect.class',
+
+        // 블랙리스트 체크 클래스.
+        '**/BlackCheckAspect.class',
+        '**/AccessDeniedException.class'
 ]
 
 jacocoTestReport {

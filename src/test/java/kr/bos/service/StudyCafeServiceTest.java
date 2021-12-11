@@ -1,15 +1,19 @@
 package kr.bos.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import kr.bos.exception.BookmarkNotFoundException;
+import kr.bos.exception.DuplicatedBookmarkException;
+import kr.bos.mapper.RoomMapper;
+import kr.bos.mapper.StudyCafeMapper;
 import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.RoomReq;
 import kr.bos.model.dto.request.StudyCafeReq;
-import kr.bos.mapper.RoomMapper;
-import kr.bos.mapper.StudyCafeMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,5 +62,37 @@ class StudyCafeServiceTest {
         studyCafeService.registerStudyCafe(1L, studyCafeReq);
         verify(studyCafeMapper).insertStudyCafe(any(StudyCafe.class));
         verify(roomMapper).insertRooms(any());
+    }
+
+    @Test
+    @DisplayName("북마크 등록에 성공합니다.")
+    public void registerBookmarkTestWhenSuccess() {
+        when(studyCafeMapper.insertBookmark(1L, 1L)).thenReturn(1);
+        studyCafeService.registerBookmark(1L, 1L);
+        verify(studyCafeMapper).insertBookmark(1L, 1L);
+    }
+
+    @Test
+    @DisplayName("북마크 등록에 실패합니다. :이미 등록된 북마크")
+    public void registerBookmarkTestWhenFail() {
+        when(studyCafeMapper.insertBookmark(1L, 1L)).thenReturn(0);
+        assertThrows(DuplicatedBookmarkException.class,
+            () -> studyCafeService.registerBookmark(1L, 1L));
+    }
+
+    @Test
+    @DisplayName("북마크 취소에 성공합니다.")
+    public void cancelBookmarkTestWhenSuccess() {
+        when(studyCafeMapper.deleteBookmark(1L, 1L)).thenReturn(1);
+        studyCafeService.cancelBookmark(1L, 1L);
+        verify(studyCafeMapper).deleteBookmark(1L, 1L);
+    }
+
+    @Test
+    @DisplayName("북마크 취소에 실패합니다. :등록하지 않은 북마크")
+    public void cancelBookmarkTestWhenFail() {
+        when(studyCafeMapper.deleteBookmark(1L, 1L)).thenReturn(0);
+        assertThrows(BookmarkNotFoundException.class,
+            () -> studyCafeService.cancelBookmark(1L, 1L));
     }
 }

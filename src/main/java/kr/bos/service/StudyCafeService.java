@@ -2,12 +2,14 @@ package kr.bos.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import kr.bos.exception.BookmarkNotFoundException;
+import kr.bos.exception.DuplicatedBookmarkException;
+import kr.bos.mapper.RoomMapper;
+import kr.bos.mapper.StudyCafeMapper;
 import kr.bos.model.domain.Room;
 import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.RoomReq;
 import kr.bos.model.dto.request.StudyCafeReq;
-import kr.bos.mapper.RoomMapper;
-import kr.bos.mapper.StudyCafeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,5 +57,33 @@ public class StudyCafeService {
         }
 
         roomMapper.insertRooms(rooms);
+    }
+
+    /**
+     * 북 마크 등록하기.
+     * <br>
+     * 북 마크가 이미 등록되어 있다면 DuplicatedBookmarkException 예외 발생.
+     *
+     * @since 1.0.0
+     */
+    public void registerBookmark(Long userId, Long studyCafeId) {
+        int insertCount = studyCafeMapper.insertBookmark(userId, studyCafeId);
+        if (insertCount == 0) {
+            throw new DuplicatedBookmarkException();
+        }
+    }
+
+    /**
+     * 북 마크 취소하기.
+     * <br>
+     * 북 마크가 등록되지 않았다면 BookmarkNotFoundException 예외 발생.
+     *
+     * @since 1.0.0
+     */
+    public void cancelBookmark(Long userId, Long studyCafeId) {
+        int deleteCount = studyCafeMapper.deleteBookmark(userId, studyCafeId);
+        if (deleteCount == 0) {
+            throw new BookmarkNotFoundException();
+        }
     }
 }
