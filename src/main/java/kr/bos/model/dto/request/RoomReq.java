@@ -1,4 +1,4 @@
-package kr.bos.dto;
+package kr.bos.model.dto.request;
 
 import javax.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode(of = "number")
-public class RoomDto {
+public class RoomReq {
 
     private Long id;
     private Long studyCafeId;

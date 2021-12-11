@@ -1,7 +1,7 @@
 package kr.bos.mapper;
 
 import java.util.Optional;
-import kr.bos.dto.UserDto;
+import kr.bos.model.dto.request.UserReq;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -12,11 +12,11 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
 
-    void insertUser(UserDto userDto);
+    void insertUser(UserReq userReq);
 
     boolean isExistsEmail(String email);
 
-    Optional<UserDto> selectUserByEmail(String email);
+    Optional<UserReq> selectUserByEmail(String email);
 
     void deleteUser(Long id);
 }

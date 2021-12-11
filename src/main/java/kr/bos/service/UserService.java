@@ -1,7 +1,7 @@
 package kr.bos.service;
 
 import java.util.Optional;
-import kr.bos.dto.UserDto;
+import kr.bos.model.dto.request.UserReq;
 import kr.bos.exception.DuplicatedEmailException;
 import kr.bos.exception.SelectUserNotFoundException;
 import kr.bos.mapper.UserMapper;
@@ -25,14 +25,14 @@ public class UserService {
      *
      * @since 1.0.0
      */
-    public void signUp(UserDto userDto) {
-        if (isExistsEmail(userDto.getEmail())) {
+    public void signUp(UserReq userReq) {
+        if (isExistsEmail(userReq.getEmail())) {
             throw new DuplicatedEmailException();
         }
 
-        String encryptPassword = PasswordEncrypt.encrypt(userDto.getPassword());
-        userDto.setPassword(encryptPassword);
-        userMapper.insertUser(userDto);
+        String encryptPassword = PasswordEncrypt.encrypt(userReq.getPassword());
+        userReq.setPassword(encryptPassword);
+        userMapper.insertUser(userReq);
     }
 
     public boolean isExistsEmail(String email) {
@@ -44,8 +44,8 @@ public class UserService {
      *
      * @since 1.0.0
      */
-    public UserDto selectUserByEmail(String email) {
-        Optional<UserDto> userDto = userMapper.selectUserByEmail(email);
+    public UserReq selectUserByEmail(String email) {
+        Optional<UserReq> userDto = userMapper.selectUserByEmail(email);
         userDto.orElseThrow(SelectUserNotFoundException::new);
         return userDto.get();
     }

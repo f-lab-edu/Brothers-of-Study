@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
-import kr.bos.dto.LoginInfoDto;
-import kr.bos.dto.UserDto;
+import kr.bos.model.dto.request.LoginInfoReq;
+import kr.bos.model.dto.request.UserReq;
 import kr.bos.exception.InvalidPasswordException;
 import kr.bos.utils.PasswordEncrypt;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,8 +30,8 @@ class LoginServiceTest {
     @InjectMocks
     LoginService loginService;
 
-    UserDto userDto;
-    LoginInfoDto loginInfoDto;
+    UserReq userReq;
+    LoginInfoReq loginInfoReq;
     String password;
 
     @BeforeEach
@@ -39,7 +39,7 @@ class LoginServiceTest {
         injectSessionInUserService();
 
         password = "password";
-        userDto = UserDto.builder()
+        userReq = UserReq.builder()
             .id(1L)
             .email("email@email.com")
             .password(PasswordEncrypt.encrypt(password))
@@ -47,7 +47,7 @@ class LoginServiceTest {
             .address("address")
             .build();
 
-        loginInfoDto = LoginInfoDto.builder()
+        loginInfoReq = LoginInfoReq.builder()
             .email("email@email.com")
             .password(password)
             .build();
@@ -66,31 +66,31 @@ class LoginServiceTest {
     @Test
     @DisplayName("로그인에 성공합니다.")
     public void loginTestWhenSuccess() {
-        when(userService.selectUserByEmail(loginInfoDto.getEmail())).thenReturn(userDto);
-        loginService.login(loginInfoDto);
-        assertEquals(loginService.getCurrentUser(), userDto.getId());
+        when(userService.selectUserByEmail(loginInfoReq.getEmail())).thenReturn(userReq);
+        loginService.login(loginInfoReq);
+        assertEquals(loginService.getCurrentUser(), userReq.getId());
     }
 
     @Test
     @DisplayName("로그인에 실패합니다. :잘못된 패스워드")
     public void loginTestWhenFail() {
-        when(userService.selectUserByEmail(loginInfoDto.getEmail())).thenReturn(userDto);
+        when(userService.selectUserByEmail(loginInfoReq.getEmail())).thenReturn(userReq);
 
-        loginInfoDto.setPassword("");
+        loginInfoReq.setPassword("");
         assertThrows(InvalidPasswordException.class,
-            () -> loginService.login(loginInfoDto));
+            () -> loginService.login(loginInfoReq));
 
-        loginInfoDto.setPassword(password + "@");
+        loginInfoReq.setPassword(password + "@");
         assertThrows(InvalidPasswordException.class,
-            () -> loginService.login(loginInfoDto));
+            () -> loginService.login(loginInfoReq));
 
-        loginInfoDto.setPassword(password.substring(1));
+        loginInfoReq.setPassword(password.substring(1));
         assertThrows(InvalidPasswordException.class,
-            () -> loginService.login(loginInfoDto));
+            () -> loginService.login(loginInfoReq));
 
-        loginInfoDto.setPassword(PasswordEncrypt.encrypt(password));
+        loginInfoReq.setPassword(PasswordEncrypt.encrypt(password));
         assertThrows(InvalidPasswordException.class,
-            () -> loginService.login(loginInfoDto));
+            () -> loginService.login(loginInfoReq));
     }
 
     @Test

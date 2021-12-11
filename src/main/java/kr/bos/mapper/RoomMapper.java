@@ -1,7 +1,7 @@
 package kr.bos.mapper;
 
 import java.util.List;
-import kr.bos.model.Room;
+import kr.bos.model.domain.Room;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

@@ -5,9 +5,9 @@ import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
-import kr.bos.model.StudyCafe;
-import kr.bos.dto.RoomDto;
-import kr.bos.dto.StudyCafeDto;
+import kr.bos.model.domain.StudyCafe;
+import kr.bos.model.dto.request.RoomReq;
+import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.mapper.RoomMapper;
 import kr.bos.mapper.StudyCafeMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -29,18 +29,18 @@ class StudyCafeServiceTest {
     @Mock
     RoomMapper roomMapper;
 
-    StudyCafeDto studyCafeDto;
+    StudyCafeReq studyCafeReq;
 
     @Test
     @DisplayName("스터디 카페 등록에 성공합니다.")
     public void registerStudyCafeTestWhenSuccess() {
-        List<RoomDto> rooms = new ArrayList<>();
-        RoomDto room1 = RoomDto.builder()
+        List<RoomReq> rooms = new ArrayList<>();
+        RoomReq room1 = RoomReq.builder()
             .number(1)
             .capacity(1)
             .build();
 
-        RoomDto room2 = RoomDto.builder()
+        RoomReq room2 = RoomReq.builder()
             .number(2)
             .capacity(2)
             .build();
@@ -48,14 +48,14 @@ class StudyCafeServiceTest {
         rooms.add(room1);
         rooms.add(room2);
 
-        studyCafeDto = StudyCafeDto.builder()
+        studyCafeReq = StudyCafeReq.builder()
             .title("title")
             .address("address")
             .thumbnail("thumbnail")
             .rooms(rooms)
             .build();
 
-        studyCafeService.registerStudyCafe(1L, studyCafeDto);
+        studyCafeService.registerStudyCafe(1L, studyCafeReq);
         verify(studyCafeMapper).insertStudyCafe(any(StudyCafe.class));
         verify(roomMapper).insertRooms(any());
     }

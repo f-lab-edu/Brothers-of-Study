@@ -1,4 +1,4 @@
-package kr.bos.model;
+package kr.bos.model.domain;
 
 import java.util.List;
 import java.time.LocalDateTime;
