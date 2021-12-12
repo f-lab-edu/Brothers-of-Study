@@ -1,8 +1,8 @@
 package kr.bos.service;
 
 import java.util.List;
-import kr.bos.dto.request.ReviewRequest;
-import kr.bos.dto.response.ReviewResponse;
+import kr.bos.dto.request.ReviewReq;
+import kr.bos.dto.response.ReviewRes;
 import kr.bos.exception.AccessDeniedException;
 import kr.bos.mapper.ReviewMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class ReviewService {
      *
      * @since 1.0.0
      */
-    public List<ReviewResponse> getReviews(Long studyCafeId) {
+    public List<ReviewRes> getReviews(Long studyCafeId) {
         return reviewMapper.selectReviewsStudyCafeId(studyCafeId);
     }
 
@@ -33,8 +33,8 @@ public class ReviewService {
      *
      * @since 1.0.0
      */
-    public void createReview(ReviewRequest reviewRequest, Long userId, Long studyCafeId) {
-        reviewMapper.insertReview(reviewRequest, userId, studyCafeId);
+    public void createReview(ReviewReq reviewReq, Long userId, Long studyCafeId) {
+        reviewMapper.insertReview(reviewReq, userId, studyCafeId);
     }
 
     /**
@@ -42,8 +42,8 @@ public class ReviewService {
      *
      * @since 1.0.0
      */
-    public void updateReview(ReviewRequest reviewRequest, Long userId, Long reviewId) {
-        int updateCount = reviewMapper.updateReview(reviewRequest, userId, reviewId);
+    public void updateReview(ReviewReq reviewReq, Long userId, Long reviewId) {
+        int updateCount = reviewMapper.updateReview(reviewReq, userId, reviewId);
         if (updateCount == 0) {
             throw new AccessDeniedException();
         }

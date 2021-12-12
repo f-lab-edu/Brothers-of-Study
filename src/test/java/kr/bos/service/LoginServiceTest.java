@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
-import kr.bos.model.dto.request.LoginInfoReq;
-import kr.bos.model.dto.request.UserReq;
+import kr.bos.dto.request.LoginInfoReq;
+import kr.bos.dto.request.UserReq;
 import kr.bos.exception.InvalidPasswordException;
 import kr.bos.utils.PasswordEncrypt;
 import org.junit.jupiter.api.BeforeEach;

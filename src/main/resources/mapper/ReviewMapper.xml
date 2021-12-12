@@ -5,7 +5,7 @@
 
 <mapper namespace="kr.bos.mapper.ReviewMapper">
 
-  <select id="selectReviewsStudyCafeId" resultType="kr.bos.dto.response.ReviewResponse">
+  <select id="selectReviewsStudyCafeId" resultType="kr.bos.dto.response.ReviewRes">
     SELECT
     reviews.id, users.name AS userName, reviews.description, reviews.score,
     reviews.created_at AS createdAt
@@ -18,14 +18,14 @@
 
   <insert id="insertReview">
     INSERT INTO reviews (user_id, study_cafe_id, description, score)
-    VALUES (#{userId}, #{studyCafeId}, #{reviewRequest.description}, #{reviewRequest.score})
+    VALUES (#{userId}, #{studyCafeId}, #{reviewReq.description}, #{reviewReq.score})
   </insert>
 
-  <update id="updateReview1">
+  <update id="updateReview">
     UPDATE reviews
     <set>
-      <if test="reviewRequest.description != null">description = #{reviewRequest.description},</if>
-      <if test="reviewRequest.score != null">score = #{reviewRequest.score}</if>
+      <if test="reviewReq.description != null">description = #{reviewReq.description},</if>
+      <if test="reviewReq.score != null">score = #{reviewReq.score}</if>
     </set>
     WHERE id =
     (

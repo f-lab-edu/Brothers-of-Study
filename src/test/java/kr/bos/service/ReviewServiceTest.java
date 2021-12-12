@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import kr.bos.dto.request.ReviewRequest;
+import kr.bos.dto.request.ReviewReq;
 import kr.bos.exception.AccessDeniedException;
 import kr.bos.mapper.ReviewMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,11 +24,11 @@ class ReviewServiceTest {
     @Mock
     ReviewMapper reviewMapper;
 
-    ReviewRequest reviewRequest;
+    ReviewReq reviewReq;
 
     @BeforeEach
     public void beforeEach() {
-        reviewRequest = new ReviewRequest();
+        reviewReq = new ReviewReq();
     }
 
     @Test
@@ -41,25 +41,25 @@ class ReviewServiceTest {
     @Test
     @DisplayName("리뷰 생성에 성공합니다.")
     public void createReviewWhenSuccess() {
-        reviewService.createReview(reviewRequest, 1L, 2L);
-        verify(reviewMapper).insertReview(reviewRequest, 1L, 2L);
+        reviewService.createReview(reviewReq, 1L, 2L);
+        verify(reviewMapper).insertReview(reviewReq, 1L, 2L);
     }
 
     @Test
     @DisplayName("리뷰 업데이트에 성공합니다.")
     public void updateReviewWhenSuccess() {
-        when(reviewMapper.updateReview(reviewRequest, 1L, 2L)).thenReturn(1);
-        reviewService.updateReview(reviewRequest, 1L, 2L);
-        verify(reviewMapper).updateReview(reviewRequest, 1L, 2L);
+        when(reviewMapper.updateReview(reviewReq, 1L, 2L)).thenReturn(1);
+        reviewService.updateReview(reviewReq, 1L, 2L);
+        verify(reviewMapper).updateReview(reviewReq, 1L, 2L);
     }
 
     @Test
     @DisplayName("리뷰 업데이트에 실패합니다. :리뷰 작성자가 아닌 경우.")
     public void updateReviewWhenFail() {
-        when(reviewMapper.updateReview(reviewRequest, 1L, 2L)).thenReturn(0);
+        when(reviewMapper.updateReview(reviewReq, 1L, 2L)).thenReturn(0);
         assertThrows(AccessDeniedException.class,
-            () -> reviewService.updateReview(reviewRequest, 1L, 2L));
-        verify(reviewMapper).updateReview(reviewRequest, 1L, 2L);
+            () -> reviewService.updateReview(reviewReq, 1L, 2L));
+        verify(reviewMapper).updateReview(reviewReq, 1L, 2L);
     }
 
     @Test

@@ -17,7 +17,7 @@ import org.hibernate.validator.constraints.Range;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReviewResponse {
+public class ReviewRes {
 
     @NotBlank
     private Long id;

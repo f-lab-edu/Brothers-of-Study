@@ -2,10 +2,10 @@ package kr.bos.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import kr.bos.model.domain.Room;
-import kr.bos.model.domain.StudyCafe;
-import kr.bos.model.dto.request.RoomReq;
-import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.domain.Room;
+import kr.bos.domain.StudyCafe;
+import kr.bos.dto.request.RoomReq;
+import kr.bos.dto.request.StudyCafeReq;
 import kr.bos.mapper.RoomMapper;
 import kr.bos.mapper.StudyCafeMapper;
 import lombok.RequiredArgsConstructor;
