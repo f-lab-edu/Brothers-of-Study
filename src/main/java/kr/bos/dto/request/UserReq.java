@@ -1,7 +1,6 @@
 package kr.bos.dto.request;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Review Request Dto.
+ * User Dto.
  *
  * @since 1.0.0
  */
@@ -19,12 +18,20 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReviewRequest {
+public class UserReq {
+
+    private Long id;
 
     @NotBlank
-    private String description;
+    @Email
+    private String email;
 
-    @Min(0)
-    @Max(5)
-    private Float score;
-}
+    @NotBlank
+    private String password;
+
+    @NotBlank
+    private String name;
+
+    @NotBlank
+    private String address;
+} 

@@ -1,6 +1,6 @@
 package kr.bos.mapper;
 
-import kr.bos.model.domain.StudyCafe;
+import kr.bos.domain.StudyCafe;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS bookmarks (
   FOREIGN KEY (study_cafe_id) REFERENCES study_cafes (id)
 );
 
-CREATE TABLE IF NOT EXISTS blacklists (
+CREATE TABLE IF NOT EXISTS blacklist (
   id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   user_id BIGINT NOT NULL,
   study_cafe_id BIGINT NOT NULL,

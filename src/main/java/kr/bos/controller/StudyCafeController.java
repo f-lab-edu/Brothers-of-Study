@@ -6,9 +6,15 @@ import javax.validation.Valid;
 import kr.bos.annotation.BlackCheck;
 import kr.bos.annotation.CurrentUserId;
 import kr.bos.annotation.LoginCheck;
+<<<<<<< HEAD
 import kr.bos.model.dto.request.ReservationReq;
 import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.service.ReservationService;
+=======
+import kr.bos.dto.request.ReviewReq;
+import kr.bos.dto.request.StudyCafeReq;
+import kr.bos.dto.response.ReviewRes;
+>>>>>>> 9a0c9f2 (Model 클래스 분리)
 import kr.bos.service.ReviewService;
 import kr.bos.service.StudyCafeService;
 import lombok.RequiredArgsConstructor;
@@ -77,7 +83,11 @@ public class StudyCafeController {
     @LoginCheck
     @BlackCheck
     @ResponseStatus(HttpStatus.OK)
+<<<<<<< HEAD
     public PageInfo<kr.bos.dto.response.ReviewResponse> getReviews(@CurrentUserId Long userId,
+=======
+    public PageInfo<ReviewRes> getReviews(@CurrentUserId Long userId,
+>>>>>>> 9a0c9f2 (Model 클래스 분리)
         @PathVariable("studyCafeId") Long studyCafeId, @RequestParam("page") Integer page,
         @RequestParam("size") Integer size) {
         PageHelper.startPage(page, size);
@@ -95,8 +105,13 @@ public class StudyCafeController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createReview(@CurrentUserId Long userId,
         @PathVariable("studyCafeId") Long studyCafeId,
+<<<<<<< HEAD
         @Valid @RequestBody kr.bos.dto.request.ReviewRequest reviewRequest) {
         reviewService.createReview(reviewRequest, userId, studyCafeId);
+=======
+        @Valid @RequestBody ReviewReq reviewReq) {
+        reviewService.createReview(reviewReq, userId, studyCafeId);
+>>>>>>> 9a0c9f2 (Model 클래스 분리)
     }
 
     /**
@@ -110,8 +125,13 @@ public class StudyCafeController {
     @ResponseStatus(HttpStatus.OK)
     public void updateReview(@CurrentUserId Long userId,
         @PathVariable("studyCafeId") Long studyCafeId, @PathVariable("reviewId") Long reviewId,
+<<<<<<< HEAD
         @RequestBody kr.bos.dto.request.ReviewRequest reviewRequest) {
         reviewService.updateReview(reviewRequest, userId, reviewId);
+=======
+        @RequestBody ReviewReq reviewReq) {
+        reviewService.updateReview(reviewReq, userId, reviewId);
+>>>>>>> 9a0c9f2 (Model 클래스 분리)
     }
 
     /**

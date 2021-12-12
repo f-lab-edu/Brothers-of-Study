@@ -1,4 +1,4 @@
-package kr.bos.model.dto.request;
+package kr.bos.dto.request;
 
 import java.util.List;
 import javax.validation.Valid;

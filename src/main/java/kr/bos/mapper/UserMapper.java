@@ -1,7 +1,7 @@
 package kr.bos.mapper;
 
 import java.util.Optional;
-import kr.bos.model.dto.request.UserReq;
+import kr.bos.dto.request.UserReq;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
