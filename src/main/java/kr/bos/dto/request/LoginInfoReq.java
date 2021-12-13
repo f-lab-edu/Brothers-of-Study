@@ -1,4 +1,4 @@
-package kr.bos.model.dto.request;
+package kr.bos.dto.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

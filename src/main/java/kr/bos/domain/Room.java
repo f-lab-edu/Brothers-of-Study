@@ -1,4 +1,4 @@
-package kr.bos.model.domain;
+package kr.bos.domain;
 
 import java.time.LocalDateTime;
 import lombok.Builder;

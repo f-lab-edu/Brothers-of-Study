@@ -3,8 +3,6 @@ spring:
     ansi:
       enabled: always
 
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-    use-generated-keys: true
-    mapper-locations: classpath:/mappers/**/*.xml
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true

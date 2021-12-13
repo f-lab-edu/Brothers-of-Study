@@ -1,7 +1,7 @@
 package kr.bos.service;
 
 import java.util.Optional;
-import kr.bos.model.dto.request.UserReq;
+import kr.bos.dto.request.UserReq;
 import kr.bos.exception.DuplicatedEmailException;
 import kr.bos.exception.SelectUserNotFoundException;
 import kr.bos.mapper.UserMapper;

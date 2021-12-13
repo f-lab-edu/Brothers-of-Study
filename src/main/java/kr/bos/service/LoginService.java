@@ -1,8 +1,8 @@
 package kr.bos.service;
 
 import javax.servlet.http.HttpSession;
-import kr.bos.model.dto.request.LoginInfoReq;
-import kr.bos.model.dto.request.UserReq;
+import kr.bos.dto.request.LoginInfoReq;
+import kr.bos.dto.request.UserReq;
 import kr.bos.exception.InvalidPasswordException;
 import kr.bos.utils.PasswordEncrypt;
 import lombok.RequiredArgsConstructor;

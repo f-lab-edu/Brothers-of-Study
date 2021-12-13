@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.bos.mapper.ReviewMapper">
+
+  <select id="selectReviewsStudyCafeId" resultType="kr.bos.dto.response.ReviewRes">
+    SELECT
+    reviews.id, users.name AS userName, reviews.description, reviews.score,
+    reviews.created_at AS createdAt
+    FROM reviews
+    JOIN users
+    ON reviews.user_id = users.id
+    WHERE study_cafe_id = #{studyCafeId}
+    ORDER BY reviews.created_at DESC
+  </select>
+
+  <insert id="insertReview">
+    INSERT INTO reviews (user_id, study_cafe_id, description, score)
+    VALUES (#{userId}, #{studyCafeId}, #{reviewReq.description}, #{reviewReq.score})
+  </insert>
+
+  <update id="updateReview">
+    UPDATE reviews
+    <set>
+      <if test="reviewReq.description != null">description = #{reviewReq.description},</if>
+      <if test="reviewReq.score != null">score = #{reviewReq.score}</if>
+    </set>
+    WHERE id =
+    (
+    SELECT id FROM
+    ( SELECT id FROM reviews WHERE id = #{reviewId} AND user_id = #{userId} ) sub_query
+    )
+  </update>
+
+  <delete id="deleteReview">
+    DELETE FROM reviews
+    WHERE id =
+    (
+    SELECT id FROM
+    ( SELECT id FROM reviews WHERE id = #{reviewId} AND user_id = #{userId} ) sub_query
+    )
+  </delete>
+
+</mapper>

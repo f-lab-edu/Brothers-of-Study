@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * 블랙리스트에 등록된 사용자가 접근시 발생하는 Exception.
+ * 허용하지 않은 유저가 접근시 발생하는 Exception.
  *
  * @since 1.0.0
  */

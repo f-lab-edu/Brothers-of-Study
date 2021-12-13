@@ -5,7 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
-import kr.bos.model.dto.request.UserReq;
+import kr.bos.dto.request.UserReq;
 import kr.bos.exception.DuplicatedEmailException;
 import kr.bos.exception.SelectUserNotFoundException;
 import kr.bos.mapper.UserMapper;
