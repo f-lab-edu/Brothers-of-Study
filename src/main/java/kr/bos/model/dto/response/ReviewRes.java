@@ -1,4 +1,4 @@
-package kr.bos.dto.response;
+package kr.bos.model.dto.response;
 
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;

@@ -5,10 +5,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
-import kr.bos.dto.request.UserReq;
 import kr.bos.exception.DuplicatedEmailException;
 import kr.bos.exception.SelectUserNotFoundException;
 import kr.bos.mapper.UserMapper;
+import kr.bos.model.domain.User;
+import kr.bos.model.dto.request.UserReq;
+import kr.bos.utils.PasswordEncrypt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,12 +28,20 @@ class UserServiceTest {
     @InjectMocks
     UserService userService;
 
+    User user;
     UserReq userReq;
 
     @BeforeEach
     public void makeUser() {
-        userReq = UserReq.builder()
+        user = User.builder()
             .id(1L)
+            .email("email@email.com")
+            .password(PasswordEncrypt.encrypt("password"))
+            .name("name")
+            .address("address")
+            .build();
+
+        userReq = UserReq.builder()
             .email("email@email.com")
             .password("password")
             .name("name")
@@ -59,7 +69,7 @@ class UserServiceTest {
     @DisplayName("회원 조회에 성공합니다.")
     public void selectUserByEmailTestWhenSuccess() {
         when(userMapper.selectUserByEmail(userReq.getEmail()))
-            .thenReturn(Optional.ofNullable(userReq));
+            .thenReturn(Optional.ofNullable(user));
         userService.selectUserByEmail(userReq.getEmail());
     }
 
@@ -73,7 +83,7 @@ class UserServiceTest {
     @Test
     @DisplayName("회원탈퇴에 성공합니다.")
     public void deleteUserWhenSuccess() {
-        userService.deleteUser(userReq.getId());
-        verify(userMapper).deleteUser(userReq.getId());
+        userService.deleteUser(user.getId());
+        verify(userMapper).deleteUser(user.getId());
     }
 }

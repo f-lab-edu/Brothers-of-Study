@@ -1,7 +1,8 @@
 package kr.bos.service;
 
 import java.util.Optional;
-import kr.bos.dto.request.UserReq;
+import kr.bos.model.domain.User;
+import kr.bos.model.dto.request.UserReq;
 import kr.bos.exception.DuplicatedEmailException;
 import kr.bos.exception.SelectUserNotFoundException;
 import kr.bos.mapper.UserMapper;
@@ -44,10 +45,10 @@ public class UserService {
      *
      * @since 1.0.0
      */
-    public UserReq selectUserByEmail(String email) {
-        Optional<UserReq> userDto = userMapper.selectUserByEmail(email);
-        userDto.orElseThrow(SelectUserNotFoundException::new);
-        return userDto.get();
+    public User selectUserByEmail(String email) {
+        Optional<User> user = userMapper.selectUserByEmail(email);
+        user.orElseThrow(SelectUserNotFoundException::new);
+        return user.get();
     }
 
     /**

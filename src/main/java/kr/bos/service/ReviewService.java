@@ -1,10 +1,11 @@
 package kr.bos.service;
 
 import java.util.List;
-import kr.bos.dto.request.ReviewReq;
-import kr.bos.dto.response.ReviewRes;
 import kr.bos.exception.AccessDeniedException;
 import kr.bos.mapper.ReviewMapper;
+import kr.bos.model.domain.Review;
+import kr.bos.model.dto.request.ReviewReq;
+import kr.bos.model.dto.response.ReviewRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,14 @@ public class ReviewService {
      * @since 1.0.0
      */
     public void createReview(ReviewReq reviewReq, Long userId, Long studyCafeId) {
-        reviewMapper.insertReview(reviewReq, userId, studyCafeId);
+        Review review = Review.builder()
+            .userId(userId)
+            .studyCafeId(studyCafeId)
+            .description(reviewReq.getDescription())
+            .score(reviewReq.getScore())
+            .build();
+
+        reviewMapper.insertReview(review);
     }
 
     /**
@@ -43,7 +51,14 @@ public class ReviewService {
      * @since 1.0.0
      */
     public void updateReview(ReviewReq reviewReq, Long userId, Long reviewId) {
-        int updateCount = reviewMapper.updateReview(reviewReq, userId, reviewId);
+        Review review = Review.builder()
+            .id(reviewId)
+            .userId(userId)
+            .description(reviewReq.getDescription())
+            .score(reviewReq.getScore())
+            .build();
+
+        int updateCount = reviewMapper.updateReview(review);
         if (updateCount == 0) {
             throw new AccessDeniedException();
         }

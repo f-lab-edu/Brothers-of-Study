@@ -1,8 +1,9 @@
 package kr.bos.mapper;
 
 import java.util.List;
-import kr.bos.dto.request.ReviewReq;
-import kr.bos.dto.response.ReviewRes;
+import kr.bos.model.domain.Review;
+import kr.bos.model.dto.request.ReviewReq;
+import kr.bos.model.dto.response.ReviewRes;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,13 +17,9 @@ public interface ReviewMapper {
 
     List<ReviewRes> selectReviewsStudyCafeId(Long studyCafeId);
 
-    void insertReview(@Param("reviewRequest") ReviewReq reviewReq,
-        @Param("userId") Long userId,
-        @Param("reviewId") Long reviewId);
+    void insertReview(Review review);
+
+    int updateReview(Review review);
 
     int deleteReview(@Param("userId") Long userId, @Param("reviewId") Long reviewId);
-
-    int updateReview(@Param("reviewRequest") ReviewReq reviewReq,
-        @Param("userId") Long userId,
-        @Param("reviewId") Long reviewId);
 }

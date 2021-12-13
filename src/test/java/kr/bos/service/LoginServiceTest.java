@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
-import kr.bos.dto.request.LoginInfoReq;
-import kr.bos.dto.request.UserReq;
 import kr.bos.exception.InvalidPasswordException;
+import kr.bos.model.domain.User;
+import kr.bos.model.dto.request.LoginInfoReq;
 import kr.bos.utils.PasswordEncrypt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,34 +22,30 @@ import org.springframework.mock.web.MockHttpSession;
 @ExtendWith(MockitoExtension.class)
 class LoginServiceTest {
 
-    private static final String USER_KEY = "USER_ID";
-
     @Mock
     UserService userService;
 
     @InjectMocks
     LoginService loginService;
 
-    UserReq userReq;
+    User user;
     LoginInfoReq loginInfoReq;
-    String password;
 
     @BeforeEach
     public void beforeEach() {
         injectSessionInUserService();
 
-        password = "password";
-        userReq = UserReq.builder()
+        user = User.builder()
             .id(1L)
             .email("email@email.com")
-            .password(PasswordEncrypt.encrypt(password))
+            .password(PasswordEncrypt.encrypt("password"))
             .name("name")
             .address("address")
             .build();
 
         loginInfoReq = LoginInfoReq.builder()
             .email("email@email.com")
-            .password(password)
+            .password("password")
             .build();
     }
 
@@ -66,29 +62,29 @@ class LoginServiceTest {
     @Test
     @DisplayName("로그인에 성공합니다.")
     public void loginTestWhenSuccess() {
-        when(userService.selectUserByEmail(loginInfoReq.getEmail())).thenReturn(userReq);
+        when(userService.selectUserByEmail(loginInfoReq.getEmail())).thenReturn(user);
         loginService.login(loginInfoReq);
-        assertEquals(loginService.getCurrentUser(), userReq.getId());
+        assertEquals(loginService.getCurrentUser(), user.getId());
     }
 
     @Test
     @DisplayName("로그인에 실패합니다. :잘못된 패스워드")
     public void loginTestWhenFail() {
-        when(userService.selectUserByEmail(loginInfoReq.getEmail())).thenReturn(userReq);
+        when(userService.selectUserByEmail(loginInfoReq.getEmail())).thenReturn(user);
 
         loginInfoReq.setPassword("");
         assertThrows(InvalidPasswordException.class,
             () -> loginService.login(loginInfoReq));
 
-        loginInfoReq.setPassword(password + "@");
+        loginInfoReq.setPassword("password" + "@");
         assertThrows(InvalidPasswordException.class,
             () -> loginService.login(loginInfoReq));
 
-        loginInfoReq.setPassword(password.substring(1));
+        loginInfoReq.setPassword("password".substring(1));
         assertThrows(InvalidPasswordException.class,
             () -> loginService.login(loginInfoReq));
 
-        loginInfoReq.setPassword(PasswordEncrypt.encrypt(password));
+        loginInfoReq.setPassword(PasswordEncrypt.encrypt("password"));
         assertThrows(InvalidPasswordException.class,
             () -> loginService.login(loginInfoReq));
     }

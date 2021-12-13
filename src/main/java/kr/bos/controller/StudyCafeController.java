@@ -6,9 +6,10 @@ import javax.validation.Valid;
 import kr.bos.annotation.BlackCheck;
 import kr.bos.annotation.CurrentUserId;
 import kr.bos.annotation.LoginCheck;
-import kr.bos.dto.request.ReviewReq;
-import kr.bos.dto.request.StudyCafeReq;
-import kr.bos.dto.response.ReviewRes;
+import kr.bos.model.dto.request.ReservationReq;
+import kr.bos.model.dto.request.ReviewReq;
+import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.model.dto.response.ReviewRes;
 import kr.bos.service.ReservationService;
 import kr.bos.service.ReviewService;
 import kr.bos.service.StudyCafeService;
@@ -93,7 +94,7 @@ public class StudyCafeController {
     public void createReservation(@CurrentUserId Long userId,
         @PathVariable("studyCafeId") Long studyCafeId,
         @PathVariable("roomId") Long roomId,
-        @Valid @RequestBody kr.bos.model.dto.request.ReservationReq reservationReq) {
+        @Valid @RequestBody ReservationReq reservationReq) {
         reservationService.createReservation(reservationReq, userId, roomId);
     }
 

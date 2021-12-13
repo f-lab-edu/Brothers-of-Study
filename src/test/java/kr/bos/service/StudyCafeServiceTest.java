@@ -7,13 +7,13 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import kr.bos.domain.StudyCafe;
-import kr.bos.dto.request.RoomReq;
-import kr.bos.dto.request.StudyCafeReq;
 import kr.bos.exception.BookmarkNotFoundException;
 import kr.bos.exception.DuplicatedBookmarkException;
 import kr.bos.mapper.RoomMapper;
 import kr.bos.mapper.StudyCafeMapper;
+import kr.bos.model.domain.StudyCafe;
+import kr.bos.model.dto.request.RoomReq;
+import kr.bos.model.dto.request.StudyCafeReq;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

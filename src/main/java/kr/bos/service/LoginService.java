@@ -1,9 +1,9 @@
 package kr.bos.service;
 
 import javax.servlet.http.HttpSession;
-import kr.bos.dto.request.LoginInfoReq;
-import kr.bos.dto.request.UserReq;
 import kr.bos.exception.InvalidPasswordException;
+import kr.bos.model.domain.User;
+import kr.bos.model.dto.request.LoginInfoReq;
 import kr.bos.utils.PasswordEncrypt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,10 +27,10 @@ public class LoginService {
      * @since 1.0.0
      */
     public void login(LoginInfoReq loginInfoReq) {
-        UserReq userReq = userService.selectUserByEmail(loginInfoReq.getEmail());
+        User user = userService.selectUserByEmail(loginInfoReq.getEmail());
 
-        if (PasswordEncrypt.isMatch(loginInfoReq.getPassword(), userReq.getPassword())) {
-            session.setAttribute(USER_ID, userReq.getId());
+        if (PasswordEncrypt.isMatch(loginInfoReq.getPassword(), user.getPassword())) {
+            session.setAttribute(USER_ID, user.getId());
         } else {
             throw new InvalidPasswordException();
         }

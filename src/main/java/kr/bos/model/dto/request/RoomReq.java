@@ -1,4 +1,4 @@
-package kr.bos.dto.request;
+package kr.bos.model.dto.request;
 
 import javax.validation.constraints.Min;
 import lombok.AllArgsConstructor;
