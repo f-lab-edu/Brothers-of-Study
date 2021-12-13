@@ -6,6 +6,8 @@ import kr.bos.domain.Room;
 import kr.bos.domain.StudyCafe;
 import kr.bos.dto.request.RoomReq;
 import kr.bos.dto.request.StudyCafeReq;
+import kr.bos.exception.BookmarkNotFoundException;
+import kr.bos.exception.DuplicatedBookmarkException;
 import kr.bos.mapper.RoomMapper;
 import kr.bos.mapper.StudyCafeMapper;
 import lombok.RequiredArgsConstructor;
@@ -55,5 +57,33 @@ public class StudyCafeService {
         }
 
         roomMapper.insertRooms(rooms);
+    }
+
+    /**
+     * 북 마크 등록하기.
+     * <br>
+     * 북 마크가 이미 등록되어 있다면 DuplicatedBookmarkException 예외 발생.
+     *
+     * @since 1.0.0
+     */
+    public void registerBookmark(Long userId, Long studyCafeId) {
+        int insertCount = studyCafeMapper.insertBookmark(userId, studyCafeId);
+        if (insertCount == 0) {
+            throw new DuplicatedBookmarkException();
+        }
+    }
+
+    /**
+     * 북 마크 취소하기.
+     * <br>
+     * 북 마크가 등록되지 않았다면 BookmarkNotFoundException 예외 발생.
+     *
+     * @since 1.0.0
+     */
+    public void cancelBookmark(Long userId, Long studyCafeId) {
+        int deleteCount = studyCafeMapper.deleteBookmark(userId, studyCafeId);
+        if (deleteCount == 0) {
+            throw new BookmarkNotFoundException();
+        }
     }
 }

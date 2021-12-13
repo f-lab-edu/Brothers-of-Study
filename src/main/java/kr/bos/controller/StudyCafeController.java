@@ -9,7 +9,6 @@ import kr.bos.annotation.LoginCheck;
 import kr.bos.dto.request.ReviewReq;
 import kr.bos.dto.request.StudyCafeReq;
 import kr.bos.dto.response.ReviewRes;
-import kr.bos.model.dto.request.ReservationReq;
 import kr.bos.service.ReservationService;
 import kr.bos.service.ReviewService;
 import kr.bos.service.StudyCafeService;
@@ -55,6 +54,34 @@ public class StudyCafeController {
     }
 
     /**
+     * 북 마크 등록하기.
+     *
+     * @since 1.0.0
+     */
+    @PostMapping("/{studyCafeId}/bookmarks")
+    @LoginCheck
+    @BlackCheck
+    @ResponseStatus(HttpStatus.CREATED)
+    public void registerBookmark(@CurrentUserId Long userId,
+        @PathVariable("studyCafeId") Long studyCafeId) {
+        studyCafeService.registerBookmark(userId, studyCafeId);
+    }
+
+    /**
+     * 북 마크 취소하기.
+     *
+     * @since 1.0.0
+     */
+    @DeleteMapping("/{studyCafeId}/bookmarks")
+    @LoginCheck
+    @BlackCheck
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancelBookmark(@CurrentUserId Long userId,
+        @PathVariable("studyCafeId") Long studyCafeId) {
+        studyCafeService.cancelBookmark(userId, studyCafeId);
+    }
+
+    /**
      * 예약하기.
      *
      * @since 1.0.0
@@ -66,7 +93,7 @@ public class StudyCafeController {
     public void createReservation(@CurrentUserId Long userId,
         @PathVariable("studyCafeId") Long studyCafeId,
         @PathVariable("roomId") Long roomId,
-        @Valid @RequestBody ReservationReq reservationReq) {
+        @Valid @RequestBody kr.bos.model.dto.request.ReservationReq reservationReq) {
         reservationService.createReservation(reservationReq, userId, roomId);
     }
 

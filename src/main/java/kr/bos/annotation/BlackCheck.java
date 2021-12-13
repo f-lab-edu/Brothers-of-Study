@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Black Check 어노테이션.
+ * 블랙리스트 체크 어노테이션. {@link kr.bos.aop.BlackCheckAspect}를 통해 AOP 적용
  *
  * @since 1.0.0
  */
