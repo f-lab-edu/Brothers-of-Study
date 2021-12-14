@@ -11,6 +11,7 @@ import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.RoomReq;
 import kr.bos.model.dto.request.StudyCafeReq;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,8 +68,9 @@ public class StudyCafeService {
      * @since 1.0.0
      */
     public void registerBookmark(Long userId, Long studyCafeId) {
-        int insertCount = studyCafeMapper.insertBookmark(userId, studyCafeId);
-        if (insertCount == 0) {
+        try {
+            studyCafeMapper.insertBookmark(userId, studyCafeId);
+        } catch (DuplicateKeyException e) {
             throw new DuplicatedBookmarkException();
         }
     }

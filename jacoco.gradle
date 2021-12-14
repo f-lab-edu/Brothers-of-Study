@@ -12,6 +12,7 @@ def jacocoExcludes = [
 
         // 블랙리스트 체크 클래스.
         '**/BlackCheckAspect.class',
+        '**/AccessDeniedException.class'
 ]
 
 jacocoTestReport {
