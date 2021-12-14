@@ -2,6 +2,7 @@ package kr.bos.service;
 
 import java.util.List;
 import kr.bos.exception.AccessDeniedException;
+import kr.bos.exception.ReviewNotFoundException;
 import kr.bos.mapper.ReviewMapper;
 import kr.bos.model.domain.Review;
 import kr.bos.model.dto.request.ReviewReq;
@@ -26,7 +27,7 @@ public class ReviewService {
      * @since 1.0.0
      */
     public List<ReviewRes> getReviews(Long studyCafeId) {
-        return reviewMapper.selectReviewsStudyCafeId(studyCafeId);
+        return reviewMapper.selectReviewsByStudyCafeId(studyCafeId);
     }
 
     /**
@@ -46,7 +47,7 @@ public class ReviewService {
     }
 
     /**
-     * 리뷰 업데이트. 업데이트 실패시 AccessDeniedException 예외 발생.
+     * 리뷰 업데이트. 업데이트 실패시 ReviewNotFoundException 예외 발생.
      *
      * @since 1.0.0
      */
@@ -60,19 +61,19 @@ public class ReviewService {
 
         int updateCount = reviewMapper.updateReview(review);
         if (updateCount == 0) {
-            throw new AccessDeniedException();
+            throw new ReviewNotFoundException();
         }
     }
 
     /**
-     * 리뷰 삭제하기. 삭제 실패시 AccessDeniedException 예외 발생.
+     * 리뷰 삭제하기. 삭제 실패시 ReviewNotFoundException 예외 발생.
      *
      * @since 1.0.0
      */
     public void deleteReview(Long userId, Long reviewId) {
         int deleteCount = reviewMapper.deleteReview(userId, reviewId);
         if (deleteCount == 0) {
-            throw new AccessDeniedException();
+            throw new ReviewNotFoundException();
         }
     }
 }

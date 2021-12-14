@@ -5,7 +5,7 @@
 
 <mapper namespace="kr.bos.mapper.ReviewMapper">
 
-  <select id="selectReviewsStudyCafeId" resultType="kr.bos.model.dto.response.ReviewRes">
+  <select id="selectReviewsByStudyCafeId" resultType="kr.bos.model.dto.response.ReviewRes">
     SELECT
     reviews.id, users.name AS userName, reviews.description, reviews.score,
     reviews.created_at AS createdAt
@@ -27,20 +27,12 @@
       <if test="description != null">description = #{description},</if>
       <if test="score != null">score = #{score}</if>
     </set>
-    WHERE id =
-    (
-    SELECT id FROM
-    ( SELECT id FROM reviews WHERE id = #{id} AND user_id = #{userId} ) sub_query
-    )
+    WHERE id = #{id} AND user_id = #{userId}
   </update>
 
   <delete id="deleteReview">
     DELETE FROM reviews
-    WHERE id =
-    (
-    SELECT id FROM
-    ( SELECT id FROM reviews WHERE id = #{reviewId} AND user_id = #{userId} ) sub_query
-    )
+    WHERE id = #{reviewId} AND user_id = #{userId}
   </delete>
 
 </mapper>
