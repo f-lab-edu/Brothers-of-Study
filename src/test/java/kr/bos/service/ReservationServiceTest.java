@@ -3,8 +3,10 @@ package kr.bos.service;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import kr.bos.exception.DuplicatedTimeReservationException;
 import kr.bos.exception.ReservationWrongTimeInputException;
 import kr.bos.mapper.ReservationMapper;
 import kr.bos.model.domain.Reservation;
@@ -38,14 +40,16 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("예약 생성에 성공합니다.")
-    public void createReviewWhenSuccess() {
+    public void createReservationWhenSuccess() {
+        when(reservationMapper.isExistsReservationByRoomIdAndUseTime(2L,
+            reservationReq.getStartTime(), reservationReq.getEndTime())).thenReturn(false);
         reservationService.createReservation(reservationReq, 1L, 2L);
         verify(reservationMapper).insertReservation(any(Reservation.class));
     }
 
     @Test
     @DisplayName("예약 생성에 실패합니다. :잘못된 시간 입력")
-    public void createReviewWhenFail() {
+    public void createReservationWhenFail1() {
         reservationReq.setEndTime(LocalDateTime.now().plusMinutes(2));
         assertThrows(ReservationWrongTimeInputException.class,
             () -> reservationService.createReservation(reservationReq, 1L, 2L));
@@ -56,6 +60,15 @@ class ReservationServiceTest {
 
         reservationReq.setStartTime(LocalDateTime.now().minusMinutes(1));
         assertThrows(ReservationWrongTimeInputException.class,
+            () -> reservationService.createReservation(reservationReq, 1L, 2L));
+    }
+
+    @Test
+    @DisplayName("예약 생성에 실패합니다. :이미 예약자가 존재합니다.")
+    public void createReservationWhenFail2() {
+        when(reservationMapper.isExistsReservationByRoomIdAndUseTime(2L,
+            reservationReq.getStartTime(), reservationReq.getEndTime())).thenReturn(true);
+        assertThrows(DuplicatedTimeReservationException.class,
             () -> reservationService.createReservation(reservationReq, 1L, 2L));
     }
 }

@@ -2,12 +2,14 @@ package kr.bos.service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import kr.bos.exception.DuplicatedTimeReservationException;
 import kr.bos.exception.ReservationWrongTimeInputException;
 import kr.bos.mapper.ReservationMapper;
 import kr.bos.model.domain.Reservation;
 import kr.bos.model.dto.request.ReservationReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Reservation Service.
@@ -28,6 +30,7 @@ public class ReservationService {
      *
      * @since 1.0.0
      */
+    @Transactional
     public void createReservation(ReservationReq reservationReq, Long userId,
         Long roomId) {
         LocalDateTime startTime = reservationReq.getStartTime();
@@ -36,6 +39,10 @@ public class ReservationService {
         if (startTime.isBefore(LocalDateTime.now()) || startTime.isAfter(endTime)
             || ChronoUnit.MINUTES.between(startTime, endTime) < 10) {
             throw new ReservationWrongTimeInputException();
+        }
+
+        if (reservationMapper.isExistsReservationByRoomIdAndUseTime(roomId, startTime, endTime)) {
+            throw new DuplicatedTimeReservationException();
         }
 
         Reservation reservation = Reservation.builder()
