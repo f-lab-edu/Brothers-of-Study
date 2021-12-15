@@ -1,9 +1,13 @@
 package kr.bos.service;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 import kr.bos.exception.DuplicatedTimeReservationException;
+import kr.bos.exception.WrongReservationCanceledException;
 import kr.bos.exception.ReservationWrongTimeInputException;
+import kr.bos.exception.SelectReservationNotFoundException;
 import kr.bos.mapper.ReservationMapper;
 import kr.bos.model.domain.Reservation;
 import kr.bos.model.dto.request.ReservationReq;
@@ -37,7 +41,7 @@ public class ReservationService {
         LocalDateTime endTime = reservationReq.getEndTime();
 
         if (startTime.isBefore(LocalDateTime.now()) || startTime.isAfter(endTime)
-            || ChronoUnit.MINUTES.between(startTime, endTime) < 10) {
+            || MINUTES.between(startTime, endTime) < 10) {
             throw new ReservationWrongTimeInputException();
         }
 
@@ -53,5 +57,25 @@ public class ReservationService {
             .build();
 
         reservationMapper.insertReservation(reservation);
+    }
+
+    /**
+     * 예약 취소하기.
+     * <br>
+     * 예약 시작 시간이 10분 전에 취소 가능. 10분 이내일 경우 WrongReservationCanceledException 예외 발생.
+     *
+     * @since 1.0.0
+     */
+    @Transactional
+    public void cancelReservation(Long userId, Long reservationId) {
+        Optional<Reservation> reservation = reservationMapper.selectReservationByIdAndUserId(userId,
+            reservationId);
+
+        reservation.orElseThrow(SelectReservationNotFoundException::new);
+        if (MINUTES.between(LocalDateTime.now(), reservation.get().getStartTime()) < 10) {
+            throw new WrongReservationCanceledException();
+        }
+
+        reservationMapper.deleteReservation(reservationId);
     }
 }

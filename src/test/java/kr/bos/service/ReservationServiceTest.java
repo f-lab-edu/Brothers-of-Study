@@ -6,8 +6,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import kr.bos.exception.DuplicatedTimeReservationException;
+import kr.bos.exception.WrongReservationCanceledException;
 import kr.bos.exception.ReservationWrongTimeInputException;
+import kr.bos.exception.SelectReservationNotFoundException;
 import kr.bos.mapper.ReservationMapper;
 import kr.bos.model.domain.Reservation;
 import kr.bos.model.dto.request.ReservationReq;
@@ -70,5 +73,43 @@ class ReservationServiceTest {
             reservationReq.getStartTime(), reservationReq.getEndTime())).thenReturn(true);
         assertThrows(DuplicatedTimeReservationException.class,
             () -> reservationService.createReservation(reservationReq, 1L, 2L));
+    }
+
+    @Test
+    @DisplayName("예약 취소에 성공합니다.")
+    public void cancelReservationWhenSuccess() {
+        Reservation reservation = Reservation.builder()
+            .id(1L)
+            .startTime(LocalDateTime.now().plusMinutes(11))
+            .build();
+
+        when(reservationMapper.selectReservationByIdAndUserId(1L, 2L)).thenReturn(
+            Optional.of(reservation));
+        reservationService.cancelReservation(1L, 2L);
+        verify(reservationMapper).selectReservationByIdAndUserId(1L, 2L);
+        verify(reservationMapper).deleteReservation(2L);
+    }
+
+    @Test
+    @DisplayName("예약 취소에 실패합니다. :존재하지 않는 예약입니다.")
+    public void cancelReservationWhenFail1() {
+        when(reservationMapper.selectReservationByIdAndUserId(1L, 2L)).thenReturn(
+            Optional.empty());
+        assertThrows(SelectReservationNotFoundException.class,
+            () -> reservationService.cancelReservation(1L, 2L));
+    }
+
+    @Test
+    @DisplayName("예약 취소에 실패합니다. :예약 취소는 시작 10분전에 할 수 없습니다.")
+    public void cancelReservationWhenFail2() {
+        Reservation reservation = Reservation.builder()
+            .id(1L)
+            .startTime(LocalDateTime.now().plusMinutes(5))
+            .build();
+
+        when(reservationMapper.selectReservationByIdAndUserId(1L, 2L)).thenReturn(
+            Optional.of(reservation));
+        assertThrows(WrongReservationCanceledException.class,
+            () -> reservationService.cancelReservation(1L, 2L));
     }
 }

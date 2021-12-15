@@ -87,10 +87,23 @@ public class StudyCafeController {
     @BlackCheck
     @ResponseStatus(HttpStatus.CREATED)
     public void createReservation(@CurrentUserId Long userId,
-        @PathVariable("studyCafeId") Long studyCafeId,
         @PathVariable("roomId") Long roomId,
         @Valid @RequestBody ReservationReq reservationReq) {
         reservationService.createReservation(reservationReq, userId, roomId);
+    }
+
+    /**
+     * 예약 취소하기.
+     *
+     * @since 1.0.0
+     */
+    @DeleteMapping("/{studyCafeId}/rooms/{roomId}/reservations/{reservationId}")
+    @LoginCheck
+    @BlackCheck
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancelReservation(@CurrentUserId Long userId,
+        @PathVariable("reservationId") Long reservationId) {
+        reservationService.cancelReservation(userId, reservationId);
     }
 
     /**
@@ -102,8 +115,8 @@ public class StudyCafeController {
     @LoginCheck
     @BlackCheck
     @ResponseStatus(HttpStatus.OK)
-    public PageInfo<ReviewRes> getReviews(@CurrentUserId Long userId,
-        @PathVariable("studyCafeId") Long studyCafeId, @RequestParam("page") Integer page,
+    public PageInfo<ReviewRes> getReviews(@PathVariable("studyCafeId") Long studyCafeId,
+        @RequestParam("page") Integer page,
         @RequestParam("size") Integer size) {
         PageHelper.startPage(page, size);
         return PageInfo.of(reviewService.getReviews(studyCafeId));
@@ -133,8 +146,7 @@ public class StudyCafeController {
     @LoginCheck
     @BlackCheck
     @ResponseStatus(HttpStatus.OK)
-    public void updateReview(@CurrentUserId Long userId,
-        @PathVariable("studyCafeId") Long studyCafeId, @PathVariable("reviewId") Long reviewId,
+    public void updateReview(@CurrentUserId Long userId, @PathVariable("reviewId") Long reviewId,
         @RequestBody ReviewReq reviewReq) {
         reviewService.updateReview(reviewReq, userId, reviewId);
     }
