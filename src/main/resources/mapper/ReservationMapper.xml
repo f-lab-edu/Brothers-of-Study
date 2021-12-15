@@ -21,4 +21,15 @@
     VALUES (#{userId}, #{roomId}, #{startTime}, #{endTime})
   </insert>
 
+  <select id="selectReservationByIdAndUserId" resultType="kr.bos.model.domain.Reservation">
+    SELECT *
+    FROM reservations
+    WHERE id = #{reservationId} AND user_id = #{userId}
+  </select>
+
+  <delete id="deleteReservation">
+    DELETE FROM reservations
+    WHERE id = #{reservationId}
+  </delete>
+
 </mapper>
