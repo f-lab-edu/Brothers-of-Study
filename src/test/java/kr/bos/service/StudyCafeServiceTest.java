@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import kr.bos.dto.StudyCafeDto;
 import kr.bos.exception.BookmarkNotFoundException;
 import kr.bos.exception.DuplicatedBookmarkException;
 import kr.bos.exception.StudyCafeNotFoundException;
@@ -22,6 +21,7 @@ import kr.bos.mapper.StudyCafeMapper;
 import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.RoomReq;
 import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.model.dto.response.StudyCafeRes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -106,19 +106,19 @@ class StudyCafeServiceTest {
     }
 
     public void giveStudyCafeExistCondition(boolean isStudyCafeExist) {
-       StudyCafe studyCafe =StudyCafe.builder()
-            .id(1L)
-            .title("열공 스터디카페 분당점")
-            .userId(100L)
-            .address("성남시 분당구 장안로")
-            .thumbnail("Thumbnail")
-            .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
-            .build();
+        StudyCafeRes studyCafe = StudyCafeRes.builder()
+             .id(1L)
+             .title("열공 스터디카페 분당점")
+             .userId(100L)
+             .address("성남시 분당구 장안로")
+             .thumbnail("Thumbnail")
+             .createdAt(LocalDateTime.now())
+             .updatedAt(LocalDateTime.now())
+             .build();
         Long studyCafeId = 1L;
 
-        Optional<kr.bos.domain.StudyCafe> studyCafeOptional =
-            isStudyCafeExist ? Optional.of(kr.bos.domain.StudyCafe.builder().build()) : Optional.empty();
+        Optional<StudyCafeRes> studyCafeOptional =
+            isStudyCafeExist ? Optional.of(StudyCafeRes.builder().build()) : Optional.empty();
         Optional<Long> studyCafeIdOptional =
             isStudyCafeExist ? Optional.of(studyCafeId) : Optional.empty();
 
@@ -128,33 +128,42 @@ class StudyCafeServiceTest {
 
 
     @Test
-    @DisplayName("스터디 카페 이름 키워드가 주어질 시 해당 키워드를 갖는 스터디 카페들을 DTO 객체 리스트로 돌려줍니다.")
+    @DisplayName("스터디 카페 이름 키워드가 주어질 시 해당 키워드를 갖는 스터디 카페 Response 리스트 객체를 받습니다.")
     public void findStudyCafesByKeyword() {
         // given
         final String name = "강남";
-        final List<StudyCafe> studyCafes =
-            Arrays.asList(StudyCafe.builder().id(1L).title("강남스터디카페").build()
+        final Long userId = 1L;
+        final List<StudyCafeRes> studyCafeResList = Arrays.asList(
+            StudyCafeRes.builder()
+                .id(1L)
+                .title("강남스터디카페")
+                .address("강남")
+                .thumbnail("")
+                .reviewAverage(3.5)
+                .bookMarked(1)
+                .emptyRoomCount(10)
+                .build()
             );
-        given(studyCafeMapper.getStudyCafesByKeyword(name)).willReturn(studyCafes);
+        given(studyCafeMapper.getStudyCafesByKeyword(userId, name)).willReturn(studyCafeResList);
 
         // when
-        List<StudyCafeDto> studyCafeDtos = studyCafeService.findStudyCafesByKeyword(name);
+        List<StudyCafeRes> responseResult = studyCafeService.findStudyCafesByKeyword(userId, name);
 
         // then
-        assertThat(studyCafeDtos).hasSize(1);
-        assertThat(studyCafeDtos.get(0)).isInstanceOf(StudyCafeDto.class);
+        assertThat(responseResult).hasSize(1);
+        assertThat(responseResult.get(0)).isInstanceOf(StudyCafeRes.class);
     }
 
     @Test
     @DisplayName("스터디 카페 객체가 주어지면 해당 스터디 카페가 등록되어 있는지 확인할 수 있습니다.")
     public void checkStudyCafeExists() {
         // given
-        StudyCafe studyCafe = StudyCafe.builder().id(1L).title("강남").build();
+        StudyCafeReq studyCafe = StudyCafeReq.builder().id(1L).title("강남").build();
 
         given(studyCafeMapper.getStudyCafeIdByName(studyCafe.getTitle()))
             .willReturn(Optional.of(1L));
         given(studyCafeMapper.getStudyCafeById(studyCafe.getId()))
-            .willReturn(Optional.of(StudyCafe.builder().build()));
+            .willReturn(Optional.of(StudyCafeRes.builder().build()));
 
         // then
         assertThat(studyCafeService.isStudyCafeExists(studyCafe)).isTrue();
@@ -164,9 +173,9 @@ class StudyCafeServiceTest {
     @DisplayName("스터디 카페의 id가 조회되지 않으면 해당 스터디 카페는 등록되지 않은 상태입니다.")
     public void checkStudyCafeExistsWithNoId() {
         // given
-        StudyCafe studyCafe = StudyCafe.builder().id(1L).title("강남").build();
+        StudyCafeReq studyCafe = StudyCafeReq.builder().id(1L).title("강남").build();
 
-        lenient().doReturn(Optional.of(kr.bos.domain.StudyCafe.builder().build()))
+        lenient().doReturn(Optional.of(StudyCafeRes.builder().build()))
             .when(studyCafeMapper).getStudyCafeIdByName(studyCafe.getTitle());
         lenient().doReturn(Optional.empty())
             .when(studyCafeMapper).getStudyCafeById(studyCafe.getId());
@@ -180,7 +189,7 @@ class StudyCafeServiceTest {
     @DisplayName("스터디 카페의 이름이 조회 되지 않으면 해당 스터디 카페는 등록되지 않은 상태입니다.")
     public void checkStudyCafeExistsWithNoTitle() {
         // given
-        StudyCafe studyCafe = StudyCafe.builder().id(1L).title("강남").build();
+        StudyCafeReq studyCafe = StudyCafeReq.builder().id(1L).title("강남").build();
 
         lenient().doReturn(Optional.empty())
             .when(studyCafeMapper).getStudyCafeIdByName(studyCafe.getTitle());
@@ -198,10 +207,10 @@ class StudyCafeServiceTest {
         // given
         final Long id = 1L;
         given(studyCafeMapper.getStudyCafeById(id))
-            .willReturn(Optional.of(StudyCafe.builder().id(id).build()));
+            .willReturn(Optional.of(StudyCafeRes.builder().id(id).build()));
 
         // when
-        StudyCafeDto studyCafeDto = studyCafeService.findStudyCafeById(id);
+        StudyCafeRes studyCafeDto = studyCafeService.findStudyCafeById(id);
 
         // then
         assertThat(studyCafeDto.getId()).isEqualTo(id);
@@ -261,7 +270,7 @@ class StudyCafeServiceTest {
     @DisplayName("스터디 카페가 존재할 시, 스터디 카페의 정보를 업데이트합니다.")
     public void updateValidStudyCafe() {
         //given
-        StudyCafe studyCafe = StudyCafe.builder().build();
+        StudyCafeReq studyCafe = StudyCafeReq.builder().build();
         giveStudyCafeExistCondition(true);
         given(studyCafeMapper.updateStudyCafe(studyCafe)).willReturn(1);
 
@@ -276,7 +285,7 @@ class StudyCafeServiceTest {
     @DisplayName("존재하지 않는 스터디 카페는 업데이트할 수 없습니다.")
     public void updateInvalidStudyCafe() {
         //given
-       StudyCafe studyCafe =StudyCafe.builder().build();
+        StudyCafeReq studyCafe = StudyCafeReq.builder().build();
         giveStudyCafeExistCondition(false);
 
         //when
@@ -292,7 +301,7 @@ class StudyCafeServiceTest {
     @DisplayName("등록된 스터디 카페는 삭제할 수 있습니다.")
     public void deleteRegisteredStudyCafe() {
         //given
-        StudyCafe studyCafe = StudyCafe.builder().build();
+        StudyCafeReq studyCafe = StudyCafeReq.builder().build();
         giveStudyCafeExistCondition(true);
         given(studyCafeMapper.deleteStudyCafe(studyCafe.getId())).willReturn(1);
 
@@ -307,7 +316,7 @@ class StudyCafeServiceTest {
     @DisplayName("등록되지 않은 스터디 카페는 삭제할 수 없습니다.")
     public void disableDeleteRegisteredStudyCafe() {
         //given
-        StudyCafe studyCafe = StudyCafe.builder().build();
+        StudyCafeReq studyCafe = StudyCafeReq.builder().build();
         giveStudyCafeExistCondition(false);
 
         //when

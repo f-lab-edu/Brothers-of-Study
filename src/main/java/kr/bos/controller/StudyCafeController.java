@@ -7,11 +7,11 @@ import javax.validation.Valid;
 import kr.bos.annotation.BlackCheck;
 import kr.bos.annotation.CurrentUserId;
 import kr.bos.annotation.LoginCheck;
-import kr.bos.dto.StudyCafeDto;
 import kr.bos.model.dto.request.ReservationReq;
 import kr.bos.model.dto.request.ReviewReq;
 import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.model.dto.response.ReviewRes;
+import kr.bos.model.dto.response.StudyCafeRes;
 import kr.bos.service.ReservationService;
 import kr.bos.service.ReviewService;
 import kr.bos.service.StudyCafeService;
@@ -165,9 +165,11 @@ public class StudyCafeController {
      *
      * @since 1.0.0
      */
-    @GetMapping("/search")
-    public List<StudyCafeDto> search(@RequestParam(required = false) String keyword) {
-        return studyCafeService.findStudyCafesByKeyword(keyword);
+    @GetMapping("/search/{keyword}")
+    @LoginCheck
+    @BlackCheck
+    public List<StudyCafeRes> search(@CurrentUserId Long userId,
+        @PathVariable("keyword") String keyword) {
+        return studyCafeService.findStudyCafesByKeyword(userId, keyword);
     }
 }
-

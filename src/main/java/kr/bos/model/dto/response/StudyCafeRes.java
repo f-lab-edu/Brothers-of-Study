@@ -1,23 +1,22 @@
-package kr.bos.domain;
+package kr.bos.model.dto.response;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 /**
- * StudyCafe Domain Object.
+ * StudyCafeRes.
  *
  * @since 1.0.0
  */
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @Getter
 @Builder
-public class StudyCafe {
+public class StudyCafeRes {
 
     private Long id;
 
@@ -32,4 +31,10 @@ public class StudyCafe {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private Double reviewAverage;
+
+    private Integer bookMarked;
+
+    private Integer emptyRoomCount;
 }

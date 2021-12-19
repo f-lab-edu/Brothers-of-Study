@@ -33,32 +33,48 @@
     )
   </select>
 
-  <resultMap id="studyCafe" type="kr.bos.domain.StudyCafe">
-    <result property="id" column="id"/>
-    <result property="userId" column="user_id"/>
-    <result property="title" column="title"/>
-    <result property="address" column="address"/>
-    <result property="thumbnail" column="thumbnail"/>
-    <result property="createdAt" column="created_at"/>
-    <result property="updatedAt" column="updated_at"/>
-  </resultMap>
-
-  <select id="getStudyCafeById" resultMap="studyCafe">
+  <select id="getStudyCafeById" resultType="kr.bos.model.dto.response.StudyCafeRes">
     SELECT id, user_id, title, address, thumbnail, created_at, updated_at
     FROM STUDY_CAFES
     WHERE id=#{id}
   </select>
 
-  <select id="getStudyCafesByKeyword" resultMap="studyCafe">
-    SELECT id, user_id, title, address, thumbnail, created_at, updated_at
-    FROM STUDY_CAFES
-    WHERE title LIKE CONCAT('%', #{name}, '%')
+  <select id="getStudyCafesByKeyword" resultType="kr.bos.model.dto.response.StudyCafeRes">
+    SELECT STUDY_CAFES.id,
+           STUDY_CAFES.user_id,
+           STUDY_CAFES.title,
+           STUDY_CAFES.address,
+           STUDY_CAFES.thumbnail,
+           STUDY_CAFES.created_at,
+           STUDY_CAFES.updated_at,
+           REVIEWS.score AS reviewAverage,
+           COUNT(BOOKMARKS.id) AS bookmarked,
+           ROOMS.capacity - (
+               SELECT COUNT(RESERVATIONS.id) FROM RESERVATIONS
+                <![CDATA[
+                     WHERE RESERVATIONS.room_id = ROOMS.id
+                       AND (CURRENT_TIMESTAMP < RESERVATIONS.end_time)
+                ]]>
+               ) AS empty_room_count
+
+            FROM STUDY_CAFES
+                INNER JOIN REVIEWS
+                ON REVIEWS.study_cafe_id = STIDY_CAFES.id
+
+                LEFT JOIN BOOKMARKS AS BK
+                ON BK.user_id = #{userId} AND BK.study_cafe_id = STUDY_CAFES.id
+
+                INNER JOIN ROOMS
+                ON ROOMS.study_cafe_id = STUDY_CAFES.id
+
+            WHERE STUDY_CAFES.title LIKE CONCAT('%', #{name}, '%'))
   </select>
+
   <select id="getStudyCafeIdByName" resultType="java.lang.Long">
     SELECT id FROM STUDY_CAFES WHERE title=#{name}
   </select>
 
-  <update id="updateStudyCafe" parameterType="kr.bos.model.domain.StudyCafe">
+  <update id="updateStudyCafe" parameterType="kr.bos.model.dto.request.StudyCafeReq">
     UPDATE STUDY_CAFES SET id=#{id}, user_id=#{userId}, title=#{title}, address=#{address},
                            thumbnail=#{thumbnail}, updated_at=NOW()
     WHERE id=#{id}

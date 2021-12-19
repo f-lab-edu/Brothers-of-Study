@@ -23,6 +23,9 @@ import lombok.NoArgsConstructor;
 public class StudyCafeReq {
 
     @NotBlank
+    private Long id;
+
+    @NotBlank
     private String title;
 
     @NotBlank

@@ -1,6 +1,8 @@
 package kr.bos.mapper;
 
 import kr.bos.model.domain.StudyCafe;
+import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.model.dto.response.StudyCafeRes;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -23,13 +25,13 @@ public interface StudyCafeMapper {
 
     boolean isBlockUser(@Param("userId") Long userId, @Param("studyCafeId") Long studyCafeId);
 
-    Optional<StudyCafe> getStudyCafeById(Long id);
+    Optional<StudyCafeRes> getStudyCafeById(Long id);
 
     Optional<Long> getStudyCafeIdByName(String name);
 
-    List<StudyCafe> getStudyCafesByKeyword(String name);
+    List<StudyCafeRes> getStudyCafesByKeyword(Long userId, String name);
 
-    int updateStudyCafe(StudyCafe studyCafe);
+    int updateStudyCafe(StudyCafeReq studyCafeReq);
 
     int deleteStudyCafe(Long id);
 }

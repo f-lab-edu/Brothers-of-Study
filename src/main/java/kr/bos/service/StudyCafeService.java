@@ -2,7 +2,6 @@ package kr.bos.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import kr.bos.dto.StudyCafeDto;
 import kr.bos.exception.BookmarkNotFoundException;
 import kr.bos.exception.DuplicatedBookmarkException;
 import kr.bos.exception.StudyCafeNotFoundException;
@@ -12,6 +11,7 @@ import kr.bos.model.domain.Room;
 import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.RoomReq;
 import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.model.dto.response.StudyCafeRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,8 +95,8 @@ public class StudyCafeService {
      *
      * @since 1.0.0
      */
-    public List<StudyCafeDto> findStudyCafesByKeyword(String name) {
-        return StudyCafeDto.toStudyCafeDtos(studyCafeMapper.getStudyCafesByKeyword(name));
+    public List<StudyCafeRes> findStudyCafesByKeyword(Long userId, String keyword) {
+        return studyCafeMapper.getStudyCafesByKeyword(userId, keyword);
     }
 
     /**
@@ -104,10 +104,9 @@ public class StudyCafeService {
      *
      * @since 1.0.0
      */
-    public StudyCafeDto findStudyCafeById(Long id) {
-        return StudyCafeDto.toStudyCafeDto(
-            studyCafeMapper.getStudyCafeById(id)
-                .orElseThrow(() -> new StudyCafeNotFoundException(id)));
+    public StudyCafeRes findStudyCafeById(Long id) {
+        return studyCafeMapper.getStudyCafeById(id)
+                .orElseThrow(() -> new StudyCafeNotFoundException(id));
     }
 
     /**
@@ -125,10 +124,10 @@ public class StudyCafeService {
      *
      * @since 1.0.0
      */
-    public boolean isStudyCafeExists(StudyCafe studyCafe) {
+    public boolean isStudyCafeExists(StudyCafeReq studyCafeReq) {
         return (
-            studyCafeMapper.getStudyCafeById(studyCafe.getId()).isPresent()
-                && studyCafeMapper.getStudyCafeIdByName(studyCafe.getTitle()).isPresent());
+            studyCafeMapper.getStudyCafeById(studyCafeReq.getId()).isPresent()
+                && studyCafeMapper.getStudyCafeIdByName(studyCafeReq.getTitle()).isPresent());
     }
 
     /**
@@ -136,12 +135,12 @@ public class StudyCafeService {
      *
      * @since 1.0.0
      */
-    public void updateStudyCafe(StudyCafe studyCafe) {
-        if (!isStudyCafeExists(studyCafe)) {
-            throw new StudyCafeNotFoundException(studyCafe.getTitle());
+    public void updateStudyCafe(StudyCafeReq studyCafeReq) {
+        if (!isStudyCafeExists(studyCafeReq)) {
+            throw new StudyCafeNotFoundException(studyCafeReq.getTitle());
         }
 
-        studyCafeMapper.updateStudyCafe(studyCafe);
+        studyCafeMapper.updateStudyCafe(studyCafeReq);
     }
 
     /**
@@ -149,11 +148,11 @@ public class StudyCafeService {
      *
      * @since 1.0.0
      */
-    public void deleteStudyCafe(StudyCafe studyCafe) {
-        if (!isStudyCafeExists(studyCafe)) {
-            throw new StudyCafeNotFoundException(studyCafe.getTitle());
+    public void deleteStudyCafe(StudyCafeReq studyCafeReq) {
+        if (!isStudyCafeExists(studyCafeReq)) {
+            throw new StudyCafeNotFoundException(studyCafeReq.getTitle());
         }
 
-        studyCafeMapper.deleteStudyCafe(studyCafe.getId());
+        studyCafeMapper.deleteStudyCafe(studyCafeReq.getId());
     }
 }
