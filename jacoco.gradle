@@ -5,14 +5,18 @@ def jacocoExcludes = [
         '**/BosApplication.class',
         '**/controller',
 
-        // 로그인 검증 클래스. (@LoginCheck, @CurrentUserId)
-        '**/CurrentUserIdResolver.class',
-        '**/RequiredLoginException.class',
+        // Aspect
         '**/LoginCheckAspect.class',
-
-        // 블랙리스트 체크 클래스.
         '**/BlackCheckAspect.class',
-        '**/AccessDeniedException.class'
+        '**/OwnerCheckAspect.class',
+
+        // Resolver
+        '**/CurrentUserIdResolver.class',
+
+        // 컨트롤러에서 발생하는 예외
+        '**/RequiredLoginException.class',
+        '**/AccessDeniedException.class',
+        '**/SelectStudyCafeNotFoundException.class'
 ]
 
 jacocoTestReport {

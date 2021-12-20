@@ -1,13 +1,12 @@
 package kr.bos.mapper;
 
+import java.util.List;
+import java.util.Optional;
 import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.model.dto.response.StudyCafeRes;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import java.util.List;
-import java.util.Optional;
-
 
 /**
  * StudyCafe Mapper.
@@ -24,6 +23,10 @@ public interface StudyCafeMapper {
     int deleteBookmark(@Param("userId") Long userId, @Param("studyCafeId") Long studyCafeId);
 
     boolean isBlockUser(@Param("userId") Long userId, @Param("studyCafeId") Long studyCafeId);
+
+    Optional<StudyCafe> selectStudyCafeById(Long studyCafeId);
+
+    void deleteRoom(Long roomId);
 
     Optional<StudyCafeRes> getStudyCafeById(Long id);
 

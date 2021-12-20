@@ -16,6 +16,16 @@
     )
   </select>
 
+  <select id="isExistsNowReservationByRoomId" resultType="boolean">
+    SELECT EXISTS
+    ( SELECT id
+      FROM reservations
+      WHERE room_id = #{roomId}
+        AND now() &lt;= end_time
+      FOR UPDATE
+    )
+  </select>
+
   <insert id="insertReservation">
     INSERT INTO reservations (user_id, room_id, start_time, end_time)
     VALUES (#{userId}, #{roomId}, #{startTime}, #{endTime})

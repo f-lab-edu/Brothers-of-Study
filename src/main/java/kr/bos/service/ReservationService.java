@@ -1,13 +1,12 @@
 package kr.bos.service;
 
-import static java.time.temporal.ChronoUnit.MINUTES;
-
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import kr.bos.exception.DuplicatedTimeReservationException;
-import kr.bos.exception.WrongReservationCanceledException;
 import kr.bos.exception.ReservationWrongTimeInputException;
 import kr.bos.exception.SelectReservationNotFoundException;
+import kr.bos.exception.WrongReservationCanceledException;
 import kr.bos.mapper.ReservationMapper;
 import kr.bos.model.domain.Reservation;
 import kr.bos.model.dto.request.ReservationReq;
@@ -41,7 +40,7 @@ public class ReservationService {
         LocalDateTime endTime = reservationReq.getEndTime();
 
         if (startTime.isBefore(LocalDateTime.now()) || startTime.isAfter(endTime)
-            || MINUTES.between(startTime, endTime) < 10) {
+            || ChronoUnit.MINUTES.between(startTime, endTime) < 10) {
             throw new ReservationWrongTimeInputException();
         }
 

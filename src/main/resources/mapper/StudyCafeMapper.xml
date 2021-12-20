@@ -5,6 +5,12 @@
 
 <mapper namespace="kr.bos.mapper.StudyCafeMapper">
 
+  <select id="selectStudyCafeById" resultType="kr.bos.model.domain.StudyCafe">
+    SELECT *
+    FROM study_cafes
+    WHERE id = #{studyCafeId}
+  </select>
+
   <insert id="insertStudyCafe" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO study_cafes (user_id, title, address, thumbnail)
     VALUES (#{userId}, #{title}, #{address}, #{thumbnail})
@@ -15,9 +21,14 @@
     VALUES (#{userId}, #{studyCafeId})
   </insert>
 
-  <delete id="deleteBookmark" parameterType="long" >
+  <delete id="deleteBookmark" parameterType="long">
     DELETE FROM bookmarks
     WHERE user_id = #{userId} AND study_cafe_id = #{studyCafeId}
+  </delete>
+
+  <delete id="deleteRoom" parameterType="long">
+    DELETE FROM rooms
+    WHERE id = #{roomId}
   </delete>
 
   <select id="isBlockUser" resultType="boolean" parameterType="long">

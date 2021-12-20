@@ -2,8 +2,10 @@ package kr.bos.model.domain;
 
 import java.util.List;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * StudyCafe Model.
@@ -11,6 +13,8 @@ import lombok.Getter;
  * @since 1.0.0
  */
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class StudyCafe {
 
