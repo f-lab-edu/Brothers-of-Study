@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import kr.bos.exception.BookmarkNotFoundException;
 import kr.bos.exception.DuplicatedBookmarkException;
+import kr.bos.exception.StudyCafeNotFoundException;
 import kr.bos.mapper.RoomMapper;
 import kr.bos.mapper.StudyCafeMapper;
 import kr.bos.model.domain.Room;
 import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.RoomReq;
 import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.model.dto.response.StudyCafeRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -87,5 +89,72 @@ public class StudyCafeService {
         if (deleteCount == 0) {
             throw new BookmarkNotFoundException();
         }
+    }
+
+
+    /**
+     * 키워드로 스터디 카페를 검색.
+     *
+     * @since 1.0.0
+     */
+    public List<StudyCafeRes> findStudyCafesByKeyword(Long userId, String keyword) {
+        return studyCafeMapper.getStudyCafesByKeyword(userId, keyword);
+    }
+
+    /**
+     * 스터디 카페의 id로, 해당 스터디 카페를 조회.
+     *
+     * @since 1.0.0
+     */
+    public StudyCafeRes findStudyCafeById(Long id) {
+        return studyCafeMapper.getStudyCafeById(id)
+                .orElseThrow(() -> new StudyCafeNotFoundException(id));
+    }
+
+    /**
+     * 스터디 카페의 고유한 이름을 통해, 해당 스터디 카페의 id를 조회.
+     *
+     * @since 1.0.0
+     */
+    public Long findStudyCafeIdByName(String name) {
+        return studyCafeMapper.getStudyCafeIdByName(name)
+            .orElseThrow(() -> new StudyCafeNotFoundException(name));
+    }
+
+    /**
+     * 해당 스터디 카페가 존재하는지 체크. 스터디 카페의 이름 & id가 조회될 시 존재하는 것으로 판단.
+     *
+     * @since 1.0.0
+     */
+    public boolean isStudyCafeExists(StudyCafeReq studyCafeReq) {
+        return (
+            studyCafeMapper.getStudyCafeById(studyCafeReq.getId()).isPresent()
+                && studyCafeMapper.getStudyCafeIdByName(studyCafeReq.getTitle()).isPresent());
+    }
+
+    /**
+     * 해당 스터디 카페를 수정/갱신.
+     *
+     * @since 1.0.0
+     */
+    public void updateStudyCafe(StudyCafeReq studyCafeReq) {
+        if (!isStudyCafeExists(studyCafeReq)) {
+            throw new StudyCafeNotFoundException(studyCafeReq.getTitle());
+        }
+
+        studyCafeMapper.updateStudyCafe(studyCafeReq);
+    }
+
+    /**
+     * 해당 스터디 카페를 삭제.
+     *
+     * @since 1.0.0
+     */
+    public void deleteStudyCafe(StudyCafeReq studyCafeReq) {
+        if (!isStudyCafeExists(studyCafeReq)) {
+            throw new StudyCafeNotFoundException(studyCafeReq.getTitle());
+        }
+
+        studyCafeMapper.deleteStudyCafe(studyCafeReq.getId());
     }
 }

@@ -2,6 +2,8 @@ package kr.bos.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import java.util.List;
+import javax.validation.Valid;
 import kr.bos.annotation.BlackCheck;
 import kr.bos.annotation.CurrentUserId;
 import kr.bos.annotation.LoginCheck;
@@ -9,6 +11,7 @@ import kr.bos.model.dto.request.ReservationReq;
 import kr.bos.model.dto.request.ReviewReq;
 import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.model.dto.response.ReviewRes;
+import kr.bos.model.dto.response.StudyCafeRes;
 import kr.bos.service.ReservationService;
 import kr.bos.service.ReviewService;
 import kr.bos.service.StudyCafeService;
@@ -148,5 +151,18 @@ public class StudyCafeController {
     public void deleteReview(@CurrentUserId Long userId,
         @PathVariable("studyCafeId") Long studyCafeId, @PathVariable("reviewId") Long reviewId) {
         reviewService.deleteReview(userId, reviewId);
+    }
+
+    /**
+     * Search.
+     *
+     * @since 1.0.0
+     */
+    @GetMapping("/search/{keyword}")
+    @LoginCheck
+    @BlackCheck
+    public List<StudyCafeRes> search(@CurrentUserId Long userId,
+        @PathVariable("keyword") String keyword) {
+        return studyCafeService.findStudyCafesByKeyword(userId, keyword);
     }
 }
