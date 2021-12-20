@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import kr.bos.exception.BookmarkNotFoundException;
 import kr.bos.exception.DuplicatedBookmarkException;
+import kr.bos.exception.ExistsTimeReservationException;
+import kr.bos.mapper.ReservationMapper;
 import kr.bos.exception.StudyCafeNotFoundException;
 import kr.bos.mapper.RoomMapper;
 import kr.bos.mapper.StudyCafeMapper;
@@ -28,6 +30,7 @@ public class StudyCafeService {
 
     private final StudyCafeMapper studyCafeMapper;
     private final RoomMapper roomMapper;
+    private final ReservationMapper reservationMapper;
 
     /**
      * 스터디 카페 등록하기.
@@ -89,6 +92,19 @@ public class StudyCafeService {
         if (deleteCount == 0) {
             throw new BookmarkNotFoundException();
         }
+    }
+
+    /**
+     * 방 삭제하기.
+     *
+     * @since 1.0.0
+     */
+    @Transactional
+    public void deleteRoom(Long roomId) {
+        if (reservationMapper.isExistsNowReservationByRoomId(roomId)) {
+            throw new ExistsTimeReservationException();
+        }
+        studyCafeMapper.deleteRoom(roomId);
     }
 
 

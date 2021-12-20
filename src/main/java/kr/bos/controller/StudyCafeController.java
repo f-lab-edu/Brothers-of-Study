@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import kr.bos.annotation.BlackCheck;
 import kr.bos.annotation.CurrentUserId;
 import kr.bos.annotation.LoginCheck;
+import kr.bos.annotation.OwnerCheck;
 import kr.bos.model.dto.request.ReservationReq;
 import kr.bos.model.dto.request.ReviewReq;
 import kr.bos.model.dto.request.StudyCafeReq;
@@ -17,9 +18,16 @@ import kr.bos.service.ReviewService;
 import kr.bos.service.StudyCafeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * StudyCafe 컨트롤러.
@@ -75,6 +83,22 @@ public class StudyCafeController {
     public void cancelBookmark(@CurrentUserId Long userId,
         @PathVariable("studyCafeId") Long studyCafeId) {
         studyCafeService.cancelBookmark(userId, studyCafeId);
+    }
+
+    /**
+     * 방 삭제하기.
+     *
+     * @since 1.0.0
+     */
+    @DeleteMapping("/{studyCafeId}/rooms/{roomId}")
+    @LoginCheck
+    @OwnerCheck
+    @BlackCheck
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRoom(@CurrentUserId Long userId,
+        @PathVariable("studyCafeId") Long studyCafeId,
+        @PathVariable("roomId") Long roomId) {
+        studyCafeService.deleteRoom(roomId);
     }
 
     /**
@@ -172,7 +196,6 @@ public class StudyCafeController {
      */
     @GetMapping("/search/{keyword}")
     @LoginCheck
-    @BlackCheck
     public List<StudyCafeRes> search(@CurrentUserId Long userId,
         @PathVariable("keyword") String keyword) {
         return studyCafeService.findStudyCafesByKeyword(userId, keyword);

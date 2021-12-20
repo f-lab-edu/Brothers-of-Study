@@ -17,6 +17,8 @@ public interface ReservationMapper {
 
     void insertReservation(Reservation reservation);
 
+    boolean isExistsNowReservationByRoomId(Long roomId);
+
     boolean isExistsReservationByRoomIdAndUseTime(@Param("roomId") Long roomId,
         @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
 

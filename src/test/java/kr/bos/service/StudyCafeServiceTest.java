@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -16,6 +17,8 @@ import java.util.Optional;
 import kr.bos.exception.BookmarkNotFoundException;
 import kr.bos.exception.DuplicatedBookmarkException;
 import kr.bos.exception.StudyCafeNotFoundException;
+import kr.bos.exception.ExistsTimeReservationException;
+import kr.bos.mapper.ReservationMapper;
 import kr.bos.mapper.RoomMapper;
 import kr.bos.mapper.StudyCafeMapper;
 import kr.bos.model.domain.StudyCafe;
@@ -42,6 +45,9 @@ class StudyCafeServiceTest {
 
     @Mock
     RoomMapper roomMapper;
+
+    @Mock
+    ReservationMapper reservationMapper;
 
     StudyCafeReq studyCafeReq;
 
@@ -103,6 +109,23 @@ class StudyCafeServiceTest {
         when(studyCafeMapper.deleteBookmark(1L, 1L)).thenReturn(0);
         assertThrows(BookmarkNotFoundException.class,
             () -> studyCafeService.cancelBookmark(1L, 1L));
+    }
+
+    @Test
+    @DisplayName("방 삭제에 성공합니다.")
+    public void deleteRoomTestWhenSuccess() {
+        when(reservationMapper.isExistsNowReservationByRoomId(anyLong())).thenReturn(false);
+        studyCafeService.deleteRoom(anyLong());
+        verify(reservationMapper).isExistsNowReservationByRoomId(anyLong());
+        verify(studyCafeMapper).deleteRoom(anyLong());
+    }
+
+    @Test
+    @DisplayName("방 삭제에 실패합니다. :등록된 예약이 존재합니다.")
+    public void deleteRoomTestWhenFail() {
+        when(reservationMapper.isExistsNowReservationByRoomId(anyLong())).thenReturn(true);
+        assertThrows(ExistsTimeReservationException.class,
+            () -> studyCafeService.deleteRoom(anyLong()));
     }
 
     public void giveStudyCafeExistCondition(boolean isStudyCafeExist) {
