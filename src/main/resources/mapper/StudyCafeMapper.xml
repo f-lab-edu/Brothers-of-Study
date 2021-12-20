@@ -10,20 +10,15 @@
     VALUES (#{userId}, #{title}, #{address}, #{thumbnail})
   </insert>
 
+  <insert id="insertBookmark" parameterType="long">
+    INSERT INTO bookmarks (user_id, study_cafe_id)
+    VALUES (#{userId}, #{studyCafeId})
+  </insert>
+
   <delete id="deleteBookmark" parameterType="long" >
     DELETE FROM bookmarks
     WHERE user_id = #{userId} AND study_cafe_id = #{studyCafeId}
   </delete>
-
-  <insert id="insertBookmark" parameterType="long">
-    INSERT INTO bookmarks (user_id, study_cafe_id)
-    SELECT #{userId}, #{studyCafeId}
-    WHERE NOT EXISTS
-    (
-      SELECT id FROM bookmarks
-      WHERE user_id = #{userId} AND study_cafe_id = #{studyCafeId}
-    ) FOR UPDATE
-  </insert>
 
   <select id="isBlockUser" resultType="boolean" parameterType="long">
     SELECT EXISTS

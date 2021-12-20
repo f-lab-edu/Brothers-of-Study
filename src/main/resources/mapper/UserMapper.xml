@@ -15,7 +15,7 @@
     (SELECT email FROM users WHERE email = #{email})
   </select>
 
-  <select id="selectUserByEmail" resultType="kr.bos.model.dto.request.UserReq">
+  <select id="selectUserByEmail" resultType="kr.bos.model.domain.User">
     SELECT id, email, password, name, address
     FROM users WHERE email = #{email}
   </select>

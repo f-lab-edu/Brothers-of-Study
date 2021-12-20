@@ -29,6 +29,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DuplicateKeyException;
 
 @ExtendWith(MockitoExtension.class)
 class StudyCafeServiceTest {
@@ -76,7 +77,6 @@ class StudyCafeServiceTest {
     @Test
     @DisplayName("북마크 등록에 성공합니다.")
     public void registerBookmarkTestWhenSuccess() {
-        when(studyCafeMapper.insertBookmark(1L, 1L)).thenReturn(1);
         studyCafeService.registerBookmark(1L, 1L);
         verify(studyCafeMapper).insertBookmark(1L, 1L);
     }
@@ -84,7 +84,7 @@ class StudyCafeServiceTest {
     @Test
     @DisplayName("북마크 등록에 실패합니다. :이미 등록된 북마크")
     public void registerBookmarkTestWhenFail() {
-        when(studyCafeMapper.insertBookmark(1L, 1L)).thenReturn(0);
+        when(studyCafeMapper.insertBookmark(1L, 1L)).thenThrow(DuplicateKeyException.class);
         assertThrows(DuplicatedBookmarkException.class,
             () -> studyCafeService.registerBookmark(1L, 1L));
     }
