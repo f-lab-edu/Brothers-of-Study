@@ -72,7 +72,7 @@ public class ReservationService {
             reservationId);
 
         reservation.orElseThrow(SelectReservationNotFoundException::new);
-        if (MINUTES.between(LocalDateTime.now(), reservation.get().getStartTime()) < 10) {
+        if (reservation.get().getStartTime().minusMinutes(10).isBefore(LocalDateTime.now())) {
             throw new WrongReservationCanceledException();
         }
 

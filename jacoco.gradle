@@ -4,7 +4,6 @@ def jacocoExcludes = [
         '**/config',
         '**/BosApplication.class',
         '**/controller',
-        '**/exception',
 
         // 로그인 검증 클래스. (@LoginCheck, @CurrentUserId)
         '**/CurrentUserIdResolver.class',

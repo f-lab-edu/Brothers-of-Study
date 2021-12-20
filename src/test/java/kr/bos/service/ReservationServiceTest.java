@@ -105,6 +105,37 @@ class ReservationServiceTest {
         Reservation reservation = Reservation.builder()
             .id(1L)
             .startTime(LocalDateTime.now().plusMinutes(5))
+            .endTime(LocalDateTime.now().plusHours(1))
+            .build();
+
+        when(reservationMapper.selectReservationByIdAndUserId(1L, 2L)).thenReturn(
+            Optional.of(reservation));
+        assertThrows(WrongReservationCanceledException.class,
+            () -> reservationService.cancelReservation(1L, 2L));
+    }
+
+    @Test
+    @DisplayName("예약 취소에 실패합니다. :이미 진행중인 예약입니다.")
+    public void cancelReservationWhenFail3() {
+        Reservation reservation = Reservation.builder()
+            .id(1L)
+            .startTime(LocalDateTime.now().minusHours(1))
+            .endTime(LocalDateTime.now().plusHours(1))
+            .build();
+
+        when(reservationMapper.selectReservationByIdAndUserId(1L, 2L)).thenReturn(
+            Optional.of(reservation));
+        assertThrows(WrongReservationCanceledException.class,
+            () -> reservationService.cancelReservation(1L, 2L));
+    }
+
+    @Test
+    @DisplayName("예약 취소에 실패합니다. :이미 종료된 예약입니다.")
+    public void cancelReservationWhenFail4() {
+        Reservation reservation = Reservation.builder()
+            .id(1L)
+            .startTime(LocalDateTime.now().minusHours(2))
+            .endTime(LocalDateTime.now().plusHours(1))
             .build();
 
         when(reservationMapper.selectReservationByIdAndUserId(1L, 2L)).thenReturn(
