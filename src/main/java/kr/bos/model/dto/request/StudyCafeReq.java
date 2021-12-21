@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import kr.bos.exception.DuplicatedRoomNumberException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,17 +36,4 @@ public class StudyCafeReq {
     @NotNull
     @Size(min = 1)
     private List<RoomReq> rooms;
-
-    /**
-     * Rooms 입력시 중복된 방 번호가 있는지 체크. 중복된 방이 있다면 DuplicatedRoomNumberException 발생.
-     *
-     * @since 1.0.0
-     */
-    public void setRooms(List<RoomReq> rooms) {
-        if (rooms.size() != rooms.stream().distinct().count()) {
-            throw new DuplicatedRoomNumberException();
-        }
-
-        this.rooms = rooms;
-    }
 }

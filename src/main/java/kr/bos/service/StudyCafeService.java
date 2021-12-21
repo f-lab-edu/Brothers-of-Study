@@ -117,20 +117,6 @@ public class StudyCafeService {
     }
 
     /**
-     * 방 삭제하기.
-     *
-     * @since 1.0.0
-     */
-    @Transactional
-    public void deleteRoom(Long roomId) {
-        if (reservationMapper.isExistsNowReservationByRoomId(roomId)) {
-            throw new ExistsTimeReservationException();
-        }
-        studyCafeMapper.deleteRoom(roomId);
-    }
-
-
-    /**
      * 키워드로 스터디 카페를 검색.
      *
      * @since 1.0.0

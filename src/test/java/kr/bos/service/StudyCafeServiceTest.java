@@ -48,9 +48,6 @@ class StudyCafeServiceTest {
     @Mock
     RoomMapper roomMapper;
 
-    @Mock
-    ReservationMapper reservationMapper;
-
     StudyCafeReq studyCafeReq;
 
     @Test
@@ -123,23 +120,6 @@ class StudyCafeServiceTest {
         when(studyCafeMapper.deleteBookmark(1L, 1L)).thenReturn(0);
         assertThrows(BookmarkNotFoundException.class,
             () -> studyCafeService.cancelBookmark(1L, 1L));
-    }
-
-    @Test
-    @DisplayName("방 삭제에 성공합니다.")
-    public void deleteRoomTestWhenSuccess() {
-        when(reservationMapper.isExistsNowReservationByRoomId(anyLong())).thenReturn(false);
-        studyCafeService.deleteRoom(anyLong());
-        verify(reservationMapper).isExistsNowReservationByRoomId(anyLong());
-        verify(studyCafeMapper).deleteRoom(anyLong());
-    }
-
-    @Test
-    @DisplayName("방 삭제에 실패합니다. :등록된 예약이 존재합니다.")
-    public void deleteRoomTestWhenFail() {
-        when(reservationMapper.isExistsNowReservationByRoomId(anyLong())).thenReturn(true);
-        assertThrows(ExistsTimeReservationException.class,
-            () -> studyCafeService.deleteRoom(anyLong()));
     }
 
     public void giveStudyCafeExistCondition(boolean isStudyCafeExist) {

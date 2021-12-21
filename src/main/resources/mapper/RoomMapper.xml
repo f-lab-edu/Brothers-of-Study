@@ -17,6 +17,25 @@
     </foreach>
   </insert>
 
+  <insert id="insertRoom">
+    INSERT INTO rooms (study_cafe_id, number, capacity)
+    VALUES (#{studyCafeId}, #{number}, #{capacity})
+  </insert>
+
+  <update id="updateRoom">
+    UPDATE rooms
+    <set>
+      <if test="number != null">number = #{number},</if>
+      <if test="capacity != null">capacity = #{capacity}</if>
+    </set>
+    WHERE id = #{id}
+  </update>
+
+  <delete id="deleteRoom">
+    DELETE FROM rooms
+    WHERE id = #{id}
+  </delete>
+
   <select id="selectRoomUseInfo" resultType="kr.bos.model.dto.response.RoomUseInfoRes">
     SELECT id, number, capacity,
       ( SELECT EXISTS
