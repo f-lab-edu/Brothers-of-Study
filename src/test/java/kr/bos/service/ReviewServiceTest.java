@@ -53,7 +53,7 @@ class ReviewServiceTest {
     @DisplayName("리뷰 업데이트에 성공합니다.")
     public void updateReviewWhenSuccess() {
         when(reviewMapper.updateReview(any(Review.class))).thenReturn(1);
-        reviewService.updateReview(reviewReq, 1L, 2L);
+        reviewService.updateReview(reviewReq, 1L, 2L, 3L);
         verify(reviewMapper).updateReview(any(Review.class));
     }
 
@@ -62,7 +62,7 @@ class ReviewServiceTest {
     public void updateReviewWhenFail() {
         when(reviewMapper.updateReview(any(Review.class))).thenReturn(0);
         assertThrows(ReviewNotFoundException.class,
-            () -> reviewService.updateReview(reviewReq, 1L, 2L));
+            () -> reviewService.updateReview(reviewReq, 1L, 2L, 3L));
         verify(reviewMapper).updateReview(any(Review.class));
     }
 
@@ -70,7 +70,7 @@ class ReviewServiceTest {
     @DisplayName("리뷰 삭제에 성공합니다.")
     public void deleteReviewWhenSuccess() {
         when(reviewMapper.deleteReview(1L, 2L)).thenReturn(1);
-        reviewService.deleteReview(1L, 2L);
+        reviewService.deleteReview(1L, 3L, 2L);
         verify(reviewMapper).deleteReview(1L, 2L);
     }
 
@@ -79,7 +79,7 @@ class ReviewServiceTest {
     public void deleteReviewWhenFail() {
         when(reviewMapper.deleteReview(1L, 2L)).thenReturn(0);
         assertThrows(ReviewNotFoundException.class,
-            () -> reviewService.deleteReview(1L, 2L));
+            () -> reviewService.deleteReview(1L, 3L, 2L));
         verify(reviewMapper).deleteReview(1L, 2L);
     }
 }
