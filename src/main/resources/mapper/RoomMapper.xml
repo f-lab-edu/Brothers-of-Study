@@ -17,4 +17,18 @@
     </foreach>
   </insert>
 
+  <select id="selectRoomUseInfo" resultType="kr.bos.model.dto.response.RoomUseInfoRes">
+    SELECT id, number, capacity,
+      ( SELECT EXISTS
+        (
+          SELECT id FROM reservations
+          WHERE room_id = rooms.id
+          AND start_time &lt;= #{searchTime}
+          AND #{searchTime} &lt;= end_time
+        )
+      ) AS currentUse
+    FROM rooms
+    WHERE study_cafe_id = #{studyCafeId}
+  </select>
+
 </mapper>

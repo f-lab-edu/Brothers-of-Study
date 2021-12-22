@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.model.dto.response.StudyCafeDetailRes;
 import kr.bos.model.dto.response.StudyCafeRes;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -25,6 +26,8 @@ public interface StudyCafeMapper {
     boolean isBlockUser(@Param("userId") Long userId, @Param("studyCafeId") Long studyCafeId);
 
     Optional<StudyCafe> selectStudyCafeById(Long studyCafeId);
+
+    Optional<StudyCafeDetailRes> selectStudyCafeDetailById(Long studyCafeId);
 
     void deleteRoom(Long roomId);
 

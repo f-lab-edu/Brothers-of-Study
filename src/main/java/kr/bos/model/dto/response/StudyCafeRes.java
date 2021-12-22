@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 
 /**
- * StudyCafeRes.
+ * StudyCafe Response Dto.
  *
  * @since 1.0.0
  */

@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * StudyCafe Dto.
+ * StudyCafe Request Dto.
  *
  * @since 1.0.0
  */
