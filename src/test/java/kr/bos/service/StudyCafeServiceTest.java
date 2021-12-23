@@ -170,7 +170,8 @@ class StudyCafeServiceTest {
         given(studyCafeMapper.getStudyCafesByKeyword(userId, name)).willReturn(studyCafeResList);
 
         // when
-        List<StudyCafeRes> responseResult = studyCafeService.findStudyCafesByKeyword(userId, name);
+        List<StudyCafeRes> responseResult =
+                studyCafeService.findStudyCafesByKeyword(userId, name, "roomCount", "name", "");
 
         // then
         assertThat(responseResult).hasSize(1);

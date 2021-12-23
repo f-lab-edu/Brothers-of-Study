@@ -3,6 +3,7 @@ package kr.bos.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import kr.bos.annotation.BlackCheck;
 import kr.bos.annotation.CurrentUserId;
@@ -198,7 +199,11 @@ public class StudyCafeController {
     @GetMapping("/search/{keyword}")
     @LoginCheck
     public List<StudyCafeRes> search(@CurrentUserId Long userId,
-        @PathVariable("keyword") String keyword) {
-        return studyCafeService.findStudyCafesByKeyword(userId, keyword);
+        @PathVariable("keyword") String keyword,
+        @RequestParam(required = false, defaultValue = "roomCount") String filter,
+        @RequestParam(required = false, defaultValue = "name") String sort,
+        @RequestParam(required = false, defaultValue = "") String regionName) {
+
+        return studyCafeService.findStudyCafesByKeyword(userId, keyword, filter, sort, regionName);
     }
 }

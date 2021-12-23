@@ -37,4 +37,6 @@ public class StudyCafeRes {
     private Integer bookMarked;
 
     private Integer emptyRoomCount;
+
+    private Integer useCount;
 }

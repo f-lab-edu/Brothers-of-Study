@@ -1,7 +1,11 @@
 package kr.bos.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import kr.bos.exception.BookmarkNotFoundException;
 import kr.bos.exception.DuplicatedBookmarkException;
 import kr.bos.exception.ExistsTimeReservationException;
@@ -14,6 +18,7 @@ import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.RoomReq;
 import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.model.dto.response.StudyCafeRes;
+import kr.bos.utils.StudyCafeListFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -113,8 +118,20 @@ public class StudyCafeService {
      *
      * @since 1.0.0
      */
-    public List<StudyCafeRes> findStudyCafesByKeyword(Long userId, String keyword) {
-        return studyCafeMapper.getStudyCafesByKeyword(userId, keyword);
+    public List<StudyCafeRes> findStudyCafesByKeyword(
+        Long userId, String studyCafeKeyword,
+        String filterKeyword, String sortKeyword, String regionName) {
+
+        Map<String, Comparator<StudyCafeRes>> sortMapper = new HashMap<>();
+
+        sortMapper.put("name", Comparator.comparing(StudyCafeRes::getTitle));
+        sortMapper.put("useCount", Comparator.comparingInt(StudyCafeRes::getUseCount));
+        sortMapper.put("reviewAverage", Comparator.comparingDouble(StudyCafeRes::getReviewAverage));
+
+        return studyCafeMapper.getStudyCafesByKeyword(userId, studyCafeKeyword).stream()
+                .filter(studyCafe ->
+                        StudyCafeListFilter.filter(studyCafe, filterKeyword, regionName))
+                .sorted(sortMapper.get(sortKeyword)).collect(Collectors.toList());
     }
 
     /**

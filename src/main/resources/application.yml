@@ -12,4 +12,3 @@ spring:
 pagehelper:
   helper-dialect: mysql
   reasonable: true
-

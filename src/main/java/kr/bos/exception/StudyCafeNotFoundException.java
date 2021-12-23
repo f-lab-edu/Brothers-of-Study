@@ -6,7 +6,6 @@ package kr.bos.exception;
  * @since 1.0.0
  */
 public class StudyCafeNotFoundException extends RuntimeException {
-
     public StudyCafeNotFoundException(Long id) {
         super("There is no matching Study Cafe with study cafe id: " + id);
     }
