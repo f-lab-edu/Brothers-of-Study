@@ -173,7 +173,7 @@ public class StudyCafeController {
     public void updateReview(@CurrentUserId Long userId,
         @PathVariable("studyCafeId") Long studyCafeId, @PathVariable("reviewId") Long reviewId,
         @RequestBody ReviewReq reviewReq) {
-        reviewService.updateReview(reviewReq, userId, studyCafeId, reviewId);
+        reviewService.updateReview(reviewReq, userId, reviewId);
     }
 
     /**
@@ -187,7 +187,7 @@ public class StudyCafeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteReview(@CurrentUserId Long userId,
         @PathVariable("studyCafeId") Long studyCafeId, @PathVariable("reviewId") Long reviewId) {
-        reviewService.deleteReview(userId, studyCafeId, reviewId);
+        reviewService.deleteReview(userId, reviewId);
     }
 
     /**

@@ -43,7 +43,6 @@ public class ReviewService {
      *
      * @since 1.0.0
      */
-    @CacheEvict(value = "reviews", key = "#studyCafeId")
     public void createReview(ReviewReq reviewReq, Long userId, Long studyCafeId) {
         Review review = Review.builder()
             .userId(userId)
@@ -60,13 +59,11 @@ public class ReviewService {
      *
      * @param reviewReq 리뷰 Request DTO
      * @param userId 유저 ID
-     * @param studyCafeId 스터디카페 ID - 캐싱을 위한 파라미터.
      * @param reviewId 리뷰 ID
      *
      * @since 1.0.0
      */
-    @CacheEvict(value = "reviews", key = "#studyCafeId")
-    public void updateReview(ReviewReq reviewReq, Long userId, Long studyCafeId, Long reviewId) {
+    public void updateReview(ReviewReq reviewReq, Long userId, Long reviewId) {
         Review review = Review.builder()
             .id(reviewId)
             .userId(userId)
@@ -84,13 +81,11 @@ public class ReviewService {
      * 리뷰 삭제하기. 삭제 실패시 ReviewNotFoundException 예외 발생.
      *
      * @param userId 유저 ID
-     * @param studyCafeId 스터디카페 ID - 캐싱을 위한 파라미터.
      * @param reviewId 리뷰 ID
      *
      * @since 1.0.0
      */
-    @CacheEvict(value = "reviews", key = "#studyCafeId")
-    public void deleteReview(Long userId, Long studyCafeId, Long reviewId) {
+    public void deleteReview(Long userId, Long reviewId) {
         int deleteCount = reviewMapper.deleteReview(userId, reviewId);
         if (deleteCount == 0) {
             throw new ReviewNotFoundException();
