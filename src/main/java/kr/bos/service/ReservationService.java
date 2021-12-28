@@ -67,11 +67,10 @@ public class ReservationService {
      */
     @Transactional
     public void cancelReservation(Long userId, Long reservationId) {
-        Optional<Reservation> reservation = reservationMapper.selectReservationByIdAndUserId(userId,
-            reservationId);
+        Reservation reservation = reservationMapper.selectReservationByIdAndUserId(userId,
+            reservationId).orElseThrow(SelectReservationNotFoundException::new);
 
-        reservation.orElseThrow(SelectReservationNotFoundException::new);
-        if (reservation.get().getStartTime().minusMinutes(10).isBefore(LocalDateTime.now())) {
+        if (reservation.getStartTime().minusMinutes(10).isBefore(LocalDateTime.now())) {
             throw new WrongReservationCanceledException();
         }
 

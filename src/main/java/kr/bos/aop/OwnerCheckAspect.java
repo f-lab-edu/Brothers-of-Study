@@ -29,10 +29,10 @@ public class OwnerCheckAspect {
      */
     @Before("@annotation(kr.bos.annotation.OwnerCheck) && args(userId, studyCafeId, ..)")
     public void ownerCheck(Long userId, Long studyCafeId) {
-        Optional<StudyCafe> studyCafe = studyCafeMapper.selectStudyCafeById(studyCafeId);
-        studyCafe.orElseThrow(SelectStudyCafeNotFoundException::new);
+        StudyCafe studyCafe = studyCafeMapper.selectStudyCafeById(studyCafeId)
+            .orElseThrow(SelectStudyCafeNotFoundException::new);
 
-        if (!studyCafe.get().getUserId().equals(userId)) {
+        if (!studyCafe.getUserId().equals(userId)) {
             throw new AccessDeniedException();
         }
     }

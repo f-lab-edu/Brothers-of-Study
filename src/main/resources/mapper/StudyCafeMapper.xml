@@ -23,7 +23,10 @@
       SELECT COUNT(*)
       FROM reservations
       WHERE room_id IN (
-        SELECT id FROM rooms WHERE rooms.study_cafe_id = #{studyCafeId}
+        SELECT id
+        FROM rooms
+        WHERE rooms.study_cafe_id = #{studyCafeId}
+          AND end_time &lt;= now()
       )
     ) AS useCount
     FROM study_cafes

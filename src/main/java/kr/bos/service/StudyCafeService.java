@@ -75,17 +75,16 @@ public class StudyCafeService {
      *
      * @since 1.0.0
      */
+    @Transactional
     public StudyCafeDetailRes getStudyCafe(Long studyCafeId, SearchTimeReq searchTimeReq) {
-        Optional<StudyCafeDetailRes> optStudyCafe = studyCafeMapper.selectStudyCafeDetailById(
-            studyCafeId);
-        optStudyCafe.orElseThrow(SelectStudyCafeNotFoundException::new);
-        StudyCafeDetailRes studyCafe = optStudyCafe.get();
+        StudyCafeDetailRes studyCafeRes = studyCafeMapper.selectStudyCafeDetailById(studyCafeId)
+            .orElseThrow(SelectStudyCafeNotFoundException::new);
 
         List<RoomUseInfoRes> rooms = roomMapper.selectRoomUseInfo(studyCafeId,
             searchTimeReq.getSearchTime());
 
-        studyCafe.setRooms(rooms);
-        return studyCafe;
+        studyCafeRes.setRooms(rooms);
+        return studyCafeRes;
     }
 
     /**
@@ -147,7 +146,7 @@ public class StudyCafeService {
      */
     public StudyCafeRes findStudyCafeById(Long id) {
         return studyCafeMapper.getStudyCafeById(id)
-                .orElseThrow(() -> new StudyCafeNotFoundException(id));
+            .orElseThrow(() -> new StudyCafeNotFoundException(id));
     }
 
     /**
