@@ -20,6 +20,20 @@
     FROM users WHERE email = #{email}
   </select>
 
+  <select id="selectUserById" resultType="kr.bos.model.dto.response.UserInfoRes">
+    SELECT email, name, address
+    FROM users WHERE id = #{userId}
+  </select>
+
+  <update id="updateUserById">
+    UPDATE users
+    <set>
+      <if test="userReq.name != null">name = #{userReq.name},</if>
+      <if test="userReq.address != null">address = #{userReq.address}</if>
+    </set>
+    WHERE id = #{userId}
+  </update>
+
   <delete id="deleteUser">
     DELETE FROM users WHERE id = #{id}
   </delete>
