@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import kr.bos.exception.ReviewNotFoundException;
 import kr.bos.mapper.ReviewMapper;
 import kr.bos.model.domain.Review;
+import kr.bos.model.dto.request.PageOption;
 import kr.bos.model.dto.request.ReviewReq;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,8 +39,10 @@ class ReviewServiceTest {
     @Test
     @DisplayName("리뷰 목록 조회에 성공합니다.")
     public void getReviewsWhenSuccess() {
-        reviewService.getReviews(2L);
-        verify(reviewMapper).selectReviewsByStudyCafeId(2L);
+        PageOption pageOption = new PageOption(1, 10);
+        when(reviewMapper.selectReviewsCountByStudyCafeId(2L)).thenReturn(100L);
+        reviewService.getReviews(2L, pageOption);
+        verify(reviewMapper).selectReviewsByStudyCafeId(2L, pageOption);
     }
 
     @Test

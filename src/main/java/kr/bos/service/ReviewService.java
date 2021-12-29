@@ -4,12 +4,13 @@ import java.util.List;
 import kr.bos.exception.ReviewNotFoundException;
 import kr.bos.mapper.ReviewMapper;
 import kr.bos.model.domain.Review;
+import kr.bos.model.dto.request.PageOption;
 import kr.bos.model.dto.request.ReviewReq;
+import kr.bos.model.dto.response.PageInfo;
 import kr.bos.model.dto.response.ReviewRes;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Review Service.
@@ -26,12 +27,15 @@ public class ReviewService {
      * 리뷰 목록 조회하기.
      *
      * @param studyCafeId 스터디카페 ID
-*
+     * @param pageOption 페이지 Option
+     *
      * @since 1.0.0
      */
-    @Cacheable(value = "reviews", key = "#studyCafeId")
-    public List<ReviewRes> getReviews(Long studyCafeId) {
-        return reviewMapper.selectReviewsByStudyCafeId(studyCafeId);
+    @Transactional
+    public PageInfo getReviews(Long studyCafeId, PageOption pageOption) {
+        List<ReviewRes> reviews = reviewMapper.selectReviewsByStudyCafeId(studyCafeId, pageOption);
+        Long totalCount = reviewMapper.selectReviewsCountByStudyCafeId(studyCafeId);
+        return new PageInfo<>(totalCount, reviews);
     }
 
     /**
