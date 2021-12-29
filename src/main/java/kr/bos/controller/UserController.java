@@ -5,12 +5,15 @@ import kr.bos.annotation.CurrentUserId;
 import kr.bos.annotation.LoginCheck;
 import kr.bos.model.dto.request.LoginInfoReq;
 import kr.bos.model.dto.request.UserReq;
+import kr.bos.model.dto.response.UserInfoRes;
 import kr.bos.service.LoginService;
 import kr.bos.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -68,6 +71,8 @@ public class UserController {
     /**
      * 회원탈퇴.
      *
+     * @param userId 유저 ID.
+     *
      * @since 1.0.0
      */
     @DeleteMapping
@@ -75,5 +80,33 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@CurrentUserId Long userId) {
         userService.deleteUser(userId);
+    }
+
+    /**
+     * 회원 정보 조회.
+     *
+     * @param userId 유저 ID.
+     *
+     * @since 1.0.0
+     */
+    @GetMapping("/info")
+    @LoginCheck
+    @ResponseStatus(HttpStatus.OK)
+    public UserInfoRes getUserInfo(@CurrentUserId Long userId) {
+        return userService.getUserInfo(userId);
+    }
+
+    /**
+     * 회원 정보 수정. (Name, Address)
+     *
+     * @param userId 유저 ID.
+     *
+     * @since 1.0.0
+     */
+    @PutMapping("/info")
+    @LoginCheck
+    @ResponseStatus(HttpStatus.OK)
+    public void updateUserInfo(@CurrentUserId Long userId, @RequestBody UserReq userReq) {
+        userService.updateUserInfo(userId, userReq);
     }
 }

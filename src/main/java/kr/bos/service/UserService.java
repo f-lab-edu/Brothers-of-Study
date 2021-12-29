@@ -1,11 +1,12 @@
 package kr.bos.service;
 
 import java.util.Optional;
-import kr.bos.model.domain.User;
-import kr.bos.model.dto.request.UserReq;
 import kr.bos.exception.DuplicatedEmailException;
 import kr.bos.exception.SelectUserNotFoundException;
 import kr.bos.mapper.UserMapper;
+import kr.bos.model.domain.User;
+import kr.bos.model.dto.request.UserReq;
+import kr.bos.model.dto.response.UserInfoRes;
 import kr.bos.utils.PasswordEncrypt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -58,5 +59,27 @@ public class UserService {
      */
     public void deleteUser(Long id) {
         userMapper.deleteUser(id);
+    }
+
+    /**
+     * id에 해당하는 유저 정보 조회.
+     *
+     * @param userId 유저 ID.
+     * @since 1.0.0
+     */
+    public UserInfoRes getUserInfo(Long userId) {
+        return userMapper.selectUserById(userId)
+            .orElseThrow(SelectUserNotFoundException::new);
+    }
+
+    /**
+     * id에 해당하는 유저 정보 수정. (Name, Address).
+     *
+     * @param userId  유저 ID.
+     * @param userReq 회원수정 DTO.
+     * @since 1.0.0
+     */
+    public void updateUserInfo(Long userId, UserReq userReq) {
+        userMapper.updateUserById(userId, userReq);
     }
 }
