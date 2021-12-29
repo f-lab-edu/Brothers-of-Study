@@ -8,8 +8,3 @@ spring:
     username: bos
     password: bos
 
-
-pagehelper:
-  helper-dialect: mysql
-  reasonable: true
-

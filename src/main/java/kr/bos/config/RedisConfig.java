@@ -1,6 +1,5 @@
 package kr.bos.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Duration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +12,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
@@ -81,10 +80,15 @@ public class RedisConfig {
      */
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
+        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer =
+            new GenericJackson2JsonRedisSerializer();
+
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisSessionConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
+        redisTemplate.setHashValueSerializer(genericJackson2JsonRedisSerializer);
         return redisTemplate;
     }
 
@@ -92,20 +96,21 @@ public class RedisConfig {
      * RedisCacheManager Bean 등록.
      * <br>
      * RedisCacheManager: 스프링에서 추상화되어있는 CacheManager 인터페이스를 레디스 사용을 위해 구현한 클래스.
-     * 캐시 key, value를 직렬화, 역직렬화 하기위한 설정 입력.
+     * <br>
+     * 캐시 key, value를 직렬화,역직렬화 하기위한 설정 입력.
      *
      * @since 1.0.0
      */
     @Bean
     public RedisCacheManager redisCacheManager(
-        @Qualifier("redisCacheConnectionFactory") RedisConnectionFactory redisConnectionFactory,
-        ObjectMapper objectMapper) {
+        @Qualifier("redisCacheConnectionFactory") RedisConnectionFactory redisConnectionFactory) {
+
         RedisCacheConfiguration redisCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
-            .disableCachingNullValues().entryTtl(Duration.ofMinutes(20L)).serializeKeysWith(
-                RedisSerializationContext.SerializationPair.fromSerializer(
-                    new StringRedisSerializer())).serializeValuesWith(
-                RedisSerializationContext.SerializationPair.fromSerializer(
-                    new GenericJackson2JsonRedisSerializer(objectMapper)));
+            .disableCachingNullValues().serializeKeysWith(SerializationPair.fromSerializer(
+                new StringRedisSerializer()))
+            .serializeValuesWith(SerializationPair.fromSerializer(
+                new GenericJackson2JsonRedisSerializer()))
+            .entryTtl(Duration.ofDays(1L));
 
         return RedisCacheManager.RedisCacheManagerBuilder
             .fromConnectionFactory(redisConnectionFactory)

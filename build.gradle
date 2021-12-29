@@ -30,7 +30,6 @@ dependencies {
     implementation 'org.mindrot:jbcrypt:0.4'
     implementation 'org.springframework.session:spring-session-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:1.4.1'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'mysql:mysql-connector-java'

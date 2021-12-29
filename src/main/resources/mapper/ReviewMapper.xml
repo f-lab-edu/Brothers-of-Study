@@ -5,6 +5,12 @@
 
 <mapper namespace="kr.bos.mapper.ReviewMapper">
 
+  <select id="selectReviewsCountByStudyCafeId" resultType="long">
+      SELECT COUNT(*)
+      FROM reviews
+      WHERE study_cafe_id = #{studyCafeId}
+  </select>
+
   <select id="selectReviewsByStudyCafeId" resultType="kr.bos.model.dto.response.ReviewRes">
     SELECT
     reviews.id, users.name AS userName, reviews.description, reviews.score,
@@ -14,6 +20,7 @@
     ON reviews.user_id = users.id
     WHERE study_cafe_id = #{studyCafeId}
     ORDER BY reviews.created_at DESC
+    LIMIT #{pageOption.limit}, #{pageOption.offset}
   </select>
 
   <insert id="insertReview">
