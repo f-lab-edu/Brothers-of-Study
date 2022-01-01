@@ -20,7 +20,7 @@
     ON reviews.user_id = users.id
     WHERE study_cafe_id = #{studyCafeId}
     ORDER BY reviews.created_at DESC
-    LIMIT #{pageOption.limit}, #{pageOption.offset}
+    LIMIT #{searchOption.offset}, #{searchOption.limit}
   </select>
 
   <insert id="insertReview">

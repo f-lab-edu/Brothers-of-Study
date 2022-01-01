@@ -6,9 +6,10 @@ import kr.bos.annotation.BlackCheck;
 import kr.bos.annotation.CurrentUserId;
 import kr.bos.annotation.LoginCheck;
 import kr.bos.annotation.OwnerCheck;
-import kr.bos.model.dto.request.PageOption;
+import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.request.ReservationReq;
 import kr.bos.model.dto.request.ReviewReq;
+import kr.bos.model.dto.request.SearchOption.SearchOptionBuilder;
 import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.model.dto.response.PageInfo;
 import kr.bos.model.dto.response.StudyCafeRes;
@@ -135,7 +136,6 @@ public class StudyCafeController {
      * @param userId 유저 ID - @BlackCheck 용도
      * @param studyCafeId 스터디카페 ID
      * @param page 페이지 번호
-     * @param size 페이지 사이즈
      *
      * @since 1.0.0
      */
@@ -144,9 +144,9 @@ public class StudyCafeController {
     @BlackCheck
     @ResponseStatus(HttpStatus.OK)
     public PageInfo getReviews(@CurrentUserId Long userId,
-        @PathVariable("studyCafeId") Long studyCafeId, @RequestParam("page") Integer page,
-        @RequestParam("size") Integer size) {
-        return reviewService.getReviews(studyCafeId, new PageOption(page, size));
+        @PathVariable("studyCafeId") Long studyCafeId, @RequestParam("page") Integer page) {
+        SearchOption searchOption = SearchOption.builder().page(page).build();
+        return reviewService.getReviews(studyCafeId, searchOption);
     }
 
     /**
