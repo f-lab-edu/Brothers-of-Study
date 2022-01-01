@@ -3,6 +3,7 @@ apply plugin: 'jacoco'
 def jacocoExcludes = [
         '**/config',
         '**/BosApplication.class',
+        '**/GlobalExceptionHandler.class',
         '**/controller',
 
         // Aspect

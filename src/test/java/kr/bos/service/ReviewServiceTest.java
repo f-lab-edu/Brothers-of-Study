@@ -1,15 +1,21 @@
 package kr.bos.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.awt.print.Pageable;
+import java.util.ArrayList;
+import java.util.List;
 import kr.bos.exception.ReviewNotFoundException;
 import kr.bos.mapper.ReviewMapper;
 import kr.bos.model.domain.Review;
-import kr.bos.model.dto.request.PageOption;
+import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.request.ReviewReq;
+import kr.bos.model.dto.response.PageInfo;
+import kr.bos.model.dto.response.ReviewRes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,10 +45,17 @@ class ReviewServiceTest {
     @Test
     @DisplayName("리뷰 목록 조회에 성공합니다.")
     public void getReviewsWhenSuccess() {
-        PageOption pageOption = new PageOption(1, 10);
+        SearchOption searchOption = SearchOption.builder().page(1).build();
+        List<ReviewRes> reviewResList = new ArrayList<>();
+
         when(reviewMapper.selectReviewsCountByStudyCafeId(2L)).thenReturn(100L);
-        reviewService.getReviews(2L, pageOption);
-        verify(reviewMapper).selectReviewsByStudyCafeId(2L, pageOption);
+        when(reviewMapper.selectReviewsByStudyCafeId(2L, searchOption)
+            ).thenReturn(reviewResList);
+
+        var result = reviewService.getReviews(2L, searchOption);
+        assertEquals(result.getTotalCount(), 100L);
+        assertEquals(result.getList(), reviewResList);
+        verify(reviewMapper).selectReviewsByStudyCafeId(2L, searchOption);
     }
 
     @Test
