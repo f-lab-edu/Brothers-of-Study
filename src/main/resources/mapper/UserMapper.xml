@@ -29,7 +29,8 @@
     UPDATE users
     <set>
       <if test="userReq.name != null">name = #{userReq.name},</if>
-      <if test="userReq.address != null">address = #{userReq.address}</if>
+      <if test="userReq.address != null">address = #{userReq.address},</if>
+      updated_at = NOW()
     </set>
     WHERE id = #{userId}
   </update>
