@@ -46,32 +46,42 @@
   </select>
 
   <select id="getStudyCafesByKeyword" resultType="kr.bos.model.dto.response.StudyCafeRes">
-    SELECT STUDY_CAFES.id,
-           STUDY_CAFES.user_id,
-           STUDY_CAFES.title,
-           STUDY_CAFES.address,
-           STUDY_CAFES.thumbnail,
-           STUDY_CAFES.created_at,
-           STUDY_CAFES.updated_at,
-           REVIEWS.score AS reviewAverage,
-           COUNT(BOOKMARKS.id) AS bookmarked,
-           ROOMS.capacity - (
-               SELECT COUNT(RESERVATIONS.id) FROM RESERVATIONS
-                <![CDATA[
-                     WHERE RESERVATIONS.room_id = ROOMS.id
-                       AND (CURRENT_TIMESTAMP < RESERVATIONS.end_time)
-                ]]>
-               ) AS empty_room_count
+    select      s.id, s.user_id, s.title, s.address, s.thumbnail, s.created_at, s.updated_at,
+                r.reviewAverage,
+                ifnull(bk.bookmarked, 0) bookmarked,
+                room_cnt_tbl.empty_room_count,
+                use_cnt_tbl.use_count
 
-            FROM STUDY_CAFES
-                INNER JOIN REVIEWS
-                ON REVIEWS.study_cafe_id = STIDY_CAFES.id
+            from study_cafes s
 
-                LEFT JOIN BOOKMARKS AS BK
-                ON BK.user_id = #{userId} AND BK.study_cafe_id = STUDY_CAFES.id
+                inner join (
+                    select study_cafe_id, avg(score) as reviewAverage from reviews
+                    group by study_cafe_id) r
+                on r.study_cafe_id = s.id
 
-                INNER JOIN ROOMS
-                ON ROOMS.study_cafe_id = STUDY_CAFES.id
+                left outer join (
+                    select id, study_cafe_id, user_id, count(*) as bookmarked from bookmarks
+                    group by id) bk
+                on bk.user_id = #{userId} and bk.study_cafe_id = s.id
+
+                inner join (select distinct
+                            rt.study_cafe_id,
+                            rooms.capacity - rt.reservedCnt empty_room_count from
+                                (select study_cafe_id, count(r.id) reservedCnt from rooms r
+                                inner join reservations res on r.id = room_id
+                                                        and now() between start_time and end_time
+                                group by r.study_cafe_id) as rt, rooms
+                            where rooms.study_cafe_id = rt.study_cafe_id) as room_cnt_tbl
+                    on room_cnt_tbl.study_cafe_id = s.id
+
+                inner join (
+                    select r.study_cafe_id, sum(temp.room_used) use_count from rooms r
+                            inner join (select room_id, count(room_id) room_used from
+                                (select room_id from reservations where user_id = #{userId}) ret
+                                group by room_id) temp
+                            on temp.room_id = r.id
+                            group by r.study_cafe_id) as user_cnt_tbl
+                    on use_cnt_tbl.study_cafe_id = s.id
 
             WHERE STUDY_CAFES.title LIKE CONCAT('%', #{name}, '%'))
   </select>
