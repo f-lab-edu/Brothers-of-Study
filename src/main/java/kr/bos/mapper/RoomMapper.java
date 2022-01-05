@@ -1,8 +1,11 @@
 package kr.bos.mapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import kr.bos.model.domain.Room;
+import kr.bos.model.dto.response.RoomUseInfoRes;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * Room Mapper.
@@ -13,4 +16,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface RoomMapper {
 
     void insertRooms(List<Room> rooms);
+
+    List<RoomUseInfoRes> selectRoomUseInfo(@Param("studyCafeId") Long studyCafeId,
+        @Param("searchTime") LocalDateTime searchTime);
 }

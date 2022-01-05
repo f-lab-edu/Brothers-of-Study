@@ -47,9 +47,8 @@ public class UserService {
      * @since 1.0.0
      */
     public User selectUserByEmail(String email) {
-        Optional<User> user = userMapper.selectUserByEmail(email);
-        user.orElseThrow(SelectUserNotFoundException::new);
-        return user.get();
+        return userMapper.selectUserByEmail(email)
+            .orElseThrow(SelectUserNotFoundException::new);
     }
 
     /**

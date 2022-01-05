@@ -23,7 +23,9 @@ import kr.bos.mapper.RoomMapper;
 import kr.bos.mapper.StudyCafeMapper;
 import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.RoomReq;
+import kr.bos.model.dto.request.SearchTimeReq;
 import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.model.dto.response.StudyCafeDetailRes;
 import kr.bos.model.dto.response.StudyCafeRes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -78,6 +80,18 @@ class StudyCafeServiceTest {
         studyCafeService.registerStudyCafe(1L, studyCafeReq);
         verify(studyCafeMapper).insertStudyCafe(any(StudyCafe.class));
         verify(roomMapper).insertRooms(any());
+    }
+
+    @Test
+    @DisplayName("스터디 카페 상세 조회에 성공합니다.")
+    public void getStudyCafeTestWhenSuccess() {
+        when(studyCafeMapper.selectStudyCafeDetailById(anyLong()))
+            .thenReturn(Optional.of(new StudyCafeDetailRes()));
+        when(roomMapper.selectRoomUseInfo(anyLong(), any(LocalDateTime.class)))
+            .thenReturn(any());
+        studyCafeService.getStudyCafe(1L, new SearchTimeReq(LocalDateTime.now()));
+        verify(studyCafeMapper).selectStudyCafeDetailById(anyLong());
+        verify(roomMapper).selectRoomUseInfo(anyLong(), any(LocalDateTime.class));
     }
 
     @Test

@@ -2,9 +2,11 @@ package kr.bos.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import kr.bos.exception.BookmarkNotFoundException;
 import kr.bos.exception.DuplicatedBookmarkException;
 import kr.bos.exception.ExistsTimeReservationException;
+import kr.bos.exception.SelectStudyCafeNotFoundException;
 import kr.bos.mapper.ReservationMapper;
 import kr.bos.exception.StudyCafeNotFoundException;
 import kr.bos.mapper.RoomMapper;
@@ -12,7 +14,10 @@ import kr.bos.mapper.StudyCafeMapper;
 import kr.bos.model.domain.Room;
 import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.RoomReq;
+import kr.bos.model.dto.request.SearchTimeReq;
 import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.model.dto.response.RoomUseInfoRes;
+import kr.bos.model.dto.response.StudyCafeDetailRes;
 import kr.bos.model.dto.response.StudyCafeRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
@@ -63,6 +68,23 @@ public class StudyCafeService {
         }
 
         roomMapper.insertRooms(rooms);
+    }
+
+    /**
+     * 스터디 카페 디테일 조회.
+     *
+     * @since 1.0.0
+     */
+    @Transactional
+    public StudyCafeDetailRes getStudyCafe(Long studyCafeId, SearchTimeReq searchTimeReq) {
+        StudyCafeDetailRes studyCafeRes = studyCafeMapper.selectStudyCafeDetailById(studyCafeId)
+            .orElseThrow(SelectStudyCafeNotFoundException::new);
+
+        List<RoomUseInfoRes> rooms = roomMapper.selectRoomUseInfo(studyCafeId,
+            searchTimeReq.getSearchTime());
+
+        studyCafeRes.setRooms(rooms);
+        return studyCafeRes;
     }
 
     /**
@@ -124,7 +146,7 @@ public class StudyCafeService {
      */
     public StudyCafeRes findStudyCafeById(Long id) {
         return studyCafeMapper.getStudyCafeById(id)
-                .orElseThrow(() -> new StudyCafeNotFoundException(id));
+            .orElseThrow(() -> new StudyCafeNotFoundException(id));
     }
 
     /**

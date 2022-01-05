@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * RoomDto.
+ * Room Request Dto.
  *
  * @since 1.0.0
  */

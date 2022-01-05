@@ -11,6 +11,30 @@
     WHERE id = #{studyCafeId}
   </select>
 
+  <select id="selectStudyCafeDetailById" resultType="kr.bos.model.dto.response.StudyCafeDetailRes">
+    SELECT reviews.study_cafe_id as id, title, address, thumbnail, AVG(score) as reviewAverage,
+    (
+      SELECT COUNT(*)
+      FROM bookmarks
+      WHERE bookmarks.study_cafe_id = reviews.study_cafe_id
+      GROUP BY bookmarks.study_cafe_id
+    ) AS bookmarkCount,
+    (
+      SELECT COUNT(*)
+      FROM reservations
+      WHERE room_id IN (
+        SELECT id
+        FROM rooms
+        WHERE rooms.study_cafe_id = #{studyCafeId}
+          AND end_time &lt;= now()
+      )
+    ) AS useCount
+    FROM study_cafes
+    RIGHT JOIN reviews ON study_cafes.id = reviews.study_cafe_id
+    WHERE study_cafes.id = #{studyCafeId}
+    GROUP BY reviews.study_cafe_id;
+  </select>
+
   <insert id="insertStudyCafe" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO study_cafes (user_id, title, address, thumbnail)
     VALUES (#{userId}, #{title}, #{address}, #{thumbnail})

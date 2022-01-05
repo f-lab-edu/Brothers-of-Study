@@ -11,6 +11,9 @@ import kr.bos.model.dto.request.ReservationReq;
 import kr.bos.model.dto.request.ReviewReq;
 import kr.bos.model.dto.request.SearchOption.SearchOptionBuilder;
 import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.model.dto.request.SearchTimeReq;
+import kr.bos.model.dto.response.ReviewRes;
+import kr.bos.model.dto.response.StudyCafeDetailRes;
 import kr.bos.model.dto.response.PageInfo;
 import kr.bos.model.dto.response.StudyCafeRes;
 import kr.bos.service.ReservationService;
@@ -55,6 +58,21 @@ public class StudyCafeController {
         @Valid @RequestBody StudyCafeReq studyCafeReq) {
 
         studyCafeService.registerStudyCafe(userId, studyCafeReq);
+    }
+
+    /**
+     * 스터디 상세 조회하기.
+     *
+     * @since 1.0.0
+     */
+    @GetMapping("/{studyCafeId}")
+    @LoginCheck
+    @BlackCheck
+    @ResponseStatus(HttpStatus.OK)
+    public StudyCafeDetailRes getStudyCafe(@CurrentUserId Long userId,
+        @PathVariable("studyCafeId") Long studyCafeId,
+        @RequestBody SearchTimeReq searchTimeReq) {
+        return studyCafeService.getStudyCafe(studyCafeId, searchTimeReq);
     }
 
     /**

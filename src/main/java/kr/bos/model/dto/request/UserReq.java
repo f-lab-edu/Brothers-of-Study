@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * User Dto.
+ * User Request Dto.
  *
  * @since 1.0.0
  */
