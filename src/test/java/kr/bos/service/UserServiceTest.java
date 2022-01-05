@@ -1,6 +1,7 @@
 package kr.bos.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -10,6 +11,7 @@ import kr.bos.exception.SelectUserNotFoundException;
 import kr.bos.mapper.UserMapper;
 import kr.bos.model.domain.User;
 import kr.bos.model.dto.request.UserReq;
+import kr.bos.model.dto.response.UserInfoRes;
 import kr.bos.utils.PasswordEncrypt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,6 +32,7 @@ class UserServiceTest {
 
     User user;
     UserReq userReq;
+    UserInfoRes userInfoRes;
 
     @BeforeEach
     public void makeUser() {
@@ -44,6 +47,12 @@ class UserServiceTest {
         userReq = UserReq.builder()
             .email("email@email.com")
             .password("password")
+            .name("name")
+            .address("address")
+            .build();
+
+        userInfoRes = UserInfoRes.builder()
+            .email("email")
             .name("name")
             .address("address")
             .build();
@@ -85,5 +94,28 @@ class UserServiceTest {
     public void deleteUserWhenSuccess() {
         userService.deleteUser(user.getId());
         verify(userMapper).deleteUser(user.getId());
+    }
+
+    @Test
+    @DisplayName("회원 정보 조회에 성공합니다.")
+    public void getUserInfoWhenSuccess() {
+        when(userMapper.selectUserById(1L))
+            .thenReturn(Optional.ofNullable(userInfoRes));
+        userService.getUserInfo(1L);
+        verify(userMapper).selectUserById(1L);
+    }
+
+    @Test
+    @DisplayName("회원 정보 조회에 실패합니다. :존재하지 않는 유저 ID.")
+    public void getUserInfoWhenFail() {
+        assertThrows(SelectUserNotFoundException.class,
+            () -> userService.getUserInfo(anyLong()));
+    }
+
+    @Test
+    @DisplayName("회원 정보 수정에 성공합니다.")
+    public void updateUserInfoWhenSuccess() {
+        userService.updateUserInfo(user.getId(), userReq);
+        verify(userMapper).updateUserById(user.getId(), userReq);
     }
 }

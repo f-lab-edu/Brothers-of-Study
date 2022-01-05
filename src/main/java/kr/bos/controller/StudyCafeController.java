@@ -1,19 +1,20 @@
 package kr.bos.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import java.util.List;
 import javax.validation.Valid;
 import kr.bos.annotation.BlackCheck;
 import kr.bos.annotation.CurrentUserId;
 import kr.bos.annotation.LoginCheck;
 import kr.bos.annotation.OwnerCheck;
+import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.request.ReservationReq;
 import kr.bos.model.dto.request.ReviewReq;
+import kr.bos.model.dto.request.SearchOption.SearchOptionBuilder;
 import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.model.dto.request.SearchTimeReq;
 import kr.bos.model.dto.response.ReviewRes;
 import kr.bos.model.dto.response.StudyCafeDetailRes;
+import kr.bos.model.dto.response.PageInfo;
 import kr.bos.model.dto.response.StudyCafeRes;
 import kr.bos.service.ReservationService;
 import kr.bos.service.ReviewService;
@@ -150,21 +151,28 @@ public class StudyCafeController {
     /**
      * 리뷰 목록 조회하기.
      *
+     * @param userId 유저 ID - @BlackCheck 용도
+     * @param studyCafeId 스터디카페 ID
+     * @param page 페이지 번호
+     *
      * @since 1.0.0
      */
     @GetMapping("/{studyCafeId}/reviews")
     @LoginCheck
     @BlackCheck
     @ResponseStatus(HttpStatus.OK)
-    public PageInfo<ReviewRes> getReviews(@PathVariable("studyCafeId") Long studyCafeId,
-        @RequestParam("page") Integer page,
-        @RequestParam("size") Integer size) {
-        PageHelper.startPage(page, size);
-        return PageInfo.of(reviewService.getReviews(studyCafeId));
+    public PageInfo getReviews(@CurrentUserId Long userId,
+        @PathVariable("studyCafeId") Long studyCafeId, @RequestParam("page") Integer page) {
+        SearchOption searchOption = SearchOption.builder().page(page).build();
+        return reviewService.getReviews(studyCafeId, searchOption);
     }
 
     /**
      * 리뷰 등록하기.
+     *
+     * @param userId 유저 ID
+     * @param studyCafeId 스터디카페 ID
+     * @param reviewReq 리뷰 DTO
      *
      * @since 1.0.0
      */
@@ -181,19 +189,29 @@ public class StudyCafeController {
     /**
      * 리뷰 수정하기.
      *
+     * @param userId 유저 ID
+     * @param studyCafeId 스터디카페 ID - @BlackCheck 용도
+     * @param reviewId 리뷰 ID
+     * @param reviewReq 리뷰 DTO
+     *
      * @since 1.0.0
      */
     @PutMapping("/{studyCafeId}/reviews/{reviewId}")
     @LoginCheck
     @BlackCheck
     @ResponseStatus(HttpStatus.OK)
-    public void updateReview(@CurrentUserId Long userId, @PathVariable("reviewId") Long reviewId,
+    public void updateReview(@CurrentUserId Long userId,
+        @PathVariable("studyCafeId") Long studyCafeId, @PathVariable("reviewId") Long reviewId,
         @RequestBody ReviewReq reviewReq) {
         reviewService.updateReview(reviewReq, userId, reviewId);
     }
 
     /**
      * 리뷰 삭제하기.
+     *
+     * @param userId 유저 ID
+     * @param studyCafeId 스터디카페 ID - @BlackCheck 용도
+     * @param reviewId 리뷰 ID
      *
      * @since 1.0.0
      */

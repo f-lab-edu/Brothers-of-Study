@@ -1,14 +1,16 @@
 package kr.bos.service;
 
 import java.util.List;
-import kr.bos.exception.AccessDeniedException;
 import kr.bos.exception.ReviewNotFoundException;
 import kr.bos.mapper.ReviewMapper;
 import kr.bos.model.domain.Review;
 import kr.bos.model.dto.request.ReviewReq;
+import kr.bos.model.dto.request.SearchOption;
+import kr.bos.model.dto.response.PageInfo;
 import kr.bos.model.dto.response.ReviewRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Review Service.
@@ -24,15 +26,24 @@ public class ReviewService {
     /**
      * 리뷰 목록 조회하기.
      *
+     * @param studyCafeId  스터디카페 ID
+     * @param searchOption 페이지 Option
      * @since 1.0.0
      */
-    public List<ReviewRes> getReviews(Long studyCafeId) {
-        return reviewMapper.selectReviewsByStudyCafeId(studyCafeId);
+    @Transactional
+    public PageInfo getReviews(Long studyCafeId, SearchOption searchOption) {
+        List<ReviewRes> reviews = reviewMapper.selectReviewsByStudyCafeId(studyCafeId,
+            searchOption);
+        Long totalCount = reviewMapper.selectReviewsCountByStudyCafeId(studyCafeId);
+        return new PageInfo<>(totalCount, reviews);
     }
 
     /**
      * 리뷰 생성하기.
      *
+     * @param reviewReq   리뷰 Request DTO
+     * @param userId      유저 ID
+     * @param studyCafeId 스터디카페 ID
      * @since 1.0.0
      */
     public void createReview(ReviewReq reviewReq, Long userId, Long studyCafeId) {
@@ -49,6 +60,9 @@ public class ReviewService {
     /**
      * 리뷰 업데이트. 업데이트 실패시 ReviewNotFoundException 예외 발생.
      *
+     * @param reviewReq 리뷰 Request DTO
+     * @param userId    유저 ID
+     * @param reviewId  리뷰 ID
      * @since 1.0.0
      */
     public void updateReview(ReviewReq reviewReq, Long userId, Long reviewId) {
@@ -68,6 +82,8 @@ public class ReviewService {
     /**
      * 리뷰 삭제하기. 삭제 실패시 ReviewNotFoundException 예외 발생.
      *
+     * @param userId   유저 ID
+     * @param reviewId 리뷰 ID
      * @since 1.0.0
      */
     public void deleteReview(Long userId, Long reviewId) {
