@@ -12,6 +12,11 @@
 - Redis
 - Jenkins
 
+## Architecture
+
+<img width="1057" alt="147902104-959468cb-fdc0-4972-9a2f-03bc2227922d" src="https://user-images.githubusercontent.com/74256905/148158835-d8a3e76a-eb67-4340-bd55-621fa1e18c59.png">
+
+
 ## 프로젝트 관리
 
 commit 요청시 자동 Build 및 Test를 적용했습니다.
