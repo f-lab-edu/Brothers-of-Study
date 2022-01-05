@@ -5,19 +5,17 @@ import javax.validation.Valid;
 import kr.bos.annotation.BlackCheck;
 import kr.bos.annotation.CurrentUserId;
 import kr.bos.annotation.LoginCheck;
-import kr.bos.annotation.OwnerCheck;
-import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.request.ReservationReq;
 import kr.bos.model.dto.request.ReviewReq;
-import kr.bos.model.dto.request.SearchOption.SearchOptionBuilder;
-import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.request.SearchTimeReq;
-import kr.bos.model.dto.response.ReviewRes;
-import kr.bos.model.dto.response.StudyCafeDetailRes;
+import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.model.dto.response.PageInfo;
+import kr.bos.model.dto.response.StudyCafeDetailRes;
 import kr.bos.model.dto.response.StudyCafeRes;
 import kr.bos.service.ReservationService;
 import kr.bos.service.ReviewService;
+import kr.bos.service.RoomService;
 import kr.bos.service.StudyCafeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,6 +42,7 @@ public class StudyCafeController {
 
     private final StudyCafeService studyCafeService;
     private final ReviewService reviewService;
+    private final RoomService roomService;
     private final ReservationService reservationService;
 
     /**
@@ -101,22 +100,6 @@ public class StudyCafeController {
     public void cancelBookmark(@CurrentUserId Long userId,
         @PathVariable("studyCafeId") Long studyCafeId) {
         studyCafeService.cancelBookmark(userId, studyCafeId);
-    }
-
-    /**
-     * 방 삭제하기.
-     *
-     * @since 1.0.0
-     */
-    @DeleteMapping("/{studyCafeId}/rooms/{roomId}")
-    @LoginCheck
-    @OwnerCheck
-    @BlackCheck
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteRoom(@CurrentUserId Long userId,
-        @PathVariable("studyCafeId") Long studyCafeId,
-        @PathVariable("roomId") Long roomId) {
-        studyCafeService.deleteRoom(roomId);
     }
 
     /**

@@ -36,7 +36,7 @@
   </update>
 
   <delete id="deleteUser">
-    DELETE FROM users WHERE id = #{id}
+    DELETE FROM users WHERE id = #{userId}
   </delete>
 
 </mapper>

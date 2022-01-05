@@ -1,6 +1,5 @@
 package kr.bos.service;
 
-import java.util.Optional;
 import kr.bos.exception.DuplicatedEmailException;
 import kr.bos.exception.SelectUserNotFoundException;
 import kr.bos.mapper.UserMapper;
@@ -24,6 +23,8 @@ public class UserService {
 
     /**
      * 회원 가입.
+     *
+     * @param userReq 회원가입 DTO.
      *
      * @since 1.0.0
      */
@@ -54,10 +55,12 @@ public class UserService {
     /**
      * id에 해당하는 유저 삭제.
      *
+     * @param userId 유저 ID.
+     *
      * @since 1.0.0
      */
-    public void deleteUser(Long id) {
-        userMapper.deleteUser(id);
+    public void deleteUser(Long userId) {
+        userMapper.deleteUser(userId);
     }
 
     /**

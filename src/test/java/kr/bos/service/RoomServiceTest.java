@@ -2,6 +2,7 @@ package kr.bos.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,7 +20,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.DuplicateKeyException;
 
 @ExtendWith(MockitoExtension.class)
 class RoomServiceTest {
@@ -45,37 +45,39 @@ class RoomServiceTest {
 
     @Test
     @DisplayName("방 생성에 성공합니다.")
-    public void deleteRoomTestWhenSuccess() {
-        roomService.createRoom(roomReq, anyLong());
+    public void createRoomTestWhenSuccess() {
+        when(roomMapper.isExistsRoomNumber(1, 1L)).thenReturn(false);
+        roomService.createRoom(roomReq, 1L);
         verify(roomMapper).insertRoom(any(Room.class));
     }
 
     @Test
     @DisplayName("방 생성에 실패합니다. :중복된 방 번호.")
-    public void createRoomTestWhenSuccess() {
-        when(roomMapper.insertRoom(any(Room.class))).thenThrow(DuplicateKeyException.class);
+    public void createRoomTestWhenFail() {
+        when(roomMapper.isExistsRoomNumber(1,  1L)).thenReturn(true);
         assertThrows(DuplicatedRoomNumberException.class,
-            () -> roomService.createRoom(roomReq, anyLong()));
+            () -> roomService.createRoom(roomReq, 1L));
     }
 
     @Test
     @DisplayName("방 수정에 성공합니다.")
-    public void createRoomTestWhenFail() {
+    public void updateRoomTestWhenSuccess() {
+        when(roomMapper.isExistsRoomNumber(anyInt(), anyLong())).thenReturn(false);
         roomService.updateRoom(roomReq, 1L, 1L);
         verify(roomMapper).updateRoom(any(Room.class));
     }
 
     @Test
     @DisplayName("방 수정에 실패합니다. :중복된 방 번호")
-    public void updateRoomTestWhenSuccess() {
-        when(roomMapper.updateRoom(any(Room.class))).thenThrow(DuplicateKeyException.class);
+    public void updateRoomTestWhenFail() {
+        when(roomMapper.isExistsRoomNumber(anyInt(), anyLong())).thenReturn(true);
         assertThrows(DuplicatedRoomNumberException.class,
             () -> roomService.updateRoom(roomReq, 1L, 1L));
     }
 
     @Test
     @DisplayName("방 삭제에 성공합니다.")
-    public void updateRoomTestWhenFail() {
+    public void deleteRoomTestWhenSuccess() {
         when(reservationMapper.isExistsNowReservationByRoomId(anyLong())).thenReturn(false);
         roomService.deleteRoom(anyLong());
         verify(reservationMapper).isExistsNowReservationByRoomId(anyLong());
