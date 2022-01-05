@@ -5,6 +5,16 @@
 
 <mapper namespace="kr.bos.mapper.StudyCafeMapper">
 
+  <select id="isExistsBookmark" resultType="boolean">
+    SELECT EXISTS
+    (
+      SELECT id
+      FROM bookmarks
+      WHERE user_id = #{userId} AND
+      study_cafe_id = #{studyCafeId}
+    )
+  </select>
+
   <select id="selectStudyCafeById" resultType="kr.bos.model.domain.StudyCafe">
     SELECT *
     FROM study_cafes

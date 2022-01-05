@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @since 1.0.0
  */
-@ResponseStatus(HttpStatus.BAD_REQUEST)
+@ResponseStatus(HttpStatus.CONFLICT)
 public class DuplicatedRoomNumberException extends RuntimeException {
 
     public DuplicatedRoomNumberException() {

@@ -5,6 +5,16 @@
 
 <mapper namespace="kr.bos.mapper.RoomMapper">
 
+  <select id="isExistsRoomNumber" resultType="boolean">
+    SELECT EXISTS
+    (
+      SELECT id
+      FROM rooms
+      WHERE study_cafe_id = #{studyCafeId} AND
+      number = #{roomNumber}
+    )
+  </select>
+
   <insert id="insertRooms">
     INSERT INTO rooms (study_cafe_id, number, capacity)
     VALUES

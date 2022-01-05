@@ -40,4 +40,6 @@ public interface StudyCafeMapper {
     int updateStudyCafe(StudyCafeReq studyCafeReq);
 
     int deleteStudyCafe(Long id);
+
+    boolean isExistsBookmark(@Param("userId") Long userId, @Param("studyCafeId") Long studyCafeId);
 }

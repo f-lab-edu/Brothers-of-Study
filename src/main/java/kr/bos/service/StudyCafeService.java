@@ -20,7 +20,6 @@ import kr.bos.model.dto.response.RoomUseInfoRes;
 import kr.bos.model.dto.response.StudyCafeDetailRes;
 import kr.bos.model.dto.response.StudyCafeRes;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,11 +41,13 @@ public class StudyCafeService {
      * <br>
      * 입력 받은 스터디 카페 정보로 스터디 카페 생성. 생성한 스터디 카페의 id를 Room에 지정한 후 Room 생성.
      *
+     * @param userId 스터디카페 생성 유저 ID.
+     * @param studyCafeReq 스터디카페 생성 DTO.
+     *
      * @since 1.0.0
      */
     @Transactional
     public void registerStudyCafe(Long userId, StudyCafeReq studyCafeReq) {
-
         StudyCafe studyCafe = StudyCafe.builder()
             .userId(userId)
             .title(studyCafeReq.getTitle())
@@ -92,20 +93,26 @@ public class StudyCafeService {
      * <br>
      * 북 마크가 이미 등록되어 있다면 DuplicatedBookmarkException 예외 발생.
      *
+     * @param userId 유저 ID.
+     * @param studyCafeId 스터디카페 ID.
+     *
      * @since 1.0.0
      */
     public void registerBookmark(Long userId, Long studyCafeId) {
-        try {
-            studyCafeMapper.insertBookmark(userId, studyCafeId);
-        } catch (DuplicateKeyException e) {
+        if (studyCafeMapper.isExistsBookmark(userId, studyCafeId)) {
             throw new DuplicatedBookmarkException();
         }
+
+        studyCafeMapper.insertBookmark(userId, studyCafeId);
     }
 
     /**
      * 북 마크 취소하기.
      * <br>
      * 북 마크가 등록되지 않았다면 BookmarkNotFoundException 예외 발생.
+     *
+     * @param userId 유저 ID.
+     * @param studyCafeId 스터디카페 ID.
      *
      * @since 1.0.0
      */
