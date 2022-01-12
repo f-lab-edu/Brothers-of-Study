@@ -1,8 +1,7 @@
 package kr.bos.aop;
 
-import java.util.Optional;
 import kr.bos.exception.AccessDeniedException;
-import kr.bos.exception.SelectStudyCafeNotFoundException;
+import kr.bos.exception.NotFoundException;
 import kr.bos.mapper.StudyCafeMapper;
 import kr.bos.model.domain.StudyCafe;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +29,10 @@ public class OwnerCheckAspect {
     @Before("@annotation(kr.bos.annotation.OwnerCheck) && args(userId, studyCafeId, ..)")
     public void ownerCheck(Long userId, Long studyCafeId) {
         StudyCafe studyCafe = studyCafeMapper.selectStudyCafeById(studyCafeId)
-            .orElseThrow(SelectStudyCafeNotFoundException::new);
+            .orElseThrow(() -> new NotFoundException("Select not found study cafe."));
 
         if (!studyCafe.getUserId().equals(userId)) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException("The service cannot be accessed.");
         }
     }
 }

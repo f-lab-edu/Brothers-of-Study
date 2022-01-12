@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
-import kr.bos.exception.InvalidPasswordException;
 import kr.bos.model.domain.User;
 import kr.bos.model.dto.request.LoginInfoReq;
 import kr.bos.utils.PasswordEncrypt;
@@ -73,20 +72,16 @@ class LoginServiceTest {
         when(userService.selectUserByEmail(loginInfoReq.getEmail())).thenReturn(user);
 
         loginInfoReq.setPassword("");
-        assertThrows(InvalidPasswordException.class,
-            () -> loginService.login(loginInfoReq));
+        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginInfoReq));
 
         loginInfoReq.setPassword("password" + "@");
-        assertThrows(InvalidPasswordException.class,
-            () -> loginService.login(loginInfoReq));
+        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginInfoReq));
 
         loginInfoReq.setPassword("password".substring(1));
-        assertThrows(InvalidPasswordException.class,
-            () -> loginService.login(loginInfoReq));
+        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginInfoReq));
 
         loginInfoReq.setPassword(PasswordEncrypt.encrypt("password"));
-        assertThrows(InvalidPasswordException.class,
-            () -> loginService.login(loginInfoReq));
+        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginInfoReq));
     }
 
     @Test

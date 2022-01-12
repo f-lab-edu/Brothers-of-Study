@@ -1,6 +1,10 @@
 package kr.bos.utils;
 
 import java.time.LocalDateTime;
+import kr.bos.exception.AccessDeniedException;
+import kr.bos.exception.DuplicatedException;
+import kr.bos.exception.NotFoundException;
+import kr.bos.exception.RequiredLoginException;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
@@ -32,8 +36,71 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             .errorMessage(e.getMessage())
             .build();
 
-        log.error(e.getClass().getName(), e);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Unauthorized 401 Exception Handler.
+     *
+     * @since 1.0.0
+     */
+    @ExceptionHandler(value = {RequiredLoginException.class})
+    protected ResponseEntity<ErrorResponse> unauthorizedHandler(RuntimeException e) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .timestamp(LocalDateTime.now())
+            .status(HttpStatus.UNAUTHORIZED.value())
+            .errorMessage(e.getMessage())
+            .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    /**
+     * Forbidden 403 Exception Handler.
+     *
+     * @since 1.0.0
+     */
+    @ExceptionHandler(value = {AccessDeniedException.class})
+    protected ResponseEntity<ErrorResponse> forbiddenHandler(RuntimeException e) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .timestamp(LocalDateTime.now())
+            .status(HttpStatus.FORBIDDEN.value())
+            .errorMessage(e.getMessage())
+            .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    /**
+     * NotFound 404 Exception Handler.
+     *
+     * @since 1.0.0
+     */
+    @ExceptionHandler(value = {NotFoundException.class})
+    protected ResponseEntity<ErrorResponse> notFoundHandler(RuntimeException e) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .timestamp(LocalDateTime.now())
+            .status(HttpStatus.NOT_FOUND.value())
+            .errorMessage(e.getMessage())
+            .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Conflict 409 Exception Handler.
+     *
+     * @since 1.0.0
+     */
+    @ExceptionHandler(value = {DuplicatedException.class})
+    protected ResponseEntity<ErrorResponse> conflictHandler(RuntimeException e) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .timestamp(LocalDateTime.now())
+            .status(HttpStatus.CONFLICT.value())
+            .errorMessage(e.getMessage())
+            .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
     /**
@@ -44,6 +111,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Value
     @Builder
     public static class ErrorResponse {
+
         LocalDateTime timestamp;
         Integer status;
         String errorMessage;

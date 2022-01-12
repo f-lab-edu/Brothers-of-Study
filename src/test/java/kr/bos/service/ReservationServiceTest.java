@@ -7,10 +7,8 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import kr.bos.exception.DuplicatedTimeReservationException;
-import kr.bos.exception.ReservationWrongTimeInputException;
-import kr.bos.exception.SelectReservationNotFoundException;
-import kr.bos.exception.WrongReservationCanceledException;
+import kr.bos.exception.DuplicatedException;
+import kr.bos.exception.NotFoundException;
 import kr.bos.mapper.ReservationMapper;
 import kr.bos.model.domain.Reservation;
 import kr.bos.model.dto.request.ReservationReq;
@@ -54,15 +52,15 @@ class ReservationServiceTest {
     @DisplayName("예약 생성에 실패합니다. :잘못된 시간 입력")
     public void createReservationWhenFail1() {
         reservationReq.setEndTime(LocalDateTime.now().plusMinutes(2));
-        assertThrows(ReservationWrongTimeInputException.class,
+        assertThrows(IllegalArgumentException.class,
             () -> reservationService.createReservation(reservationReq, 1L, 2L));
 
         reservationReq.setStartTime(LocalDateTime.now().plusMinutes(100));
-        assertThrows(ReservationWrongTimeInputException.class,
+        assertThrows(IllegalArgumentException.class,
             () -> reservationService.createReservation(reservationReq, 1L, 2L));
 
         reservationReq.setStartTime(LocalDateTime.now().minusMinutes(1));
-        assertThrows(ReservationWrongTimeInputException.class,
+        assertThrows(IllegalArgumentException.class,
             () -> reservationService.createReservation(reservationReq, 1L, 2L));
     }
 
@@ -71,7 +69,7 @@ class ReservationServiceTest {
     public void createReservationWhenFail2() {
         when(reservationMapper.isExistsReservationByRoomIdAndUseTime(2L,
             reservationReq.getStartTime(), reservationReq.getEndTime())).thenReturn(true);
-        assertThrows(DuplicatedTimeReservationException.class,
+        assertThrows(DuplicatedException.class,
             () -> reservationService.createReservation(reservationReq, 1L, 2L));
     }
 
@@ -95,7 +93,7 @@ class ReservationServiceTest {
     public void cancelReservationWhenFail1() {
         when(reservationMapper.selectReservationByIdAndUserId(1L, 2L)).thenReturn(
             Optional.empty());
-        assertThrows(SelectReservationNotFoundException.class,
+        assertThrows(NotFoundException.class,
             () -> reservationService.cancelReservation(1L, 2L));
     }
 
@@ -110,7 +108,7 @@ class ReservationServiceTest {
 
         when(reservationMapper.selectReservationByIdAndUserId(1L, 2L)).thenReturn(
             Optional.of(reservation));
-        assertThrows(WrongReservationCanceledException.class,
+        assertThrows(IllegalArgumentException.class,
             () -> reservationService.cancelReservation(1L, 2L));
     }
 
@@ -125,7 +123,7 @@ class ReservationServiceTest {
 
         when(reservationMapper.selectReservationByIdAndUserId(1L, 2L)).thenReturn(
             Optional.of(reservation));
-        assertThrows(WrongReservationCanceledException.class,
+        assertThrows(IllegalArgumentException.class,
             () -> reservationService.cancelReservation(1L, 2L));
     }
 
@@ -140,7 +138,7 @@ class ReservationServiceTest {
 
         when(reservationMapper.selectReservationByIdAndUserId(1L, 2L)).thenReturn(
             Optional.of(reservation));
-        assertThrows(WrongReservationCanceledException.class,
+        assertThrows(IllegalArgumentException.class,
             () -> reservationService.cancelReservation(1L, 2L));
     }
 }

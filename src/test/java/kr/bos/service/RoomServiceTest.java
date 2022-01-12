@@ -7,8 +7,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import kr.bos.exception.DuplicatedRoomNumberException;
-import kr.bos.exception.ExistsTimeReservationException;
+import kr.bos.exception.DuplicatedException;
 import kr.bos.mapper.ReservationMapper;
 import kr.bos.mapper.RoomMapper;
 import kr.bos.model.domain.Room;
@@ -55,7 +54,7 @@ class RoomServiceTest {
     @DisplayName("방 생성에 실패합니다. :중복된 방 번호.")
     public void createRoomTestWhenFail() {
         when(roomMapper.isExistsRoomNumber(1,  1L)).thenReturn(true);
-        assertThrows(DuplicatedRoomNumberException.class,
+        assertThrows(DuplicatedException.class,
             () -> roomService.createRoom(roomReq, 1L));
     }
 
@@ -71,7 +70,7 @@ class RoomServiceTest {
     @DisplayName("방 수정에 실패합니다. :중복된 방 번호")
     public void updateRoomTestWhenFail() {
         when(roomMapper.isExistsRoomNumber(anyInt(), anyLong())).thenReturn(true);
-        assertThrows(DuplicatedRoomNumberException.class,
+        assertThrows(DuplicatedException.class,
             () -> roomService.updateRoom(roomReq, 1L, 1L));
     }
 
@@ -88,7 +87,7 @@ class RoomServiceTest {
     @DisplayName("방 삭제에 실패합니다. :등록된 예약이 존재합니다.")
     public void deleteRoomTestWhenFail() {
         when(reservationMapper.isExistsNowReservationByRoomId(anyLong())).thenReturn(true);
-        assertThrows(ExistsTimeReservationException.class,
+        assertThrows(DuplicatedException.class,
             () -> roomService.deleteRoom(anyLong()));
     }
 

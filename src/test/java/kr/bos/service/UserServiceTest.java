@@ -1,13 +1,14 @@
 package kr.bos.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
-import kr.bos.exception.DuplicatedEmailException;
-import kr.bos.exception.SelectUserNotFoundException;
+import kr.bos.exception.DuplicatedException;
+import kr.bos.exception.NotFoundException;
 import kr.bos.mapper.UserMapper;
 import kr.bos.model.domain.User;
 import kr.bos.model.dto.request.UserReq;
@@ -63,14 +64,14 @@ class UserServiceTest {
     public void signUpTestWhenSuccess() {
         when(userMapper.isExistsEmail(userReq.getEmail())).thenReturn(false);
         userService.signUp(userReq);
-        verify(userMapper).insertUser(userReq);
+        verify(userMapper).insertUser(any(User.class));
     }
 
     @Test
     @DisplayName("회원가입에 실패합니다. :중복된 이메일")
     public void signUpTestWhenFail() {
         when(userMapper.isExistsEmail(userReq.getEmail())).thenReturn(true);
-        assertThrows(DuplicatedEmailException.class, () -> userService.signUp(userReq));
+        assertThrows(DuplicatedException.class, () -> userService.signUp(userReq));
         verify(userMapper).isExistsEmail(userReq.getEmail());
     }
 
@@ -85,7 +86,7 @@ class UserServiceTest {
     @Test
     @DisplayName("회원 조회에 실패합니다. :존재하지않는 이메일")
     public void selectUserByEmailTestWhenFail() {
-        assertThrows(SelectUserNotFoundException.class,
+        assertThrows(NotFoundException.class,
             () -> userService.selectUserByEmail(userReq.getEmail()));
     }
 
@@ -108,7 +109,7 @@ class UserServiceTest {
     @Test
     @DisplayName("회원 정보 조회에 실패합니다. :존재하지 않는 유저 ID.")
     public void getUserInfoWhenFail() {
-        assertThrows(SelectUserNotFoundException.class,
+        assertThrows(NotFoundException.class,
             () -> userService.getUserInfo(anyLong()));
     }
 
@@ -116,6 +117,6 @@ class UserServiceTest {
     @DisplayName("회원 정보 수정에 성공합니다.")
     public void updateUserInfoWhenSuccess() {
         userService.updateUserInfo(user.getId(), userReq);
-        verify(userMapper).updateUserById(user.getId(), userReq);
+        verify(userMapper).updateUserById(any(), any(User.class));
     }
 }

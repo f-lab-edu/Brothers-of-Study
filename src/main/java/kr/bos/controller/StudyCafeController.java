@@ -1,18 +1,18 @@
 package kr.bos.controller;
 
-import java.util.List;
 import javax.validation.Valid;
 import kr.bos.annotation.BlackCheck;
 import kr.bos.annotation.CurrentUserId;
 import kr.bos.annotation.LoginCheck;
+import kr.bos.annotation.OwnerCheck;
 import kr.bos.model.dto.request.ReservationReq;
 import kr.bos.model.dto.request.ReviewReq;
+import kr.bos.model.dto.request.RoomReq;
 import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.request.SearchTimeReq;
 import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.model.dto.response.PageInfo;
 import kr.bos.model.dto.response.StudyCafeDetailRes;
-import kr.bos.model.dto.response.StudyCafeRes;
 import kr.bos.service.ReservationService;
 import kr.bos.service.ReviewService;
 import kr.bos.service.RoomService;
@@ -48,6 +48,8 @@ public class StudyCafeController {
     /**
      * 스터디 카페 등록하기.
      *
+     * @param userId       유저 ID
+     * @param studyCafeReq 스터디카페 Request DTO
      * @since 1.0.0
      */
     @PostMapping
@@ -55,13 +57,15 @@ public class StudyCafeController {
     @ResponseStatus(HttpStatus.CREATED)
     public void registerStudyCafe(@CurrentUserId Long userId,
         @Valid @RequestBody StudyCafeReq studyCafeReq) {
-
         studyCafeService.registerStudyCafe(userId, studyCafeReq);
     }
 
     /**
      * 스터디 상세 조회하기.
      *
+     * @param userId        유저 ID - @BlackCheck 용도
+     * @param studyCafeId   스터디카페 ID
+     * @param searchTimeReq 검색시간 DTO
      * @since 1.0.0
      */
     @GetMapping("/{studyCafeId}")
@@ -77,6 +81,8 @@ public class StudyCafeController {
     /**
      * 북 마크 등록하기.
      *
+     * @param userId      유저 ID
+     * @param studyCafeId 스터디카페 ID
      * @since 1.0.0
      */
     @PostMapping("/{studyCafeId}/bookmarks")
@@ -91,6 +97,8 @@ public class StudyCafeController {
     /**
      * 북 마크 취소하기.
      *
+     * @param userId      유저 ID
+     * @param studyCafeId 스터디카페 ID
      * @since 1.0.0
      */
     @DeleteMapping("/{studyCafeId}/bookmarks")
@@ -103,8 +111,67 @@ public class StudyCafeController {
     }
 
     /**
+     * 방 추가하기.
+     *
+     * @param userId      유저 ID - @BlackCheck 용도
+     * @param studyCafeId 스터디카페 ID
+     * @param roomReq     Room DTO
+     * @since 1.0.0
+     */
+    @PostMapping("/{studyCafeId}/rooms")
+    @LoginCheck
+    @OwnerCheck
+    @BlackCheck
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createRoom(@CurrentUserId Long userId,
+        @PathVariable("studyCafeId") Long studyCafeId, @RequestBody RoomReq roomReq) {
+        roomService.createRoom(roomReq, studyCafeId);
+    }
+
+    /**
+     * 방 수정하기.
+     *
+     * @param userId      유저 ID - @BlackCheck 용도
+     * @param studyCafeId 스터디카페 ID
+     * @param roomId      방 ID
+     * @param roomReq     Room DTO
+     * @since 1.0.0
+     */
+    @PutMapping("/{studyCafeId}/rooms/{roomId}")
+    @LoginCheck
+    @OwnerCheck
+    @BlackCheck
+    @ResponseStatus(HttpStatus.OK)
+    public void updateRoom(@CurrentUserId Long userId,
+        @PathVariable("studyCafeId") Long studyCafeId,
+        @PathVariable("roomId") Long roomId, @RequestBody RoomReq roomReq) {
+        roomService.updateRoom(roomReq, roomId, studyCafeId);
+    }
+
+    /**
+     * 방 삭제하기.
+     *
+     * @param userId      유저 ID - @BlackCheck, @OwnerCheck 용도
+     * @param studyCafeId 스터디카페 ID - @BlackCheck, @OwnerCheck 용도
+     * @param roomId      방 ID
+     * @since 1.0.0
+     */
+    @DeleteMapping("/{studyCafeId}/rooms/{roomId}")
+    @LoginCheck
+    @OwnerCheck
+    @BlackCheck
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRoom(@CurrentUserId Long userId,
+        @PathVariable("studyCafeId") Long studyCafeId, @PathVariable("roomId") Long roomId) {
+        roomService.deleteRoom(roomId);
+    }
+
+    /**
      * 예약하기.
      *
+     * @param userId         유저 ID
+     * @param roomId         방 ID
+     * @param reservationReq 예약 요청 DTO.
      * @since 1.0.0
      */
     @PostMapping("/{studyCafeId}/rooms/{roomId}/reservations")
@@ -120,6 +187,8 @@ public class StudyCafeController {
     /**
      * 예약 취소하기.
      *
+     * @param userId        유저 ID
+     * @param reservationId 예약 ID
      * @since 1.0.0
      */
     @DeleteMapping("/{studyCafeId}/rooms/{roomId}/reservations/{reservationId}")
@@ -134,10 +203,9 @@ public class StudyCafeController {
     /**
      * 리뷰 목록 조회하기.
      *
-     * @param userId 유저 ID - @BlackCheck 용도
+     * @param userId      유저 ID - @BlackCheck 용도
      * @param studyCafeId 스터디카페 ID
-     * @param page 페이지 번호
-     *
+     * @param page        페이지 번호
      * @since 1.0.0
      */
     @GetMapping("/{studyCafeId}/reviews")
@@ -153,10 +221,9 @@ public class StudyCafeController {
     /**
      * 리뷰 등록하기.
      *
-     * @param userId 유저 ID
+     * @param userId      유저 ID
      * @param studyCafeId 스터디카페 ID
-     * @param reviewReq 리뷰 DTO
-     *
+     * @param reviewReq   리뷰 DTO
      * @since 1.0.0
      */
     @PostMapping("/{studyCafeId}/reviews")
@@ -172,11 +239,10 @@ public class StudyCafeController {
     /**
      * 리뷰 수정하기.
      *
-     * @param userId 유저 ID
+     * @param userId      유저 ID
      * @param studyCafeId 스터디카페 ID - @BlackCheck 용도
-     * @param reviewId 리뷰 ID
-     * @param reviewReq 리뷰 DTO
-     *
+     * @param reviewId    리뷰 ID
+     * @param reviewReq   리뷰 DTO
      * @since 1.0.0
      */
     @PutMapping("/{studyCafeId}/reviews/{reviewId}")
@@ -192,10 +258,9 @@ public class StudyCafeController {
     /**
      * 리뷰 삭제하기.
      *
-     * @param userId 유저 ID
+     * @param userId      유저 ID
      * @param studyCafeId 스터디카페 ID - @BlackCheck 용도
-     * @param reviewId 리뷰 ID
-     *
+     * @param reviewId    리뷰 ID
      * @since 1.0.0
      */
     @DeleteMapping("/{studyCafeId}/reviews/{reviewId}")
@@ -205,17 +270,5 @@ public class StudyCafeController {
     public void deleteReview(@CurrentUserId Long userId,
         @PathVariable("studyCafeId") Long studyCafeId, @PathVariable("reviewId") Long reviewId) {
         reviewService.deleteReview(userId, reviewId);
-    }
-
-    /**
-     * Search.
-     *
-     * @since 1.0.0
-     */
-    @GetMapping("/search/{keyword}")
-    @LoginCheck
-    public List<StudyCafeRes> search(@CurrentUserId Long userId,
-        @PathVariable("keyword") String keyword) {
-        return studyCafeService.findStudyCafesByKeyword(userId, keyword);
     }
 }

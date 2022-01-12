@@ -5,7 +5,7 @@
 
 <mapper namespace="kr.bos.mapper.UserMapper">
 
-  <insert id="insertUser" parameterType="kr.bos.model.dto.request.UserReq">
+  <insert id="insertUser" parameterType="kr.bos.model.domain.User">
     INSERT INTO users (email, password, name, address)
     VALUES (#{email}, #{password}, #{name}, #{address})
   </insert>
@@ -28,8 +28,8 @@
   <update id="updateUserById">
     UPDATE users
     <set>
-      <if test="userReq.name != null">name = #{userReq.name},</if>
-      <if test="userReq.address != null">address = #{userReq.address},</if>
+      <if test="user.name != null">name = #{user.name},</if>
+      <if test="user.address != null">address = #{user.address},</if>
       updated_at = NOW()
     </set>
     WHERE id = #{userId}

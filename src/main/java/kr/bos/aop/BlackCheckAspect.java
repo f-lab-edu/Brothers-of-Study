@@ -27,7 +27,7 @@ public class BlackCheckAspect {
     @Before("@annotation(kr.bos.annotation.BlackCheck) && args(userId, studyCafeId, ..)")
     public void blackCheck(Long userId, Long studyCafeId) {
         if (studyCafeMapper.isBlockUser(userId, studyCafeId)) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException("The service cannot be accessed.");
         }
     }
 }

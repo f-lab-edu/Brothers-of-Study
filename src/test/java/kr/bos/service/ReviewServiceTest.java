@@ -6,15 +6,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
-import kr.bos.exception.ReviewNotFoundException;
+import kr.bos.exception.NotFoundException;
 import kr.bos.mapper.ReviewMapper;
 import kr.bos.model.domain.Review;
-import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.request.ReviewReq;
-import kr.bos.model.dto.response.PageInfo;
+import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.response.ReviewRes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -50,7 +48,7 @@ class ReviewServiceTest {
 
         when(reviewMapper.selectReviewsCountByStudyCafeId(2L)).thenReturn(100L);
         when(reviewMapper.selectReviewsByStudyCafeId(2L, searchOption)
-            ).thenReturn(reviewResList);
+        ).thenReturn(reviewResList);
 
         var result = reviewService.getReviews(2L, searchOption);
         assertEquals(result.getTotalCount(), 100L);
@@ -77,7 +75,7 @@ class ReviewServiceTest {
     @DisplayName("리뷰 업데이트에 실패합니다. :리뷰 작성자가 아닌 경우.")
     public void updateReviewWhenFail() {
         when(reviewMapper.updateReview(any(Review.class))).thenReturn(0);
-        assertThrows(ReviewNotFoundException.class,
+        assertThrows(NotFoundException.class,
             () -> reviewService.updateReview(reviewReq, 1L, 2L));
         verify(reviewMapper).updateReview(any(Review.class));
     }
@@ -94,7 +92,7 @@ class ReviewServiceTest {
     @DisplayName("리뷰 삭제에 실패합니다. :리뷰 작성자가 아닌 경우.")
     public void deleteReviewWhenFail() {
         when(reviewMapper.deleteReview(1L, 2L)).thenReturn(0);
-        assertThrows(ReviewNotFoundException.class,
+        assertThrows(NotFoundException.class,
             () -> reviewService.deleteReview(1L, 2L));
         verify(reviewMapper).deleteReview(1L, 2L);
     }

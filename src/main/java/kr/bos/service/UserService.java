@@ -1,7 +1,7 @@
 package kr.bos.service;
 
-import kr.bos.exception.DuplicatedEmailException;
-import kr.bos.exception.SelectUserNotFoundException;
+import kr.bos.exception.DuplicatedException;
+import kr.bos.exception.NotFoundException;
 import kr.bos.mapper.UserMapper;
 import kr.bos.model.domain.User;
 import kr.bos.model.dto.request.UserReq;
@@ -9,6 +9,7 @@ import kr.bos.model.dto.response.UserInfoRes;
 import kr.bos.utils.PasswordEncrypt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * User Service.
@@ -24,20 +25,25 @@ public class UserService {
     /**
      * 회원 가입.
      *
-     * @param userReq 회원가입 DTO.
-     *
+     * @param userReq 회원가입 DTO
      * @since 1.0.0
      */
     public void signUp(UserReq userReq) {
         if (isExistsEmail(userReq.getEmail())) {
-            throw new DuplicatedEmailException();
+            throw new DuplicatedException("This email already exists.");
         }
 
-        String encryptPassword = PasswordEncrypt.encrypt(userReq.getPassword());
-        userReq.setPassword(encryptPassword);
-        userMapper.insertUser(userReq);
+        User user = User.builder()
+            .email(userReq.getEmail())
+            .password(PasswordEncrypt.encrypt(userReq.getPassword()))
+            .name(userReq.getName())
+            .address(userReq.getAddress())
+            .build();
+
+        userMapper.insertUser(user);
     }
 
+    @Transactional(readOnly = true)
     public boolean isExistsEmail(String email) {
         return userMapper.isExistsEmail(email);
     }
@@ -45,18 +51,19 @@ public class UserService {
     /**
      * Email 일치하는 유저 검색.
      *
+     * @param email 이메일
      * @since 1.0.0
      */
+    @Transactional(readOnly = true)
     public User selectUserByEmail(String email) {
         return userMapper.selectUserByEmail(email)
-            .orElseThrow(SelectUserNotFoundException::new);
+            .orElseThrow(() -> new NotFoundException("Select not found user"));
     }
 
     /**
      * id에 해당하는 유저 삭제.
      *
-     * @param userId 유저 ID.
-     *
+     * @param userId 유저 ID
      * @since 1.0.0
      */
     public void deleteUser(Long userId) {
@@ -69,9 +76,10 @@ public class UserService {
      * @param userId 유저 ID.
      * @since 1.0.0
      */
+    @Transactional(readOnly = true)
     public UserInfoRes getUserInfo(Long userId) {
         return userMapper.selectUserById(userId)
-            .orElseThrow(SelectUserNotFoundException::new);
+            .orElseThrow(() -> new NotFoundException("Select not found user"));
     }
 
     /**
@@ -82,6 +90,11 @@ public class UserService {
      * @since 1.0.0
      */
     public void updateUserInfo(Long userId, UserReq userReq) {
-        userMapper.updateUserById(userId, userReq);
+        User user = User.builder()
+            .name(userReq.getName())
+            .name(userReq.getAddress())
+            .build();
+
+        userMapper.updateUserById(userId, user);
     }
 }

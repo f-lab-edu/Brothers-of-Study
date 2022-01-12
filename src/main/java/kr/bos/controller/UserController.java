@@ -72,7 +72,6 @@ public class UserController {
      * 회원탈퇴.
      *
      * @param userId 유저 ID.
-     *
      * @since 1.0.0
      */
     @DeleteMapping
@@ -86,7 +85,6 @@ public class UserController {
      * 회원 정보 조회.
      *
      * @param userId 유저 ID.
-     *
      * @since 1.0.0
      */
     @GetMapping("/info")
@@ -100,7 +98,6 @@ public class UserController {
      * 회원 정보 수정. (Name, Address)
      *
      * @param userId 유저 ID.
-     *
      * @since 1.0.0
      */
     @PutMapping("/info")

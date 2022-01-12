@@ -19,7 +19,7 @@ public interface StudyCafeMapper {
 
     void insertStudyCafe(StudyCafe studyCafe);
 
-    int insertBookmark(@Param("userId") Long userId, @Param("studyCafeId") Long studyCafeId);
+    void insertBookmark(@Param("userId") Long userId, @Param("studyCafeId") Long studyCafeId);
 
     int deleteBookmark(@Param("userId") Long userId, @Param("studyCafeId") Long studyCafeId);
 
@@ -28,18 +28,6 @@ public interface StudyCafeMapper {
     Optional<StudyCafe> selectStudyCafeById(Long studyCafeId);
 
     Optional<StudyCafeDetailRes> selectStudyCafeDetailById(Long studyCafeId);
-
-    void deleteRoom(Long roomId);
-
-    Optional<StudyCafeRes> getStudyCafeById(Long id);
-
-    Optional<Long> getStudyCafeIdByName(String name);
-
-    List<StudyCafeRes> getStudyCafesByKeyword(Long userId, String name);
-
-    int updateStudyCafe(StudyCafeReq studyCafeReq);
-
-    int deleteStudyCafe(Long id);
 
     boolean isExistsBookmark(@Param("userId") Long userId, @Param("studyCafeId") Long studyCafeId);
 }

@@ -1,10 +1,10 @@
 package kr.bos.model.dto.request;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
-import kr.bos.exception.DuplicatedRoomNumberException;
+import kr.bos.exception.DuplicatedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,6 +48,6 @@ class StudyCafeReqTest {
             .build();
 
         rooms.add(duplicatedRoom);
-        assertThrows(DuplicatedRoomNumberException.class, () -> studyCafeReq.setRooms(rooms));
+        assertThrows(DuplicatedException.class, () -> studyCafeReq.setRooms(rooms));
     }
 }
