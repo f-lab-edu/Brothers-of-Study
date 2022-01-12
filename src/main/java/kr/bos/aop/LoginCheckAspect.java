@@ -28,7 +28,7 @@ public class LoginCheckAspect {
     public Long loginCheck() {
         Long userId = loginService.getCurrentUser();
         if (userId == null) {
-            throw new RequiredLoginException();
+            throw new RequiredLoginException("This service requires login");
         }
 
         return userId;

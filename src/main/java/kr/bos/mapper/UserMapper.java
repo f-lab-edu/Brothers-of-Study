@@ -2,7 +2,6 @@ package kr.bos.mapper;
 
 import java.util.Optional;
 import kr.bos.model.domain.User;
-import kr.bos.model.dto.request.UserReq;
 import kr.bos.model.dto.response.UserInfoRes;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,7 +14,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserMapper {
 
-    void insertUser(UserReq userReq);
+    void insertUser(User user);
 
     boolean isExistsEmail(String email);
 
@@ -25,5 +24,5 @@ public interface UserMapper {
 
     Optional<UserInfoRes> selectUserById(Long userId);
 
-    void updateUserById(@Param("userId") Long userId, @Param("userReq") UserReq userReq);
+    void updateUserById(@Param("userId") Long userId, @Param("user") User user);
 }

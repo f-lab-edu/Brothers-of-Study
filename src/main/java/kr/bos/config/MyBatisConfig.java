@@ -11,14 +11,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * DatabaseConfig.
- * MyBatis 설정을 위한 Configuration.
+ * DatabaseConfig. MyBatis 설정을 위한 Configuration.
  *
  * @since 1.0.0
  */
 @Configuration
 @MapperScan(basePackages = "kr.bos.mapper")
-public class DatabaseConfig {
+public class MyBatisConfig {
 
     @Autowired
     private ApplicationContext applicationContext;

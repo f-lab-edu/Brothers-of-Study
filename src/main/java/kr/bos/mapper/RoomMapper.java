@@ -17,9 +17,9 @@ public interface RoomMapper {
 
     void insertRooms(List<Room> rooms);
 
-    int insertRoom(Room room);
+    void insertRoom(Room room);
 
-    int updateRoom(Room room);
+    void updateRoom(Room room);
 
     void deleteRoom(Long roomId);
 

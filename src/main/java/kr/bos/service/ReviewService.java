@@ -1,7 +1,7 @@
 package kr.bos.service;
 
 import java.util.List;
-import kr.bos.exception.ReviewNotFoundException;
+import kr.bos.exception.NotFoundException;
 import kr.bos.mapper.ReviewMapper;
 import kr.bos.model.domain.Review;
 import kr.bos.model.dto.request.ReviewReq;
@@ -30,8 +30,8 @@ public class ReviewService {
      * @param searchOption 페이지 Option
      * @since 1.0.0
      */
-    @Transactional
-    public PageInfo getReviews(Long studyCafeId, SearchOption searchOption) {
+    @Transactional(readOnly = true)
+    public PageInfo<ReviewRes> getReviews(Long studyCafeId, SearchOption searchOption) {
         List<ReviewRes> reviews = reviewMapper.selectReviewsByStudyCafeId(studyCafeId,
             searchOption);
         Long totalCount = reviewMapper.selectReviewsCountByStudyCafeId(studyCafeId);
@@ -58,7 +58,7 @@ public class ReviewService {
     }
 
     /**
-     * 리뷰 업데이트. 업데이트 실패시 ReviewNotFoundException 예외 발생.
+     * 리뷰 업데이트.
      *
      * @param reviewReq 리뷰 Request DTO
      * @param userId    유저 ID
@@ -75,12 +75,12 @@ public class ReviewService {
 
         int updateCount = reviewMapper.updateReview(review);
         if (updateCount == 0) {
-            throw new ReviewNotFoundException();
+            throw new NotFoundException("Select not found review");
         }
     }
 
     /**
-     * 리뷰 삭제하기. 삭제 실패시 ReviewNotFoundException 예외 발생.
+     * 리뷰 삭제하기.
      *
      * @param userId   유저 ID
      * @param reviewId 리뷰 ID
@@ -89,7 +89,7 @@ public class ReviewService {
     public void deleteReview(Long userId, Long reviewId) {
         int deleteCount = reviewMapper.deleteReview(userId, reviewId);
         if (deleteCount == 0) {
-            throw new ReviewNotFoundException();
+            throw new NotFoundException("Select not found review");
         }
     }
 }

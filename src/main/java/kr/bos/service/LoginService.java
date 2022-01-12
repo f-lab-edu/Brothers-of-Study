@@ -1,7 +1,6 @@
 package kr.bos.service;
 
 import javax.servlet.http.HttpSession;
-import kr.bos.exception.InvalidPasswordException;
 import kr.bos.model.domain.User;
 import kr.bos.model.dto.request.LoginInfoReq;
 import kr.bos.utils.PasswordEncrypt;
@@ -32,7 +31,7 @@ public class LoginService {
         if (PasswordEncrypt.isMatch(loginInfoReq.getPassword(), user.getPassword())) {
             session.setAttribute(USER_ID, user.getId());
         } else {
-            throw new InvalidPasswordException();
+            throw new IllegalArgumentException("Your password is invalid.");
         }
     }
 

@@ -4,7 +4,3 @@ spring:
       enabled: always
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/brothers-of-study
-    username: bos
-    password: bos
-

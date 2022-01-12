@@ -1,7 +1,6 @@
 package kr.bos.service;
 
-import kr.bos.exception.DuplicatedRoomNumberException;
-import kr.bos.exception.ExistsTimeReservationException;
+import kr.bos.exception.DuplicatedException;
 import kr.bos.mapper.ReservationMapper;
 import kr.bos.mapper.RoomMapper;
 import kr.bos.model.domain.Room;
@@ -25,11 +24,11 @@ public class RoomService {
     /**
      * 스터디 카페에 해당 방 번호가 존재하는지 확인.
      *
-     * @param roomNumber 방 번호.
+     * @param roomNumber  방 번호.
      * @param studyCafeId 스터디카페 ID.
-     *
      * @since 1.0.0
      */
+    @Transactional(readOnly = true)
     public boolean isExistsRoomNumber(Integer roomNumber, Long studyCafeId) {
         return roomMapper.isExistsRoomNumber(roomNumber, studyCafeId);
     }
@@ -37,14 +36,13 @@ public class RoomService {
     /**
      * 방 추가 생성하기.
      *
-     * @param roomReq 방 생성 DTO.
+     * @param roomReq     방 생성 DTO.
      * @param studyCafeId 스터디카페 ID.
-     *
      * @since 1.0.0
      */
     public void createRoom(RoomReq roomReq, Long studyCafeId) {
         if (isExistsRoomNumber(roomReq.getNumber(), studyCafeId)) {
-            throw new DuplicatedRoomNumberException();
+            throw new DuplicatedException("This room number already exists.");
         }
 
         Room room = Room.builder()
@@ -59,15 +57,14 @@ public class RoomService {
     /**
      * 방 수정하기.
      *
-     * @param roomReq 방 생성 DTO.
-     * @param roomId 방 ID.
+     * @param roomReq     방 생성 DTO.
+     * @param roomId      방 ID.
      * @param studyCafeId 스터디카페 ID.
-     *
      * @since 1.0.0
      */
     public void updateRoom(RoomReq roomReq, Long roomId, Long studyCafeId) {
         if (isExistsRoomNumber(roomReq.getNumber(), studyCafeId)) {
-            throw new DuplicatedRoomNumberException();
+            throw new DuplicatedException("This room number already exists.");
         }
 
         Room room = Room.builder()
@@ -84,13 +81,11 @@ public class RoomService {
      * 방 삭제하기.
      *
      * @param roomId 방 ID.
-     *
      * @since 1.0.0
      */
-    @Transactional
     public void deleteRoom(Long roomId) {
         if (reservationMapper.isExistsNowReservationByRoomId(roomId)) {
-            throw new ExistsTimeReservationException();
+            throw new DuplicatedException("A reservation exists at that time.");
         }
         roomMapper.deleteRoom(roomId);
     }
