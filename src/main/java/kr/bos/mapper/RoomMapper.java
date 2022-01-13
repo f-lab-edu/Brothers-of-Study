@@ -2,6 +2,7 @@ package kr.bos.mapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import kr.bos.model.domain.Room;
 import kr.bos.model.dto.response.RoomUseInfoRes;
 import org.apache.ibatis.annotations.Mapper;
@@ -28,4 +29,10 @@ public interface RoomMapper {
 
     boolean isExistsRoomNumber(@Param("roomNumber") Integer roomNumber,
         @Param("studyCafeId") Long studyCafeId);
+
+    Optional<Long> getRoomLockById(Long roomId);
+
+    void insertRoomLock(Long id);
+
+    void insertRoomLocks(List<Long> ids);
 }

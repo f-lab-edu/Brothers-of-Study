@@ -5,11 +5,11 @@ import java.time.temporal.ChronoUnit;
 import kr.bos.exception.DuplicatedException;
 import kr.bos.exception.NotFoundException;
 import kr.bos.mapper.ReservationMapper;
+import kr.bos.mapper.RoomMapper;
 import kr.bos.model.domain.Reservation;
 import kr.bos.model.dto.request.ReservationReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Reservation Service.
@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReservationService {
 
     private final ReservationMapper reservationMapper;
+    private final RoomMapper roomMapper;
 
     /**
      * 예약하기.
@@ -40,6 +41,9 @@ public class ReservationService {
             || ChronoUnit.MINUTES.between(startTime, endTime) < 10) {
             throw new IllegalArgumentException("Please check your reservation time again.");
         }
+
+        roomMapper.getRoomLockById(roomId)
+            .orElseThrow(() -> new NotFoundException("Select not found room_lock"));
 
         if (reservationMapper.isExistsReservationByRoomIdAndUseTime(roomId, startTime, endTime)) {
             throw new DuplicatedException("This Reservation Time already exists.");

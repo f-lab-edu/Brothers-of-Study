@@ -60,6 +60,13 @@ public class StudyCafeService {
         }
 
         roomMapper.insertRooms(rooms);
+
+        List<Long> roomIds = new ArrayList<>();
+        for (Room room : rooms) {
+            roomIds.add(room.getId());
+        }
+
+        roomMapper.insertRoomLocks(roomIds);
     }
 
     /**

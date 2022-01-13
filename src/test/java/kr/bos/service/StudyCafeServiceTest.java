@@ -67,6 +67,7 @@ class StudyCafeServiceTest {
         studyCafeService.registerStudyCafe(1L, studyCafeReq);
         verify(studyCafeMapper).insertStudyCafe(any(StudyCafe.class));
         verify(roomMapper).insertRooms(any());
+        verify(roomMapper).insertRoomLocks(any());
     }
 
     @Test
