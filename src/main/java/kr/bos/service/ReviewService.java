@@ -9,6 +9,7 @@ import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.response.PageInfo;
 import kr.bos.model.dto.response.ReviewRes;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +47,7 @@ public class ReviewService {
      * @param studyCafeId 스터디카페 ID
      * @since 1.0.0
      */
+    @CacheEvict(value = "studyCafes", allEntries = true)
     public void createReview(ReviewReq reviewReq, Long userId, Long studyCafeId) {
         Review review = Review.builder()
             .userId(userId)
@@ -65,6 +67,7 @@ public class ReviewService {
      * @param reviewId  리뷰 ID
      * @since 1.0.0
      */
+    @CacheEvict(value = "studyCafes", allEntries = true)
     public void updateReview(ReviewReq reviewReq, Long userId, Long reviewId) {
         Review review = Review.builder()
             .id(reviewId)
@@ -86,6 +89,7 @@ public class ReviewService {
      * @param reviewId 리뷰 ID
      * @since 1.0.0
      */
+    @CacheEvict(value = "studyCafes", allEntries = true)
     public void deleteReview(Long userId, Long reviewId) {
         int deleteCount = reviewMapper.deleteReview(userId, reviewId);
         if (deleteCount == 0) {

@@ -19,22 +19,7 @@ import lombok.NoArgsConstructor;
 public class StudyCafeRes {
 
     private Long id;
-
-    private Long userId;
-
     private String title;
-
     private String address;
-
-    private String thumbnail;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    private Double reviewAverage;
-
-    private Integer bookMarked;
-
-    private Integer emptyRoomCount;
+    private Float reviewAverage;
 }

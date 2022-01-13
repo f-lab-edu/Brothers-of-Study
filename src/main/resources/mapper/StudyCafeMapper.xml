@@ -15,6 +15,50 @@
     )
   </select>
 
+  <select id="selectStudyCafesBySearchOption" resultType="kr.bos.model.dto.response.StudyCafeRes">
+    SELECT study_cafes.id AS id, title, address, AVG(score) AS reviewAverage
+    FROM study_cafes
+    LEFT JOIN reviews ON study_cafes.id = reviews.study_cafe_id
+    <where>
+      <if test="keyword != null">
+        title LIKE CONCAT(#{keyword}, '%')
+      </if>
+      <if test="isBookmark == true">
+        AND study_cafes.id IN (SELECT study_cafe_id FROM bookmarks WHERE user_id = #{userId})
+      </if>
+      <if test="isMyStudyCafe == true">
+        AND study_cafes.user_id = #{userId}
+      </if>
+    </where>
+    GROUP BY reviews.study_cafe_id, study_cafes.id, title, address
+    <if test='order.name.equals("RECENTLY")'>
+      ORDER BY study_cafes.created_at
+    </if>
+    <if test='order.name.equals("NAME")'>
+      ORDER BY study_cafes.title
+    </if>
+    <if test='order.name.equals("SCORE")'>
+      ORDER BY reviewAverage
+    </if>
+    LIMIT #{offset}, #{limit}
+  </select>
+
+  <select id="selectStudyCafesCountsBySearchOption" resultType="long">
+    SELECT COUNT(*)
+    FROM study_cafes
+    <where>
+      <if test="keyword != null">
+        title LIKE CONCAT(#{keyword}, '%')
+      </if>
+      <if test="isBookmark == true">
+        AND study_cafes.id IN (SELECT study_cafe_id FROM bookmarks WHERE user_id = #{userId})
+      </if>
+      <if test="isMyStudyCafe == true">
+        AND study_cafes.user_id = #{userId}
+      </if>
+    </where>
+  </select>
+
   <select id="selectStudyCafeById" resultType="kr.bos.model.domain.StudyCafe">
     SELECT *
     FROM study_cafes

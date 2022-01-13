@@ -10,9 +10,9 @@ import kr.bos.model.dto.request.ReviewReq;
 import kr.bos.model.dto.request.RoomReq;
 import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.request.SearchTimeReq;
-import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.model.dto.response.PageInfo;
 import kr.bos.model.dto.response.StudyCafeDetailRes;
+import kr.bos.model.dto.response.StudyCafeRes;
 import kr.bos.service.ReservationService;
 import kr.bos.service.ReviewService;
 import kr.bos.service.RoomService;
@@ -46,18 +46,37 @@ public class StudyCafeController {
     private final ReservationService reservationService;
 
     /**
-     * 스터디 카페 등록하기.
+     * 스터디카페 목록 조회하기.
      *
-     * @param userId       유저 ID
-     * @param studyCafeReq 스터디카페 Request DTO
+     * @param userId        필터를 위한 userId (내 스터디 카페, 북마크 등록)
+     * @param keyword       검색어
+     * @param isBookmark    북마크 등록한 스터디 카페만 조회할 것인지
+     * @param isMyStudyCafe 내 스터디 카페만 조회할 것인지
+     * @param order         정렬 (최신순, 이름, 평점)
+     * @param page          페이지 번호
      * @since 1.0.0
      */
-    @PostMapping
+    @GetMapping
     @LoginCheck
-    @ResponseStatus(HttpStatus.CREATED)
-    public void registerStudyCafe(@CurrentUserId Long userId,
-        @Valid @RequestBody StudyCafeReq studyCafeReq) {
-        studyCafeService.registerStudyCafe(userId, studyCafeReq);
+    @ResponseStatus(HttpStatus.OK)
+    public PageInfo<StudyCafeRes> getStudyCafes(
+        @CurrentUserId Long userId,
+        @RequestParam(required = false) String keyword,
+        @RequestParam(required = false) Boolean isBookmark,
+        @RequestParam(required = false) Boolean isMyStudyCafe,
+        @RequestParam(required = false) String order,
+        @RequestParam(required = false) Integer page
+    ) {
+        SearchOption searchOption = SearchOption.builder()
+            .keyword(keyword)
+            .isMyStudyCafe(isMyStudyCafe)
+            .isBookmark(isBookmark)
+            .order(order)
+            .page(page)
+            .userId(userId)
+            .build();
+
+        return studyCafeService.getStudyCafes(searchOption);
     }
 
     /**
