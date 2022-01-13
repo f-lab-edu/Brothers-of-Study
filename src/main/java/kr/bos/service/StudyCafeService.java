@@ -9,11 +9,16 @@ import kr.bos.mapper.StudyCafeMapper;
 import kr.bos.model.domain.Room;
 import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.RoomReq;
+import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.request.SearchTimeReq;
 import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.model.dto.response.PageInfo;
 import kr.bos.model.dto.response.RoomUseInfoRes;
 import kr.bos.model.dto.response.StudyCafeDetailRes;
+import kr.bos.model.dto.response.StudyCafeRes;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +35,22 @@ public class StudyCafeService {
     private final RoomMapper roomMapper;
 
     /**
+     * 스터디 카페 목록 조회하기.
+     *
+     * @param searchOption 검색 옵션 DTO.
+     * @since 1.0.0
+     */
+    @Transactional(readOnly = true)
+    @Cacheable(value = "studyCafes", condition = "#searchOption.cacheKey == null",
+        key = "#searchOption.cacheKey")
+    public PageInfo<StudyCafeRes> getStudyCafes(SearchOption searchOption) {
+        List<StudyCafeRes> studyCafes = studyCafeMapper.selectStudyCafesBySearchOption(
+            searchOption);
+        Long totalCount = studyCafeMapper.selectStudyCafesCountsBySearchOption(searchOption);
+        return new PageInfo<>(totalCount, studyCafes);
+    }
+
+    /**
      * 스터디 카페 등록하기.
      * <br>
      * 입력 받은 스터디 카페 정보로 스터디 카페 생성. 생성한 스터디 카페의 id를 Room에 지정한 후 Room 생성.
@@ -38,6 +59,7 @@ public class StudyCafeService {
      * @param studyCafeReq 스터디카페 DTO
      * @since 1.0.0
      */
+    @CacheEvict(value = "studyCafes", allEntries = true)
     public void registerStudyCafe(Long userId, StudyCafeReq studyCafeReq) {
         StudyCafe studyCafe = StudyCafe.builder()
             .userId(userId)

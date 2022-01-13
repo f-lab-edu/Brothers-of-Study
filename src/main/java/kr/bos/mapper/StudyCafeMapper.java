@@ -3,7 +3,7 @@ package kr.bos.mapper;
 import java.util.List;
 import java.util.Optional;
 import kr.bos.model.domain.StudyCafe;
-import kr.bos.model.dto.request.StudyCafeReq;
+import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.response.StudyCafeDetailRes;
 import kr.bos.model.dto.response.StudyCafeRes;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,6 +16,10 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface StudyCafeMapper {
+
+    List<StudyCafeRes> selectStudyCafesBySearchOption(SearchOption searchOption);
+
+    Long selectStudyCafesCountsBySearchOption(SearchOption searchOption);
 
     void insertStudyCafe(StudyCafe studyCafe);
 

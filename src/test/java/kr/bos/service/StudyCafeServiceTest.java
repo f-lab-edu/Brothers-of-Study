@@ -1,5 +1,6 @@
 package kr.bos.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -16,9 +17,11 @@ import kr.bos.mapper.RoomMapper;
 import kr.bos.mapper.StudyCafeMapper;
 import kr.bos.model.domain.StudyCafe;
 import kr.bos.model.dto.request.RoomReq;
+import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.request.SearchTimeReq;
 import kr.bos.model.dto.request.StudyCafeReq;
 import kr.bos.model.dto.response.StudyCafeDetailRes;
+import kr.bos.model.dto.response.StudyCafeRes;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -67,6 +70,24 @@ class StudyCafeServiceTest {
         studyCafeService.registerStudyCafe(1L, studyCafeReq);
         verify(studyCafeMapper).insertStudyCafe(any(StudyCafe.class));
         verify(roomMapper).insertRooms(any());
+    }
+
+    @Test
+    @DisplayName("스터디 카페 목록 조회에 성공합니다.")
+    public void getStudyCafesTestWhenSuccess() {
+        SearchOption searchOption = SearchOption.builder().build();
+        List<StudyCafeRes> studyCafeResList = new ArrayList<>();
+
+        when(studyCafeMapper.selectStudyCafesBySearchOption(searchOption)).thenReturn(
+            studyCafeResList);
+        when(studyCafeMapper.selectStudyCafesCountsBySearchOption(searchOption)
+        ).thenReturn(100L);
+
+        var result = studyCafeService.getStudyCafes(searchOption);
+        assertEquals(result.getTotalCount(), 100L);
+        assertEquals(result.getList(), studyCafeResList);
+        verify(studyCafeMapper).selectStudyCafesBySearchOption(searchOption);
+        verify(studyCafeMapper).selectStudyCafesCountsBySearchOption(searchOption);
     }
 
     @Test
