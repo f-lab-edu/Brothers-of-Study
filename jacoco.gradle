@@ -5,6 +5,7 @@ def jacocoExcludes = [
         '**/BosApplication.class',
         '**/GlobalExceptionHandler.class',
         '**/controller',
+        '**/DataSourceType.class',
 
         // Aspect
         '**/LoginCheckAspect.class',
