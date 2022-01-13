@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * StudyCafe 컨트롤러.
+ * StudyCafe Controller.
  *
  * @since 1.0.0
  */

@@ -17,7 +17,6 @@ def jacocoExcludes = [
         // 컨트롤러에서 발생하는 예외
         '**/RequiredLoginException.class',
         '**/AccessDeniedException.class',
-        '**/SelectStudyCafeNotFoundException.class'
 ]
 
 jacocoTestReport {
