@@ -52,6 +52,7 @@ public class RoomService {
             .build();
 
         roomMapper.insertRoom(room);
+        roomMapper.insertRoomLock(room.getId());
     }
 
     /**

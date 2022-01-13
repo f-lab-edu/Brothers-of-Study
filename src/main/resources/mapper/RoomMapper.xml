@@ -5,6 +5,11 @@
 
 <mapper namespace="kr.bos.mapper.RoomMapper">
 
+  <select id="getRoomLockById" resultType="long">
+    SELECT id
+    FROM room_locks WHERE room_id = #{roomId} FOR UPDATE
+  </select>
+
   <select id="isExistsRoomNumber" resultType="boolean">
     SELECT EXISTS
     (
@@ -15,7 +20,7 @@
     )
   </select>
 
-  <insert id="insertRooms">
+  <insert id="insertRooms" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO rooms (study_cafe_id, number, capacity)
     VALUES
     <foreach collection="list" item="room" separator=",">
@@ -27,9 +32,22 @@
     </foreach>
   </insert>
 
-  <insert id="insertRoom">
+  <insert id="insertRoom" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO rooms (study_cafe_id, number, capacity)
     VALUES (#{studyCafeId}, #{number}, #{capacity})
+  </insert>
+
+  <insert id="insertRoomLock">
+    INSERT INTO room_locks (room_id)
+    VALUES (#{id})
+  </insert>
+
+  <insert id="insertRoomLocks">
+    INSERT INTO room_locks (room_id)
+    VALUES
+    <foreach collection="list" item="id" separator=",">
+      ( #{id} )
+    </foreach>
   </insert>
 
   <update id="updateRoom">

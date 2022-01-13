@@ -48,6 +48,7 @@ class RoomServiceTest {
         when(roomMapper.isExistsRoomNumber(1, 1L)).thenReturn(false);
         roomService.createRoom(roomReq, 1L);
         verify(roomMapper).insertRoom(any(Room.class));
+        verify(roomMapper).insertRoomLock(any());
     }
 
     @Test

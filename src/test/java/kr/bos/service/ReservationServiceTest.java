@@ -10,6 +10,7 @@ import java.util.Optional;
 import kr.bos.exception.DuplicatedException;
 import kr.bos.exception.NotFoundException;
 import kr.bos.mapper.ReservationMapper;
+import kr.bos.mapper.RoomMapper;
 import kr.bos.model.domain.Reservation;
 import kr.bos.model.dto.request.ReservationReq;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +30,9 @@ class ReservationServiceTest {
     @Mock
     ReservationMapper reservationMapper;
 
+    @Mock
+    RoomMapper roomMapper;
+
     ReservationReq reservationReq;
 
     @BeforeEach
@@ -42,6 +46,7 @@ class ReservationServiceTest {
     @Test
     @DisplayName("예약 생성에 성공합니다.")
     public void createReservationWhenSuccess() {
+        when(roomMapper.getRoomLockById(2L)).thenReturn(Optional.of(1L));
         when(reservationMapper.isExistsReservationByRoomIdAndUseTime(2L,
             reservationReq.getStartTime(), reservationReq.getEndTime())).thenReturn(false);
         reservationService.createReservation(reservationReq, 1L, 2L);
@@ -67,9 +72,18 @@ class ReservationServiceTest {
     @Test
     @DisplayName("예약 생성에 실패합니다. :이미 예약자가 존재합니다.")
     public void createReservationWhenFail2() {
+        when(roomMapper.getRoomLockById(2L)).thenReturn(Optional.of(1L));
         when(reservationMapper.isExistsReservationByRoomIdAndUseTime(2L,
             reservationReq.getStartTime(), reservationReq.getEndTime())).thenReturn(true);
         assertThrows(DuplicatedException.class,
+            () -> reservationService.createReservation(reservationReq, 1L, 2L));
+    }
+
+    @Test
+    @DisplayName("예약 생성에 실패합니다. :방 잠금 객체가 존재하지 않습니다.")
+    public void createReservationWhenFail3() {
+        when(roomMapper.getRoomLockById(2L)).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class,
             () -> reservationService.createReservation(reservationReq, 1L, 2L));
     }
 
