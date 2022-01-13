@@ -1,7 +1,6 @@
 package kr.bos.config;
 
 import java.time.Duration;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -102,9 +101,7 @@ public class RedisConfig {
      * @since 1.0.0
      */
     @Bean
-    public RedisCacheManager redisCacheManager(
-        @Qualifier("redisCacheConnectionFactory") RedisConnectionFactory redisConnectionFactory) {
-
+    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisCacheConnectionFactory) {
         RedisCacheConfiguration redisCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
             .disableCachingNullValues().serializeKeysWith(SerializationPair.fromSerializer(
                 new StringRedisSerializer()))
@@ -113,7 +110,7 @@ public class RedisConfig {
             .entryTtl(Duration.ofDays(1L));
 
         return RedisCacheManager.RedisCacheManagerBuilder
-            .fromConnectionFactory(redisConnectionFactory)
+            .fromConnectionFactory(redisCacheConnectionFactory)
             .cacheDefaults(redisCacheConfig).build();
     }
 }

@@ -29,9 +29,9 @@ public class MyBatisConfig {
      * @since 1.0.0
      */
     @Bean
-    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+    public SqlSessionFactory sqlSessionFactory(DataSource proxyDataSource) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(dataSource);
+        sqlSessionFactoryBean.setDataSource(proxyDataSource);
         sqlSessionFactoryBean
             .setMapperLocations(applicationContext.getResources("classpath:/mapper/**/*.xml"));
         sqlSessionFactoryBean
