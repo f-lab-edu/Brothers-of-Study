@@ -50,7 +50,7 @@ checkstyle 플러그인을 적용해 코드 컨벤션을 유지했습니다.
 
 <https://github.com/f-lab-edu/Brothers-of-Study/wiki/ERD>
 
-![Brothers-of-Study (1)](https://user-images.githubusercontent.com/74256905/147106124-c84b41a5-6343-4cce-b0c5-51474aa1433e.png)
+![Brothers-of-Study (1)](https://user-images.githubusercontent.com/74256905/149701721-660ed9aa-c8d8-4042-83bc-a05c51a5b761.png)
 
 ## Prototyping
 
