@@ -1,3 +1,5 @@
+<img width="1057" alt="147902104-959468cb-fdc0-4972-9a2f-03bc2227922d" src="https://user-images.githubusercontent.com/74256905/148158835-d8a3e76a-eb67-4340-bd55-621fa1e18c59.png">
+
 # 📚 Brothers-of-Study
 - 스터디 카페 예약 서비스인 **스터디의 형제들**입니다.
 - **대규모 트래픽**을 처리할 수 있는 서비스를 목표로 진행했습니다. 
@@ -12,10 +14,16 @@
 - Redis
 - Jenkins
 
-## Architecture
+## Issue
 
-<img width="1057" alt="147902104-959468cb-fdc0-4972-9a2f-03bc2227922d" src="https://user-images.githubusercontent.com/74256905/148158835-d8a3e76a-eb67-4340-bd55-621fa1e18c59.png">
-
+- [#1 분산 환경에서 발생하는 세션 불일치 문제 해결하기.](https://jinukix.tistory.com/127)
+- [#2 DTO, Entitiy간의 변환은 어디서 일어나야 할까? 프로젝트 구조에 대한 고찰.](https://jinukix.tistory.com/135)
+- [#3 AOP를 적용해 중복되는 로그인 검증 기능 분리하기.](https://jinukix.tistory.com/133)
+- [#4 캐싱적용해서 읽기 작업 성능 개선하기.](https://jinukix.tistory.com/136)
+- [#5 중복 예약으로 발생하는 DB 동시성 문제 해결하기. (팬텀 리드 이슈)](https://jinukix.tistory.com/137)
+- [#6 Jenkins를 통한 CI & CD 구축하기.](https://jinukix.tistory.com/138)
+- [#7 분산환경에서 서비스의 중단없이 배포하기.](https://jinukix.tistory.com/139)
+- [#8 MySQL Replication Master/Slave 이중화 적용하기.](https://jinukix.tistory.com/140)
 
 ## 프로젝트 관리
 
