@@ -4,7 +4,8 @@ import kr.bos.exception.DuplicatedException;
 import kr.bos.exception.NotFoundException;
 import kr.bos.mapper.UserMapper;
 import kr.bos.model.domain.User;
-import kr.bos.model.dto.request.UserReq;
+import kr.bos.model.dto.request.SignUpReq;
+import kr.bos.model.dto.request.UserUpdateReq;
 import kr.bos.model.dto.response.UserInfoRes;
 import kr.bos.utils.PasswordEncrypt;
 import lombok.RequiredArgsConstructor;
@@ -25,21 +26,20 @@ public class UserService {
     /**
      * 회원 가입.
      *
-     * @param userReq 회원가입 DTO
+     * @param signUpReq 회원가입 DTO
      * @since 1.0.0
      */
-    public void signUp(UserReq userReq) {
-        if (isExistsEmail(userReq.getEmail())) {
+    public void signUp(SignUpReq signUpReq) {
+        if (isExistsEmail(signUpReq.getEmail())) {
             throw new DuplicatedException("This email already exists.");
         }
 
         User user = User.builder()
-            .email(userReq.getEmail())
-            .password(PasswordEncrypt.encrypt(userReq.getPassword()))
-            .name(userReq.getName())
-            .address(userReq.getAddress())
+            .email(signUpReq.getEmail())
+            .password(PasswordEncrypt.encrypt(signUpReq.getPassword()))
+            .name(signUpReq.getName())
+            .address(signUpReq.getAddress())
             .build();
-
         userMapper.insertUser(user);
     }
 
@@ -85,16 +85,17 @@ public class UserService {
     /**
      * id에 해당하는 유저 정보 수정. (Name, Address).
      *
-     * @param userId  유저 ID.
-     * @param userReq 회원수정 DTO.
+     * @param userId        유저 ID.
+     * @param userUpdateReq 회원수정 DTO.
      * @since 1.0.0
      */
-    public void updateUserInfo(Long userId, UserReq userReq) {
+    public void updateUserInfo(Long userId, UserUpdateReq userUpdateReq) {
         User user = User.builder()
-            .name(userReq.getName())
-            .name(userReq.getAddress())
+            .id(userId)
+            .name(userUpdateReq.getName())
+            .address(userUpdateReq.getAddress())
             .build();
 
-        userMapper.updateUserById(userId, user);
+        userMapper.updateUserById(user);
     }
 }

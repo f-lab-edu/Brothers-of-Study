@@ -42,6 +42,10 @@ checkstyle 플러그인을 적용해 코드 컨벤션을 유지했습니다.
 3. checkstyle/intellij-java-google-style.xml 파일 선택
 4. 적용 후 Tab size 와 Indent 를 4로 변경
 
+## Api Docs
+
+<https://jinukix.github.io/bos-api-guide/>
+
 ## Use cases
 
 <https://github.com/f-lab-edu/Brothers-of-Study/wiki/Use-cases>

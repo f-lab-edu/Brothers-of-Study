@@ -1,0 +1,412 @@
+= Bos API docs
+//:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:snippets: build/generated-snippets
+
+[[resources-post]]
+== Users
+
+[[resources-post-create]]
+=== 회원가입
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/users/sign-up/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/users/sign-up/success/http-response.adoc[]
+
+`*_2. Fail_*: 중복된 이메일입니다.`
+
+==== HTTP request
+
+include::{snippets}/users/sign-up/fail/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/users/sign-up/fail/http-response.adoc[]
+
+=== 로그인
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/users/login/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/users/login/success/http-response.adoc[]
+
+`*_2. Fail_*: 존재하지 않는 이메일입니다.`
+
+==== HTTP request
+
+include::{snippets}/users/login/fail1/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/users/login/fail1/http-response.adoc[]
+
+`*_3. Fail_*: 비밀번호 일치하지 않습니다.`
+
+==== HTTP request
+
+include::{snippets}/users/login/fail2/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/users/login/fail2/http-response.adoc[]
+
+=== 로그아웃
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/users/logout/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/users/logout/success/http-response.adoc[]
+
+=== 회원탈퇴
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/users/delete/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/users/delete/success/http-response.adoc[]
+
+=== 회원정보 조회
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/users/info/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/users/info/success/http-response.adoc[]
+
+`*_2. Fail_*: 존재하지 않는 계정입니다.`
+
+==== HTTP request
+
+include::{snippets}/users/info/fail/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/users/info/fail/http-response.adoc[]
+
+=== 회원정보 수정
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/users/info-update/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/users/info-update/success/http-response.adoc[]
+
+== StudyCafes
+
+=== 스터디 카페 목록 조회
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/get-study-cafes/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/get-study-cafes/success/http-response.adoc[]
+
+=== 스터디 카페 상세 조회
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/get-study-cafe/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/get-study-cafe/success/http-response.adoc[]
+
+`*_2. Fail_*: 존재하지 않는 스터디카페입니다.`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/get-study-cafe/fail/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/get-study-cafe/fail/http-response.adoc[]
+
+=== 북마크 등록
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/register-bookmarks/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/register-bookmarks/success/http-response.adoc[]
+
+`*_2. Fail_*: 이미 북마크가 등록되어 있습니다.
+
+==== HTTP request
+
+include::{snippets}/study_cafes/register-bookmarks/fail/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/register-bookmarks/fail/http-response.adoc[]
+
+=== 북마크 취소
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/cancel-bookmarks/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/cancel-bookmarks/success/http-response.adoc[]
+
+`*_2. Fail_*: 북마크가 등록되어 있지 않습니다.
+
+==== HTTP request
+
+include::{snippets}/study_cafes/cancel-bookmarks/fail/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/cancel-bookmarks/fail/http-response.adoc[]
+
+=== 방 추가하기
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/create-rooms/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/create-rooms/success/http-response.adoc[]
+
+`*_2. Fail_*: 중복된 방 번호가 존재합니다.
+
+==== HTTP request
+
+include::{snippets}/study_cafes/create-rooms/fail/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/create-rooms/fail/http-response.adoc[]
+
+=== 방 수정하기
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/update-rooms/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/update-rooms/success/http-response.adoc[]
+
+`*_2. Fail_*: 중복된 방 번호가 존재합니다.
+
+==== HTTP request
+
+include::{snippets}/study_cafes/update-rooms/fail/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/update-rooms/fail/http-response.adoc[]
+
+=== 방 삭제하기
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/delete-rooms/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/delete-rooms/success/http-response.adoc[]
+
+`*_2. Fail_*: 삭제하려는 방에 등록된 예약이 존재합니다.
+
+==== HTTP request
+
+include::{snippets}/study_cafes/delete-rooms/fail/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/delete-rooms/fail/http-response.adoc[]
+
+=== 예약하기
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/create-reservations/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/create-reservations/success/http-response.adoc[]
+
+`*_2. Fail_*: 잘못된 이용시간을 입력했습니다.
+
+==== HTTP request
+
+include::{snippets}/study_cafes/create-reservations/fail/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/create-reservations/fail/http-response.adoc[]
+
+`*_3. Fail_*: :방 잠금 데이터가 존재하지 않습니다.
+
+==== HTTP request
+
+include::{snippets}/study_cafes/create-reservations/fail2/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/create-reservations/fail2/http-response.adoc[]
+
+`*_4. Fail_*: 이미 예약이 존재합니다.
+
+==== HTTP request
+
+include::{snippets}/study_cafes/create-reservations/fail3/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/create-reservations/fail3/http-response.adoc[]
+
+=== 예약 취소하기
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/cancel-reservations/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/cancel-reservations/success/http-response.adoc[]
+
+`*_2. Fail_*: 존재하지 않는 예약입니다.
+
+==== HTTP request
+
+include::{snippets}/study_cafes/cancel-reservations/fail/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/cancel-reservations/fail/http-response.adoc[]
+
+`*_3. Fail_*: 시작 10분전에 예약을 취소할 수 없습니다.
+
+==== HTTP request
+
+include::{snippets}/study_cafes/cancel-reservations/fail2/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/cancel-reservations/fail2/http-response.adoc[]
+
+=== 리뷰 목록 조회
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/get-reviews/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/get-reviews/success/http-response.adoc[]
+
+=== 리뷰 등록하기
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/create-reviews/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/create-reviews/success/http-response.adoc[]
+
+=== 리뷰 수정하기
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/update-reviews/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/update-reviews/success/http-response.adoc[]
+
+`*_2. Fail_*: 존재하지 않는 리뷰입니다.
+
+==== HTTP request
+
+include::{snippets}/study_cafes/update-reviews/fail/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/update-reviews/fail/http-response.adoc[]
+
+=== 리뷰 삭제하기
+
+`*_1. Success_*`
+
+==== HTTP request
+
+include::{snippets}/study_cafes/delete-reviews/success/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/delete-reviews/success/http-response.adoc[]
+
+`*_2. Fail_*: 존재하지 않는 리뷰입니다.
+
+==== HTTP request
+
+include::{snippets}/study_cafes/delete-reviews/fail/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/study_cafes/delete-reviews/fail/http-response.adoc[]
