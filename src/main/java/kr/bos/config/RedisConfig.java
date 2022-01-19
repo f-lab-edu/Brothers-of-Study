@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
  * RedisConfig. 레디스의 세션과 캐시 사용을 분리하기 위한 설정.
@@ -20,6 +21,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @since 1.0.0
  */
 @Configuration
+@EnableRedisHttpSession
 public class RedisConfig {
 
     @Value("${spring.redis.session.host}")

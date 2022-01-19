@@ -32,7 +32,7 @@
       <if test="user.address != null">address = #{user.address},</if>
       updated_at = NOW()
     </set>
-    WHERE id = #{userId}
+    WHERE id = #{user.id}
   </update>
 
   <delete id="deleteUser">

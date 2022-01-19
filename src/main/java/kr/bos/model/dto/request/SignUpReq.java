@@ -2,6 +2,7 @@ package kr.bos.model.dto.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import kr.bos.model.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,16 +10,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * LoginInfo Dto. 로그인 입력 정보.
+ * SignUp Dto.
  *
  * @since 1.0.0
  */
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class LoginInfoReq {
+public class SignUpReq {
 
     @NotBlank
     @Email
@@ -26,4 +27,10 @@ public class LoginInfoReq {
 
     @NotBlank
     private String password;
+
+    @NotBlank
+    private String name;
+
+    @NotBlank
+    private String address;
 }

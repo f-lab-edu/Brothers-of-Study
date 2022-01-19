@@ -24,5 +24,5 @@ public interface UserMapper {
 
     Optional<UserInfoRes> selectUserById(Long userId);
 
-    void updateUserById(@Param("userId") Long userId, @Param("user") User user);
+    void updateUserById(User user);
 }

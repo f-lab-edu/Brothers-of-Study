@@ -3,8 +3,9 @@ package kr.bos.controller;
 import javax.validation.Valid;
 import kr.bos.annotation.CurrentUserId;
 import kr.bos.annotation.LoginCheck;
-import kr.bos.model.dto.request.LoginInfoReq;
-import kr.bos.model.dto.request.UserReq;
+import kr.bos.model.dto.request.LoginReq;
+import kr.bos.model.dto.request.SignUpReq;
+import kr.bos.model.dto.request.UserUpdateReq;
 import kr.bos.model.dto.response.UserInfoRes;
 import kr.bos.service.LoginService;
 import kr.bos.service.UserService;
@@ -35,25 +36,51 @@ public class UserController {
     /**
      * 회원 가입.
      *
-     * @param userReq 회원가입 입력 정보
+     * @param signUpReq 회원가입 입력 정보
      * @since 1.0.0
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@Valid @RequestBody UserReq userReq) {
-        userService.signUp(userReq);
+    public void signUp(@Valid @RequestBody SignUpReq signUpReq) {
+        userService.signUp(signUpReq);
     }
 
     /**
      * 로그인.
      *
-     * @param loginInfoReq 로그인 입력 정보
+     * @param loginReq 로그인 입력 정보
      * @since 1.0.0
      */
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public void login(@Valid @RequestBody LoginInfoReq loginInfoReq) {
-        loginService.login(loginInfoReq);
+    public void login(@Valid @RequestBody LoginReq loginReq) {
+        loginService.login(loginReq);
+    }
+
+    /**
+     * 회원 정보 조회.
+     *
+     * @param userId 유저 ID.
+     * @since 1.0.0
+     */
+    @GetMapping
+    @LoginCheck
+    @ResponseStatus(HttpStatus.OK)
+    public UserInfoRes getUserInfo(@CurrentUserId Long userId) {
+        return userService.getUserInfo(userId);
+    }
+
+    /**
+     * 회원 정보 수정. (Name, Address)
+     *
+     * @param userId 유저 ID.
+     * @since 1.0.0
+     */
+    @PutMapping
+    @LoginCheck
+    @ResponseStatus(HttpStatus.OK)
+    public void updateUserInfo(@CurrentUserId Long userId, @RequestBody UserUpdateReq userReq) {
+        userService.updateUserInfo(userId, userReq);
     }
 
     /**
@@ -79,31 +106,5 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@CurrentUserId Long userId) {
         userService.deleteUser(userId);
-    }
-
-    /**
-     * 회원 정보 조회.
-     *
-     * @param userId 유저 ID.
-     * @since 1.0.0
-     */
-    @GetMapping("/info")
-    @LoginCheck
-    @ResponseStatus(HttpStatus.OK)
-    public UserInfoRes getUserInfo(@CurrentUserId Long userId) {
-        return userService.getUserInfo(userId);
-    }
-
-    /**
-     * 회원 정보 수정. (Name, Address)
-     *
-     * @param userId 유저 ID.
-     * @since 1.0.0
-     */
-    @PutMapping("/info")
-    @LoginCheck
-    @ResponseStatus(HttpStatus.OK)
-    public void updateUserInfo(@CurrentUserId Long userId, @RequestBody UserReq userReq) {
-        userService.updateUserInfo(userId, userReq);
     }
 }

@@ -1,5 +1,6 @@
 package kr.bos.controller;
 
+import java.time.LocalDateTime;
 import javax.validation.Valid;
 import kr.bos.annotation.BlackCheck;
 import kr.bos.annotation.CurrentUserId;
@@ -11,6 +12,7 @@ import kr.bos.model.dto.request.RoomReq;
 import kr.bos.model.dto.request.SearchOption;
 import kr.bos.model.dto.request.SearchTimeReq;
 import kr.bos.model.dto.response.PageInfo;
+import kr.bos.model.dto.response.ReviewRes;
 import kr.bos.model.dto.response.StudyCafeDetailRes;
 import kr.bos.model.dto.response.StudyCafeRes;
 import kr.bos.service.ReservationService;
@@ -93,7 +95,11 @@ public class StudyCafeController {
     @ResponseStatus(HttpStatus.OK)
     public StudyCafeDetailRes getStudyCafe(@CurrentUserId Long userId,
         @PathVariable("studyCafeId") Long studyCafeId,
-        @RequestBody SearchTimeReq searchTimeReq) {
+        @RequestBody(required = false) SearchTimeReq searchTimeReq) {
+        if (searchTimeReq == null) {
+            searchTimeReq = new SearchTimeReq(LocalDateTime.now());
+        }
+
         return studyCafeService.getStudyCafe(studyCafeId, searchTimeReq);
     }
 
@@ -231,7 +237,7 @@ public class StudyCafeController {
     @LoginCheck
     @BlackCheck
     @ResponseStatus(HttpStatus.OK)
-    public PageInfo getReviews(@CurrentUserId Long userId,
+    public PageInfo<ReviewRes> getReviews(@CurrentUserId Long userId,
         @PathVariable("studyCafeId") Long studyCafeId, @RequestParam("page") Integer page) {
         SearchOption searchOption = SearchOption.builder().page(page).build();
         return reviewService.getReviews(studyCafeId, searchOption);

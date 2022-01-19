@@ -9,7 +9,6 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  * Starting point of an application.
  */
 @EnableCaching
-@EnableRedisHttpSession
 @SpringBootApplication
 public class BosApplication {
 

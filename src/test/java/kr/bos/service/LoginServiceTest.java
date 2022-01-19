@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
 import kr.bos.model.domain.User;
-import kr.bos.model.dto.request.LoginInfoReq;
+import kr.bos.model.dto.request.LoginReq;
 import kr.bos.utils.PasswordEncrypt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ class LoginServiceTest {
     LoginService loginService;
 
     User user;
-    LoginInfoReq loginInfoReq;
+    LoginReq loginReq;
 
     @BeforeEach
     public void beforeEach() {
@@ -42,7 +42,7 @@ class LoginServiceTest {
             .address("address")
             .build();
 
-        loginInfoReq = LoginInfoReq.builder()
+        loginReq = LoginReq.builder()
             .email("email@email.com")
             .password("password")
             .build();
@@ -61,27 +61,27 @@ class LoginServiceTest {
     @Test
     @DisplayName("로그인에 성공합니다.")
     public void loginTestWhenSuccess() {
-        when(userService.selectUserByEmail(loginInfoReq.getEmail())).thenReturn(user);
-        loginService.login(loginInfoReq);
+        when(userService.selectUserByEmail(loginReq.getEmail())).thenReturn(user);
+        loginService.login(loginReq);
         assertEquals(loginService.getCurrentUser(), user.getId());
     }
 
     @Test
     @DisplayName("로그인에 실패합니다. :잘못된 패스워드")
     public void loginTestWhenFail() {
-        when(userService.selectUserByEmail(loginInfoReq.getEmail())).thenReturn(user);
+        when(userService.selectUserByEmail(loginReq.getEmail())).thenReturn(user);
 
-        loginInfoReq.setPassword("");
-        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginInfoReq));
+        loginReq.setPassword("");
+        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginReq));
 
-        loginInfoReq.setPassword("password" + "@");
-        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginInfoReq));
+        loginReq.setPassword("password" + "@");
+        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginReq));
 
-        loginInfoReq.setPassword("password".substring(1));
-        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginInfoReq));
+        loginReq.setPassword("password".substring(1));
+        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginReq));
 
-        loginInfoReq.setPassword(PasswordEncrypt.encrypt("password"));
-        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginInfoReq));
+        loginReq.setPassword(PasswordEncrypt.encrypt("password"));
+        assertThrows(IllegalArgumentException.class, () -> loginService.login(loginReq));
     }
 
     @Test

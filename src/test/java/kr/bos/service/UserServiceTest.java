@@ -11,7 +11,8 @@ import kr.bos.exception.DuplicatedException;
 import kr.bos.exception.NotFoundException;
 import kr.bos.mapper.UserMapper;
 import kr.bos.model.domain.User;
-import kr.bos.model.dto.request.UserReq;
+import kr.bos.model.dto.request.SignUpReq;
+import kr.bos.model.dto.request.UserUpdateReq;
 import kr.bos.model.dto.response.UserInfoRes;
 import kr.bos.utils.PasswordEncrypt;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,7 @@ class UserServiceTest {
     UserService userService;
 
     User user;
-    UserReq userReq;
+    SignUpReq signUpReq;
     UserInfoRes userInfoRes;
 
     @BeforeEach
@@ -45,7 +46,7 @@ class UserServiceTest {
             .address("address")
             .build();
 
-        userReq = UserReq.builder()
+        signUpReq = SignUpReq.builder()
             .email("email@email.com")
             .password("password")
             .name("name")
@@ -62,32 +63,32 @@ class UserServiceTest {
     @Test
     @DisplayName("회원가입에 성공합니다.")
     public void signUpTestWhenSuccess() {
-        when(userMapper.isExistsEmail(userReq.getEmail())).thenReturn(false);
-        userService.signUp(userReq);
+        when(userMapper.isExistsEmail(signUpReq.getEmail())).thenReturn(false);
+        userService.signUp(signUpReq);
         verify(userMapper).insertUser(any(User.class));
     }
 
     @Test
     @DisplayName("회원가입에 실패합니다. :중복된 이메일")
     public void signUpTestWhenFail() {
-        when(userMapper.isExistsEmail(userReq.getEmail())).thenReturn(true);
-        assertThrows(DuplicatedException.class, () -> userService.signUp(userReq));
-        verify(userMapper).isExistsEmail(userReq.getEmail());
+        when(userMapper.isExistsEmail(signUpReq.getEmail())).thenReturn(true);
+        assertThrows(DuplicatedException.class, () -> userService.signUp(signUpReq));
+        verify(userMapper).isExistsEmail(signUpReq.getEmail());
     }
 
     @Test
     @DisplayName("회원 조회에 성공합니다.")
     public void selectUserByEmailTestWhenSuccess() {
-        when(userMapper.selectUserByEmail(userReq.getEmail()))
+        when(userMapper.selectUserByEmail(signUpReq.getEmail()))
             .thenReturn(Optional.ofNullable(user));
-        userService.selectUserByEmail(userReq.getEmail());
+        userService.selectUserByEmail(signUpReq.getEmail());
     }
 
     @Test
     @DisplayName("회원 조회에 실패합니다. :존재하지않는 이메일")
     public void selectUserByEmailTestWhenFail() {
         assertThrows(NotFoundException.class,
-            () -> userService.selectUserByEmail(userReq.getEmail()));
+            () -> userService.selectUserByEmail(signUpReq.getEmail()));
     }
 
     @Test
@@ -116,7 +117,8 @@ class UserServiceTest {
     @Test
     @DisplayName("회원 정보 수정에 성공합니다.")
     public void updateUserInfoWhenSuccess() {
-        userService.updateUserInfo(user.getId(), userReq);
-        verify(userMapper).updateUserById(any(), any(User.class));
+        UserUpdateReq requestDto = UserUpdateReq.builder().build();
+        userService.updateUserInfo(user.getId(), requestDto);
+        verify(userMapper).updateUserById(any(User.class));
     }
 }
