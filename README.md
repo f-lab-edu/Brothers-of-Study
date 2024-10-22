@@ -17,13 +17,12 @@
 ## Issue
 
 - [#1 분산 환경에서 발생하는 세션 불일치 문제 해결하기.](https://jinukix.tistory.com/127)
-- [#2 DTO, Entitiy간의 변환은 어디서 일어나야 할까? 프로젝트 구조에 대한 고찰.](https://jinukix.tistory.com/135)
-- [#3 AOP를 적용해 중복되는 로그인 검증 기능 분리하기.](https://jinukix.tistory.com/133)
-- [#4 캐싱적용해서 읽기 작업 성능 개선하기.](https://jinukix.tistory.com/136)
-- [#5 중복 예약으로 발생하는 DB 동시성 문제 해결하기. (팬텀 리드 이슈)](https://jinukix.tistory.com/137)
-- [#6 Jenkins를 통한 CI & CD 구축하기.](https://jinukix.tistory.com/138)
-- [#7 분산환경에서 서비스의 중단없이 배포하기.](https://jinukix.tistory.com/139)
-- [#8 MySQL Replication Master/Slave 이중화 적용하기.](https://jinukix.tistory.com/140)
+- [#2 AOP를 적용해 중복되는 로그인 검증 기능 분리하기.](https://jinukix.tistory.com/133)
+- [#3 캐싱적용해서 읽기 작업 성능 개선하기.](https://jinukix.tistory.com/136)
+- [#4 중복 예약으로 발생하는 DB 동시성 문제 해결하기. (팬텀 리드 이슈)](https://jinukix.tistory.com/137)
+- [#5 Jenkins를 통한 CI & CD 구축하기.](https://jinukix.tistory.com/138)
+- [#6 분산환경에서 서비스의 중단없이 배포하기.](https://jinukix.tistory.com/139)
+- [#7 MySQL Replication Master/Slave 이중화 적용하기.](https://jinukix.tistory.com/140)
 
 ## 프로젝트 관리
 
